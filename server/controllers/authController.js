@@ -59,9 +59,9 @@ async function register(req, res, next) {
 
     // Insert user into database
     const newUserResult = await query(
-      `INSERT INTO users (full_name, email, password_hash, phone, role, is_active)
+      `INSERT INTO users (name, email, password_hash, phone, role, is_active)
        VALUES ($1, $2, $3, $4, 'customer', true)
-       RETURNING id, full_name, email, phone, role, is_active, avatar_url, created_at`,
+       RETURNING id, name AS full_name, name, email, phone, role, is_active, created_at`,
       [full_name.trim(), cleanEmail, password_hash, phone ? phone.trim() : null]
     );
 
@@ -98,7 +98,7 @@ async function login(req, res, next) {
 
     // Find user in database
     const userResult = await query(
-      `SELECT id, full_name, email, password_hash, phone, role, is_active, avatar_url, created_at 
+      `SELECT id, name AS full_name, name, email, password_hash, phone, role, is_active, created_at 
        FROM users WHERE LOWER(email) = $1`,
       [cleanEmail]
     );

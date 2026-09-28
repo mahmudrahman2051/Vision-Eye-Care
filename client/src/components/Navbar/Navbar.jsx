@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   HiOutlineShoppingBag,
@@ -7,7 +7,10 @@ import {
   HiOutlineMagnifyingGlass,
   HiOutlineBars3,
   HiOutlineXMark,
+  HiOutlineArrowRightOnRectangle,
+  HiOutlineCog6Tooth,
 } from 'react-icons/hi2';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 const navLinks = [
@@ -21,10 +24,25 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
   const cartCount = 0; // Will be connected to CartContext later
   const wishlistCount = 0; // Will be connected to WishlistContext later
+
+  // Close user dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setUserDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -33,6 +51,12 @@ export default function Navbar() {
       setSearchQuery('');
       setSearchOpen(false);
     }
+  };
+
+  const handleLogout = async () => {
+    setUserDropdownOpen(false);
+    await logout();
+    navigate('/login');
   };
 
   const closeMobile = () => setMobileOpen(false);
@@ -62,6 +86,16 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
+          {isAdmin && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `nav-link text-[#DFFF00] font-semibold ${isActive ? 'nav-link-active' : ''}`
+              }
+            >
+              Admin Dashboard
+            </NavLink>
+          )}
         </nav>
 
         {/* Actions */}
@@ -92,10 +126,61 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* Account */}
-          <Link to="/login" className="nav-action-btn" id="account-link" aria-label="Account">
-            <HiOutlineUser size={20} />
-          </Link>
+          {/* Account Menu */}
+          {isAuthenticated ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="nav-action-btn flex items-center gap-1.5 focus:outline-none"
+                id="user-menu-btn"
+              >
+                <div className="w-7 h-7 rounded-full bg-[#DFFF00] text-black font-extrabold flex items-center justify-center text-xs">
+                  {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                </div>
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-[#0B0B0B] border border-[#292929] rounded-xl shadow-2xl py-2 z-50 animate-fadeIn">
+                  <div className="px-4 py-2 border-b border-[#292929]">
+                    <p className="text-xs font-bold text-white truncate">{user?.full_name}</p>
+                    <p className="text-[11px] text-gray-400 truncate">{user?.email}</p>
+                    <span className="inline-block mt-1 px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded bg-[#171717] text-[#DFFF00] border border-[#292929]">
+                      {user?.role}
+                    </span>
+                  </div>
+
+                  <Link
+                    to="/account"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#171717] hover:text-[#DFFF00] transition-colors"
+                  >
+                    <HiOutlineUser size={15} /> My Account
+                  </Link>
+
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-[#DFFF00] hover:bg-[#171717] transition-colors"
+                    >
+                      <HiOutlineCog6Tooth size={15} /> Admin Portal
+                    </Link>
+                  )}
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#171717] hover:text-red-300 transition-colors text-left border-t border-[#292929] mt-1"
+                  >
+                    <HiOutlineArrowRightOnRectangle size={15} /> Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="nav-action-btn" id="account-link" aria-label="Account">
+              <HiOutlineUser size={20} />
+            </Link>
+          )}
 
           {/* Mobile Toggle */}
           <button
@@ -144,13 +229,35 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
+          {isAdmin && (
+            <NavLink to="/admin" className="mobile-nav-link text-[#DFFF00]" onClick={closeMobile}>
+              Admin Dashboard
+            </NavLink>
+          )}
           <div className="mobile-nav-divider" />
           <NavLink to="/wishlist" className="mobile-nav-link" onClick={closeMobile}>
             Wishlist
           </NavLink>
-          <NavLink to="/login" className="mobile-nav-link" onClick={closeMobile}>
-            Account
-          </NavLink>
+          {isAuthenticated ? (
+            <>
+              <NavLink to="/account" className="mobile-nav-link" onClick={closeMobile}>
+                My Account ({user?.full_name})
+              </NavLink>
+              <button
+                onClick={() => {
+                  closeMobile();
+                  handleLogout();
+                }}
+                className="mobile-nav-link text-red-400 text-left w-full"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <NavLink to="/login" className="mobile-nav-link" onClick={closeMobile}>
+              Sign In / Register
+            </NavLink>
+          )}
         </nav>
       </div>
 

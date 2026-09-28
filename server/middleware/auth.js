@@ -20,7 +20,7 @@ async function authenticateToken(req, res, next) {
 
     // Fetch latest user info from DB
     const result = await query(
-      'SELECT id, full_name, email, phone, role, is_active, avatar_url, created_at FROM users WHERE id = $1',
+      'SELECT id, name AS full_name, name, email, phone, role, is_active, created_at FROM users WHERE id = $1',
       [decoded.id]
     );
 
@@ -77,7 +77,7 @@ async function optionalAuth(req, res, next) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'vision-eye-care-dev-secret-key-2026');
     const result = await query(
-      'SELECT id, full_name, email, phone, role, is_active, avatar_url, created_at FROM users WHERE id = $1',
+      'SELECT id, name AS full_name, name, email, phone, role, is_active, created_at FROM users WHERE id = $1',
       [decoded.id]
     );
 
