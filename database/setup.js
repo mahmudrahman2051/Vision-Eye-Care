@@ -32,8 +32,34 @@ async function run() {
   try {
     console.log('\n🔧 Vision Eye Care — Database Setup\n');
 
-    // 1. Run schema.sql
-    console.log('📋 Step 1: Running schema.sql ...');
+    // 1. Drop existing tables
+    console.log('📋 Step 1: Dropping existing tables ...');
+    await client.query(`
+      DROP TABLE IF EXISTS order_status_history CASCADE;
+      DROP TABLE IF EXISTS coupon_usages CASCADE;
+      DROP TABLE IF EXISTS reviews CASCADE;
+      DROP TABLE IF EXISTS order_items CASCADE;
+      DROP TABLE IF EXISTS payments CASCADE;
+      DROP TABLE IF EXISTS orders CASCADE;
+      DROP TABLE IF EXISTS addresses CASCADE;
+      DROP TABLE IF EXISTS cart_items CASCADE;
+      DROP TABLE IF EXISTS wishlist_items CASCADE;
+      DROP TABLE IF EXISTS product_tags CASCADE;
+      DROP TABLE IF EXISTS tags CASCADE;
+      DROP TABLE IF EXISTS product_images CASCADE;
+      DROP TABLE IF EXISTS products CASCADE;
+      DROP TABLE IF EXISTS subcategories CASCADE;
+      DROP TABLE IF EXISTS categories CASCADE;
+      DROP TABLE IF EXISTS coupons CASCADE;
+      DROP TABLE IF EXISTS contact_messages CASCADE;
+      DROP TABLE IF EXISTS newsletter_subscribers CASCADE;
+      DROP TABLE IF EXISTS users CASCADE;
+      DROP FUNCTION IF EXISTS update_updated_at_column CASCADE;
+    `);
+    console.log('   ✅ Tables dropped.\n');
+
+    // 2. Run schema.sql (creates only)
+    console.log('📋 Step 2: Running schema.sql ...');
     const schemaSQL = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf-8');
     await client.query(schemaSQL);
     console.log('   ✅ Schema created successfully.\n');
@@ -41,7 +67,9 @@ async function run() {
     // 2. Run seed.sql
     console.log('🌱 Step 2: Running seed.sql ...');
     const seedSQL = fs.readFileSync(path.join(__dirname, 'seed.sql'), 'utf-8');
+    await client.query('BEGIN');
     await client.query(seedSQL);
+    await client.query('COMMIT');
     console.log('   ✅ Seed data inserted successfully.\n');
 
     // 3. Create admin user

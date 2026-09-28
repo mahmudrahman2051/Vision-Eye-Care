@@ -113,7 +113,7 @@ INSERT INTO products (name, slug, sku, description, short_description, price, co
 ('FlexiKids Round Blue', 'flexikids-round-blue', 'VEC-KID-001',
  'Fun and flexible round glasses designed specifically for kids. Made from virtually indestructible TR90 material that bends without breaking. Soft silicone temple tips keep glasses secure during play. Available with prescription or plano lenses.',
  'Virtually indestructible round frames for kids',
- 1200.00, 1500.00, 55, 10, 7, 15, 'FlexiKids', 'TR90 Nylon', 'Round', 'Blue', 'kids', 'Small', 'active', false, false, true),
+ 1200.00, 1500.00, 55, 10, 7, 14, 'FlexiKids', 'TR90 Nylon', 'Round', 'Blue', 'kids', 'Small', 'active', false, false, true),
 
 -- 10
 ('DigitalShield Pro', 'digitalshield-pro', 'VEC-BL-001',
@@ -191,7 +191,7 @@ INSERT INTO products (name, slug, sku, description, short_description, price, co
 ('Sporty Kids Wraparound', 'sporty-kids-wraparound', 'VEC-KID-003',
  'Active-lifestyle kids sunglasses with a secure wraparound design. Shatterproof polycarbonate lenses meet ANSI Z87.1 safety standards. Integrated strap keeps glasses secure during sports. Available in multiple vibrant color options.',
  'Shatterproof wraparound sunglasses for active kids',
- 1100.00, 1400.00, 45, 10, 7, 16, 'ActiveKids', 'Polycarbonate', 'Wrap', 'Blue/Green', 'kids', 'Small', 'active', false, false, true),
+ 1100.00, 1400.00, 45, 10, 7, 15, 'ActiveKids', 'Polycarbonate', 'Wrap', 'Blue/Green', 'kids', 'Small', 'active', false, false, true),
 
 -- 23
 ('DuoFlex Bifocal Reader', 'duoflex-bifocal-reader', 'VEC-RX-007',
