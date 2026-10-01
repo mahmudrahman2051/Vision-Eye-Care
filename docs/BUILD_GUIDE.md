@@ -1,16 +1,16 @@
-# Vision Eye Care — Comprehensive Website Build Guide Prompt
+# Drishti — Comprehensive Website Build Guide Prompt
 
 ## 1. PROJECT ROLE
 
 You are a senior full-stack engineer, UI/UX designer, database architect, and ecommerce developer.
 
-Build a complete production-ready ecommerce website called **Vision Eye Care** for selling eyeglasses and related eyewear products.
+Build a complete production-ready ecommerce website called **Drishti** for selling eyeglasses and related eyewear products.
 
 The website must look professional, modern, premium, responsive, fast, and trustworthy.
 
 ### Brand
 
-- Name: **Vision Eye Care**
+- Name: **Drishti**
 - Business type: Eyewear / Glasses ecommerce
 - Primary visual theme: **Neon Yellow + Black**
 - Design direction:
@@ -85,7 +85,7 @@ Roles:
 Use a clean full-stack structure similar to:
 
 ```text
-vision-eye-care/
+Drishti-Atelier/
 │
 ├── client/
 │   ├── src/
@@ -213,7 +213,7 @@ Sections:
 6. New arrivals
 7. Best sellers
 8. Promotional banner
-9. Why choose Vision Eye Care
+9. Why choose Drishti
 10. Customer reviews
 11. Newsletter
 12. Footer
@@ -1567,7 +1567,7 @@ Use:
 - Form validation
 - Confirmation dialogs
 
-Admin UI must use the same Vision Eye Care visual identity but should prioritize usability.
+Admin UI must use the same Drishti visual identity but should prioritize usability.
 
 ---
 
@@ -1740,7 +1740,7 @@ Create:
 - Back home
 - Shop now button
 
-Use the Vision Eye Care black/neon-yellow design.
+Use the Drishti black/neon-yellow design.
 
 ---
 
@@ -1811,7 +1811,7 @@ Route:
 
 Include:
 
-- Vision Eye Care story
+- Drishti story
 - Brand values
 - Why choose us
 - Quality statement
@@ -2236,7 +2236,7 @@ Before declaring the project complete, verify:
 
 # 70. FINAL INSTRUCTION TO THE AI CODING AGENT
 
-Build **Vision Eye Care** as a complete, production-quality full-stack ecommerce application.
+Build **Drishti** as a complete, production-quality full-stack ecommerce application.
 
 Do not stop at UI mockups.
 
@@ -2258,7 +2258,7 @@ Every customer-facing ecommerce operation must work end-to-end.
 
 Every admin operation must work end-to-end.
 
-Maintain the **black + neon-yellow Vision Eye Care identity** throughout the application.
+Maintain the **black + neon-yellow Drishti identity** throughout the application.
 
 Prioritize:
 

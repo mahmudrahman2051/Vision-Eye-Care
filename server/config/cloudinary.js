@@ -14,7 +14,7 @@ cloudinary.config({
  */
 async function uploadImage(filePath, options = {}) {
   const defaultOptions = {
-    folder: 'vision-eye-care/products',
+    folder: 'Drishti-Atelier/products',
     transformation: [
       { width: 1200, height: 1200, crop: 'limit', quality: 'auto', fetch_format: 'auto' },
     ],

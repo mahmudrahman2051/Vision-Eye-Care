@@ -1,15 +1,15 @@
-# 🏗️ Vision Eye Care — Implementation Plan
+# Drishti — Implementation Plan
 
-> **Generated from**: [DEVELOPMENT_PHASES.md](file:///f:/Vision_Eye_Care/docs/DEVELOPMENT_PHASES.md) + [BUILD_GUIDE.md](file:///f:/Vision_Eye_Care/docs/BUILD_GUIDE.md)
+> **Generated from**: [DEVELOPMENT_PHASES.md](file:///f:/Drishti_Eye_Care/docs/DEVELOPMENT_PHASES.md) + [BUILD_GUIDE.md](file:///f:/Drishti_Eye_Care/docs/BUILD_GUIDE.md)
 > **Date**: September 27, 2026
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 
 | Attribute | Details |
 |---|---|
-| **Project** | Vision Eye Care — Full-Stack E-commerce |
+| **Project** | Drishti — Full-Stack E-commerce |
 | **Business** | Eyewear / Glasses online store |
 | **Theme** | Neon Yellow (`#DFFF00`) + Black (`#050505`) |
 | **Frontend** | React + Vite + Tailwind CSS |
@@ -21,11 +21,11 @@
 
 ---
 
-## 📊 Phase Analysis & Effort Estimates
+## Phase Analysis & Effort Estimates
 
 ```mermaid
 gantt
-    title Vision Eye Care — Development Timeline
+    title Drishti — Development Timeline
     dateFormat  YYYY-MM-DD
     axisFormat  %b %d
 
@@ -58,10 +58,10 @@ gantt
 
 ---
 
-## 🗂️ Target Project Structure
+## Target Project Structure
 
 ```text
-f:\Vision_Eye_Care\
+f:\Drishti_Eye_Care\
 │
 ├── client/                         # React + Vite frontend
 │   ├── src/
@@ -107,7 +107,7 @@ f:\Vision_Eye_Care\
 
 ---
 
-## 🔶 Phase 1 — Project Foundation
+## Phase 1 — Project Foundation
 
 > **Goal**: Scaffold both apps, connect DB, establish the design system
 > **Effort**: ~2 days
@@ -123,7 +123,7 @@ f:\Vision_Eye_Care\
 | 1.5 | Connect Neon PostgreSQL | Backend | `pg.Pool` with `DATABASE_URL` from env |
 | 1.6 | Create `.env.example` | Both | All required env vars documented |
 | 1.7 | Create folder structures | Both | Per the project structure above |
-| 1.8 | Build base layout | Frontend | `MainLayout` with Navbar + Footer, Vision Eye Care branding |
+| 1.8 | Build base layout | Frontend | `MainLayout` with Navbar + Footer, Drishti branding |
 | 1.9 | Setup routing shell | Frontend | React Router with placeholder routes |
 | 1.10 | Vite proxy config | Frontend | Proxy `/api` to backend `localhost:5000` |
 
@@ -147,7 +147,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 2 — Database & Seed Data
+## Phase 2 — Database & Seed Data
 
 > **Goal**: Full schema + realistic seed data
 > **Effort**: ~2 days
@@ -193,7 +193,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 3 — Authentication
+## Phase 3 — Authentication
 
 > **Goal**: Complete JWT auth with role-based access control
 > **Effort**: ~3 days
@@ -226,7 +226,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 4 — Product System
+## Phase 4 — Product System
 
 > **Goal**: Full product CRUD + public shop with search/filter/pagination
 > **Effort**: ~5 days (largest feature phase)
@@ -269,7 +269,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 5 — Cart & Wishlist
+## Phase 5 — Cart & Wishlist
 
 > **Goal**: Persistent cart + wishlist with stock validation
 > **Effort**: ~3 days
@@ -299,7 +299,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 6 — Checkout & Orders
+## Phase 6 — Checkout & Orders
 
 > **Goal**: Transactional order creation with COD
 > **Effort**: ~4 days
@@ -333,7 +333,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 7 — Customer Account
+## Phase 7 — Customer Account
 
 > **Goal**: Full account dashboard
 > **Effort**: ~3 days
@@ -359,7 +359,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 8 — Admin Dashboard
+## Phase 8 — Admin Dashboard
 
 > **Goal**: Real-time statistics dashboard
 > **Effort**: ~3 days
@@ -387,7 +387,7 @@ Colors:
 
 ---
 
-## 🔶 Phase 9 — Admin Management
+## Phase 9 — Admin Management
 
 > **Goal**: Complete CRUD for all entities
 > **Effort**: ~5 days
@@ -422,7 +422,7 @@ GET/DELETE           /api/admin/reviews
 
 ---
 
-## 🔶 Phase 10 — Public Pages
+## Phase 10 — Public Pages
 
 > **Goal**: About, Contact, FAQ, legal pages, 404
 > **Effort**: ~2 days
@@ -449,7 +449,7 @@ GET/DELETE           /api/admin/reviews
 
 ---
 
-## 🔶 Phase 11 — UI/UX Polish
+## Phase 11 — UI/UX Polish
 
 > **Goal**: Premium, consistent look & feel across all breakpoints
 > **Effort**: ~3 days
@@ -479,7 +479,7 @@ GET/DELETE           /api/admin/reviews
 
 ---
 
-## 🔶 Phase 12 — Security, SEO & Performance
+## Phase 12 — Security, SEO & Performance
 
 > **Effort**: ~3 days
 
@@ -521,7 +521,7 @@ GET/DELETE           /api/admin/reviews
 
 ---
 
-## 🔶 Phase 13 — Full Testing & Bug Fixing
+## Phase 13 — Full Testing & Bug Fixing
 
 > **Effort**: ~3 days
 
@@ -555,7 +555,7 @@ Admin Login → Dashboard → Product CRUD → Image Upload
 
 ---
 
-## 🔶 Phase 14 — Production Preparation
+## Phase 14 — Production Preparation
 
 > **Effort**: ~2 days
 
@@ -603,7 +603,7 @@ Admin Login → Dashboard → Product CRUD → Image Upload
 
 ---
 
-## 📦 Key Dependencies
+## Key Dependencies
 
 ### Frontend (`client/package.json`)
 
@@ -633,7 +633,7 @@ Admin Login → Dashboard → Product CRUD → Image Upload
 
 ---
 
-## 🎯 Summary
+## Summary
 
 | Metric | Value |
 |---|---|
@@ -643,6 +643,3 @@ Admin Login → Dashboard → Product CRUD → Image Upload
 | **API Endpoints** | ~40+ |
 | **Frontend Pages** | ~20+ |
 | **Reusable Components** | ~30+ |
-
-> [!TIP]
-> To begin execution, say **"Start Phase 1"** and I will implement it step-by-step following the execution rules above.

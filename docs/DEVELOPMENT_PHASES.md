@@ -1,4 +1,4 @@
-# Vision Eye Care — Phase-by-Phase Development Plan
+# Drishti — Phase-by-Phase Development Plan
 
 ## How to Use This File
 
@@ -24,7 +24,7 @@ Use this file together with `BUILD_GUIDE.md`.
 - Frontend/backend folder structure
 - Base routing
 - Base UI/layout system
-- Vision Eye Care black + neon-yellow theme
+- Drishti black + neon-yellow theme
 
 ### Deliverables
 - Frontend runs

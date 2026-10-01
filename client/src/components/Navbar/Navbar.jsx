@@ -11,27 +11,23 @@ import {
   HiOutlineCog6Tooth,
 } from 'react-icons/hi2';
 import { useAuth } from '../../context/AuthContext';
+import AnnouncementBar from './AnnouncementBar';
+import MegaMenu from './MegaMenu';
+import SearchOverlay from './SearchOverlay';
 import './Navbar.css';
-
-const navLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeMegaMenu, setActiveMegaMenu] = useState(null);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  const cartCount = 0; // Will be connected to CartContext later
-  const wishlistCount = 0; // Will be connected to WishlistContext later
+  const cartCount = 0; // Connected in Phase 5
+  const wishlistCount = 0; // Connected in Phase 5
 
   // Close user dropdown on outside click
   useEffect(() => {
@@ -44,15 +40,6 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-      setSearchOpen(false);
-    }
-  };
-
   const handleLogout = async () => {
     setUserDropdownOpen(false);
     await logout();
@@ -62,209 +49,174 @@ export default function Navbar() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="navbar" id="main-navbar">
-      <div className="navbar-inner container">
-        {/* Logo */}
-        <Link to="/" className="navbar-logo" id="logo-link">
-          <span className="logo-icon">👓</span>
-          <span className="logo-text">
-            Vision<span className="logo-accent">Eye Care</span>
-          </span>
-        </Link>
+    <>
+      {/* Announcement Bar */}
+      <AnnouncementBar />
 
-        {/* Desktop Nav */}
-        <nav className="navbar-links" id="desktop-nav">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                `nav-link ${isActive ? 'nav-link-active' : ''}`
-              }
-              end={link.to === '/'}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          {isAdmin && (
-            <NavLink
-              to="/admin"
-              className={({ isActive }) =>
-                `nav-link text-[#DFFF00] font-semibold ${isActive ? 'nav-link-active' : ''}`
-              }
-            >
-              Admin Dashboard
-            </NavLink>
-          )}
-        </nav>
-
-        {/* Actions */}
-        <div className="navbar-actions">
-          {/* Search Toggle */}
-          <button
-            className="nav-action-btn"
-            id="search-toggle"
-            onClick={() => setSearchOpen(!searchOpen)}
-            aria-label="Toggle search"
-          >
-            <HiOutlineMagnifyingGlass size={20} />
-          </button>
-
-          {/* Wishlist */}
-          <Link to="/wishlist" className="nav-action-btn" id="wishlist-link" aria-label="Wishlist">
-            <HiOutlineHeart size={20} />
-            {wishlistCount > 0 && (
-              <span className="action-badge">{wishlistCount}</span>
-            )}
+      <header className="navbar sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-[#292929]" id="main-navbar">
+        <div className="navbar-inner container relative flex items-center justify-between py-4">
+          {/* Brand Logo */}
+          <Link to="/" className="navbar-logo flex items-center gap-2 text-xl font-extrabold tracking-tight text-white" id="logo-link">
+            <span className="text-2xl">👓</span>
+            <span className="logo-text">
+              Vision<span className="text-[#DFFF00]"> Eye Care</span>
+            </span>
           </Link>
 
-          {/* Cart */}
-          <Link to="/cart" className="nav-action-btn" id="cart-link" aria-label="Cart">
-            <HiOutlineShoppingBag size={20} />
-            {cartCount > 0 && (
-              <span className="action-badge">{cartCount}</span>
-            )}
-          </Link>
-
-          {/* Account Menu */}
-          {isAuthenticated ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                className="nav-action-btn flex items-center gap-1.5 focus:outline-none"
-                id="user-menu-btn"
-              >
-                <div className="w-7 h-7 rounded-full bg-[#DFFF00] text-black font-extrabold flex items-center justify-center text-xs">
-                  {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
-                </div>
-              </button>
-
-              {userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-[#0B0B0B] border border-[#292929] rounded-xl shadow-2xl py-2 z-50 animate-fadeIn">
-                  <div className="px-4 py-2 border-b border-[#292929]">
-                    <p className="text-xs font-bold text-white truncate">{user?.full_name}</p>
-                    <p className="text-[11px] text-gray-400 truncate">{user?.email}</p>
-                    <span className="inline-block mt-1 px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded bg-[#171717] text-[#DFFF00] border border-[#292929]">
-                      {user?.role}
-                    </span>
-                  </div>
-
-                  <Link
-                    to="/account"
-                    onClick={() => setUserDropdownOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#171717] hover:text-[#DFFF00] transition-colors"
-                  >
-                    <HiOutlineUser size={15} /> My Account
-                  </Link>
-
-                  {isAdmin && (
-                    <Link
-                      to="/admin"
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-[#DFFF00] hover:bg-[#171717] transition-colors"
-                    >
-                      <HiOutlineCog6Tooth size={15} /> Admin Portal
-                    </Link>
-                  )}
-
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#171717] hover:text-red-300 transition-colors text-left border-t border-[#292929] mt-1"
-                  >
-                    <HiOutlineArrowRightOnRectangle size={15} /> Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <Link to="/login" className="nav-action-btn" id="account-link" aria-label="Account">
-              <HiOutlineUser size={20} />
-            </Link>
-          )}
-
-          {/* Mobile Toggle */}
-          <button
-            className="nav-action-btn mobile-toggle"
-            id="mobile-menu-toggle"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <HiOutlineXMark size={22} /> : <HiOutlineBars3 size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Search Bar */}
-      <div className={`search-bar ${searchOpen ? 'search-bar-open' : ''}`}>
-        <form onSubmit={handleSearch} className="search-form container">
-          <HiOutlineMagnifyingGlass size={18} className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search for eyewear..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-            id="search-input"
-            autoFocus={searchOpen}
-          />
-          <button type="submit" className="btn btn-primary btn-sm" id="search-submit">
-            Search
-          </button>
-        </form>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className={`mobile-menu ${mobileOpen ? 'mobile-menu-open' : ''}`} id="mobile-menu">
-        <nav className="mobile-nav">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                `mobile-nav-link ${isActive ? 'mobile-nav-link-active' : ''}`
-              }
-              end={link.to === '/'}
-              onClick={closeMobile}
+          {/* Desktop Navigation Links with MegaMenu support */}
+          <nav className="hidden lg:flex items-center gap-8 font-bold text-xs uppercase tracking-wider text-gray-300" id="desktop-nav">
+            <NavLink to="/" className={({ isActive }) => (isActive ? 'text-[#DFFF00]' : 'hover:text-white transition-colors')} end>
+              Home
+            </NavLink>
+            <div
+              className="relative py-2 cursor-pointer"
+              onMouseEnter={() => setActiveMegaMenu('eyeglasses')}
             >
-              {link.label}
-            </NavLink>
-          ))}
-          {isAdmin && (
-            <NavLink to="/admin" className="mobile-nav-link text-[#DFFF00]" onClick={closeMobile}>
-              Admin Dashboard
-            </NavLink>
-          )}
-          <div className="mobile-nav-divider" />
-          <NavLink to="/wishlist" className="mobile-nav-link" onClick={closeMobile}>
-            Wishlist
-          </NavLink>
-          {isAuthenticated ? (
-            <>
-              <NavLink to="/account" className="mobile-nav-link" onClick={closeMobile}>
-                My Account ({user?.full_name})
+              <NavLink to="/shop?category=eyeglasses" className="hover:text-white transition-colors">
+                Eyeglasses
               </NavLink>
-              <button
-                onClick={() => {
-                  closeMobile();
-                  handleLogout();
-                }}
-                className="mobile-nav-link text-red-400 text-left w-full"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <NavLink to="/login" className="mobile-nav-link" onClick={closeMobile}>
-              Sign In / Register
+            </div>
+            <div
+              className="relative py-2 cursor-pointer"
+              onMouseEnter={() => setActiveMegaMenu('sunglasses')}
+            >
+              <NavLink to="/shop?category=sunglasses" className="hover:text-white transition-colors">
+                Sunglasses
+              </NavLink>
+            </div>
+            <NavLink to="/shop?search=Designer" className="hover:text-white transition-colors">
+              Brands
             </NavLink>
-          )}
-        </nav>
-      </div>
+            <NavLink to="/shop?sort=newest" className="hover:text-white transition-colors">
+              New Arrivals
+            </NavLink>
+            <NavLink to="/shop?search=Blue+Light" className="hover:text-white transition-colors">
+              Lenses
+            </NavLink>
+            <NavLink to="/about" className="hover:text-white transition-colors">
+              Services
+            </NavLink>
+            {isAdmin && (
+              <NavLink to="/admin" className="text-[#DFFF00] font-extrabold hover:underline">
+                Admin
+              </NavLink>
+            )}
+          </nav>
 
-      {/* Overlay */}
-      {mobileOpen && (
-        <div className="mobile-overlay" onClick={closeMobile} aria-hidden="true" />
-      )}
-    </header>
+          {/* Actions Bar (Search, Wishlist, Cart, User) */}
+          <div className="navbar-actions flex items-center gap-4 text-gray-300">
+            {/* Search Trigger */}
+            <button
+              className="nav-action-btn p-2 hover:text-[#DFFF00] transition-colors"
+              id="search-toggle"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Toggle search"
+            >
+              <HiOutlineMagnifyingGlass size={22} />
+            </button>
+
+            {/* Wishlist */}
+            <Link to="/wishlist" className="nav-action-btn relative p-2 hover:text-[#DFFF00] transition-colors" id="wishlist-link" aria-label="Wishlist">
+              <HiOutlineHeart size={22} />
+              {wishlistCount > 0 && <span className="action-badge">{wishlistCount}</span>}
+            </Link>
+
+            {/* Cart */}
+            <Link to="/cart" className="nav-action-btn relative p-2 hover:text-[#DFFF00] transition-colors" id="cart-link" aria-label="Cart">
+              <HiOutlineShoppingBag size={22} />
+              {cartCount > 0 && <span className="action-badge">{cartCount}</span>}
+            </Link>
+
+            {/* User Profile */}
+            {isAuthenticated ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-1.5 focus:outline-none"
+                  id="user-menu-btn"
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#DFFF00] text-black font-extrabold flex items-center justify-center text-xs shadow-md">
+                    {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
+                </button>
+
+                {userDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-[#0B0B0B] border border-[#292929] rounded-xl shadow-2xl py-2 z-50 animate-fadeIn">
+                    <div className="px-4 py-2 border-b border-[#292929]">
+                      <p className="text-xs font-bold text-white truncate">{user?.full_name}</p>
+                      <p className="text-[11px] text-gray-400 truncate">{user?.email}</p>
+                      <span className="inline-block mt-1 px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded bg-[#171717] text-[#DFFF00] border border-[#292929]">
+                        {user?.role}
+                      </span>
+                    </div>
+
+                    <Link
+                      to="/account"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#171717] hover:text-[#DFFF00] transition-colors"
+                    >
+                      <HiOutlineUser size={15} /> My Account
+                    </Link>
+
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-xs text-[#DFFF00] hover:bg-[#171717] transition-colors"
+                      >
+                        <HiOutlineCog6Tooth size={15} /> Admin Portal
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#171717] hover:text-red-300 transition-colors text-left border-t border-[#292929] mt-1"
+                    >
+                      <HiOutlineArrowRightOnRectangle size={15} /> Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="nav-action-btn p-2 hover:text-[#DFFF00] transition-colors" id="account-link" aria-label="Account">
+                <HiOutlineUser size={22} />
+              </Link>
+            )}
+
+            {/* Mobile Menu Toggle */}
+            <button
+              className="lg:hidden p-2 text-gray-300 hover:text-white"
+              id="mobile-menu-toggle"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <HiOutlineXMark size={24} /> : <HiOutlineBars3 size={24} />}
+            </button>
+          </div>
+
+          {/* Mega Menu Dropdown */}
+          <MegaMenu activeMenu={activeMegaMenu} onClose={() => setActiveMegaMenu(null)} />
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileOpen && (
+          <div className="lg:hidden bg-[#0B0B0B] border-t border-[#292929] px-6 py-6 space-y-4 animate-fadeIn">
+            <nav className="flex flex-col space-y-3 text-sm font-bold text-gray-300">
+              <NavLink to="/" onClick={closeMobile} className="hover:text-[#DFFF00]">Home</NavLink>
+              <NavLink to="/shop?category=eyeglasses" onClick={closeMobile} className="hover:text-[#DFFF00]">Eyeglasses</NavLink>
+              <NavLink to="/shop?category=sunglasses" onClick={closeMobile} className="hover:text-[#DFFF00]">Sunglasses</NavLink>
+              <NavLink to="/shop?search=Designer" onClick={closeMobile} className="hover:text-[#DFFF00]">Brands</NavLink>
+              <NavLink to="/shop?sort=newest" onClick={closeMobile} className="hover:text-[#DFFF00]">New Arrivals</NavLink>
+              <NavLink to="/shop?search=Blue+Light" onClick={closeMobile} className="hover:text-[#DFFF00]">Lenses</NavLink>
+              <NavLink to="/about" onClick={closeMobile} className="hover:text-[#DFFF00]">Services</NavLink>
+              {isAdmin && <NavLink to="/admin" onClick={closeMobile} className="text-[#DFFF00]">Admin Dashboard</NavLink>}
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {/* Instant Search Overlay */}
+      <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   );
 }
