@@ -15,7 +15,7 @@ const TrustFooterBar = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {trustItems.map((item, idx) => (
-            <div key={idx} className="bg-[#FFF8F6] border border-orange-100 rounded-2xl p-4 flex flex-col items-center text-center gap-2">
+            <div key={idx} className="bg-[#FEFCE8] border border-[#FEF08A] rounded-2xl p-4 flex flex-col items-center text-center gap-2">
               <div className="p-2 bg-white rounded-full shadow-sm">
                 {item.icon}
               </div>

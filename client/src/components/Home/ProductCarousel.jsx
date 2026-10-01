@@ -35,40 +35,41 @@ const ProductCarousel = ({ title = 'AI Glasses', fetchParams = {}, viewAllLink =
   };
 
   return (
-    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8 border-b border-gray-100 relative">
+    <section className="bg-[#F9FAFB] py-14 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Large Peach Header Title (Screenshot 2) */}
-        <div className="text-center">
-          <h2 className="text-4xl sm:text-6xl font-black text-[#F4D9C5] tracking-tight uppercase">
+        {/* Header Title with Yellow Accent */}
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl sm:text-5xl font-black text-[#050505] tracking-tight uppercase">
             {title}
           </h2>
+          <div className="w-20 h-1.5 bg-[#DFFF00] mx-auto rounded-full border border-black/10"></div>
         </div>
 
-        {/* Carousel Area with Side Navigation Arrows */}
-        <div className="relative group">
+        {/* Carousel Area */}
+        <div className="relative group px-2">
           {/* Left Arrow */}
           <button
             onClick={() => scroll('left')}
-            className="absolute -left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 hover:bg-[#EEF0F8] rounded-full text-gray-700 flex items-center justify-center shadow-lg transition-all"
+            className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border-2 border-black hover:bg-[#DFFF00] rounded-full text-black flex items-center justify-center shadow-lg transition-all"
             aria-label="Previous"
           >
-            <FiChevronLeft className="w-5 h-5 text-[#5B649E]" />
+            <FiChevronLeft className="w-5 h-5" />
           </button>
 
           {/* Right Arrow */}
           <button
             onClick={() => scroll('right')}
-            className="absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 hover:bg-[#EEF0F8] rounded-full text-gray-700 flex items-center justify-center shadow-lg transition-all"
+            className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border-2 border-black hover:bg-[#DFFF00] rounded-full text-black flex items-center justify-center shadow-lg transition-all"
             aria-label="Next"
           >
-            <FiChevronRight className="w-5 h-5 text-[#5B649E]" />
+            <FiChevronRight className="w-5 h-5" />
           </button>
 
           {/* Scrollable Container */}
           {loading ? (
             <div className="flex gap-6 overflow-hidden">
               {[...Array(4)].map((_, idx) => (
-                <div key={idx} className="w-64 sm:w-72 flex-shrink-0 bg-gray-50 border border-gray-100 rounded-2xl h-72 animate-pulse p-4" />
+                <div key={idx} className="w-64 sm:w-72 flex-shrink-0 bg-white border border-gray-200 rounded-2xl h-72 animate-pulse p-4" />
               ))}
             </div>
           ) : (
@@ -85,11 +86,11 @@ const ProductCarousel = ({ title = 'AI Glasses', fetchParams = {}, viewAllLink =
           )}
         </div>
 
-        {/* Center Pill Button (Screenshot 2) */}
-        <div className="text-center pt-2">
+        {/* VIEW ALL Button - Safely spaced below carousel */}
+        <div className="text-center pt-4">
           <Link
             to={viewAllLink}
-            className="inline-block px-8 py-3 bg-[#5B649E] hover:bg-[#4A5288] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"
+            className="inline-block px-8 py-3 bg-[#050505] hover:bg-gray-800 text-[#DFFF00] font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"
           >
             VIEW ALL
           </Link>

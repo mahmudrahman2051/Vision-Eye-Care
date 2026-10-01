@@ -1,32 +1,24 @@
 @import "tailwindcss";
 
 /* ============================================
-   Vision Eye Care — Glasses.com Exact Theme
+   Vision Eye Care — White & Yellow Theme System
    ============================================ */
 
 @theme {
-  /* Glasses.com Primary Colors */
-  --color-slate-blue: #5B649E;
-  --color-slate-blue-hover: #4A5288;
-  --color-slate-blue-light: #EEF0F8;
-
-  --color-lavender-bar: #D0D8FB;
-  --color-lavender-text: #2A3168;
-
-  --color-[#111827]: #111827;
-  --color-[#374151]: #374151;
-  --color-[#6B7280]: #6B7280;
-  --color-[#9CA3AF]: #9CA3AF;
-  --color-[#E5E7EB]: #E5E7EB;
-  --color-[#F3F4F6]: #F3F4F6;
-  --color-[#F9FAFB]: #F9FAFB;
+  --color-yellow: #DFFF00;
+  --color-yellow-hover: #cbe600;
+  --color-yellow-dark: #EAB308;
+  --color-yellow-light: #FEFCE8;
+  --color-black: #050505;
+  --color-dark-gray: #111827;
+  --color-mid-gray: #4B5563;
+  --color-light-gray: #F9FAFB;
+  --color-border-gray: #E5E7EB;
   --color-white: #FFFFFF;
 
-  /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Base resets */
 * {
   margin: 0;
   padding: 0;
@@ -42,9 +34,10 @@ html {
 body {
   font-family: var(--font-sans);
   background-color: #FFFFFF;
-  color: #111827;
+  color: #050505;
   line-height: 1.5;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -60,26 +53,6 @@ img {
 button {
   cursor: pointer;
   font-family: inherit;
-}
-
-/* Container */
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin-inline: auto;
-  padding-inline: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container {
-    padding-inline: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding-inline: 2.5rem;
-  }
 }
 
 /* Scrollbar */
@@ -101,7 +74,6 @@ button {
   background: #9CA3AF;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

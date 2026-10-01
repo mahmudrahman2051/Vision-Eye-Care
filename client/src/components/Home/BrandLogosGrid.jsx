@@ -23,7 +23,7 @@ const BrandLogosGrid = () => {
             <Link
               key={idx}
               to={b.link}
-              className={`text-gray-900 hover:text-[#5B649E] transition-colors ${b.style}`}
+              className={`text-gray-900 hover:text-black hover:scale-105 transition-all duration-200 ${b.style}`}
             >
               {b.name}
             </Link>
