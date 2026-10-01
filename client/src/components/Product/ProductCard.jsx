@@ -50,7 +50,7 @@ const ProductCard = ({ product }) => {
   const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80`;
 
   return (
-    <div className="group relative bg-white border border-gray-200 hover:border-black rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-[380px] justify-between">
+    <div className="group relative bg-white border border-gray-200 hover:border-black rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-[390px] justify-between">
       {/* Badges Overlay */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
         {hasDiscount && (
@@ -83,8 +83,8 @@ const ProductCard = ({ product }) => {
         <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500' : ''}`} />
       </button>
 
-      {/* Product Image Area - Fixed 210px Height */}
-      <Link to={`/product/${slug || id}`} className="relative h-[210px] w-full bg-[#F8F9FA] overflow-hidden block flex-shrink-0">
+      {/* Product Image Area - Fixed 176px (h-44) */}
+      <Link to={`/product/${slug || id}`} className="relative h-44 w-full bg-[#F8F9FA] overflow-hidden block flex-shrink-0">
         <img
           src={primary_image || defaultImage}
           alt={name}

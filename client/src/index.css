@@ -1,46 +1,23 @@
 @import "tailwindcss";
 
 /* ============================================
-   VISION EYE CARE — White & Yellow Optical Design Tokens
+   VISION EYE CARE — White & Yellow Theme
+   Tailwind CSS v4 — @theme extend to preserve defaults
    ============================================ */
 
-:root {
+@theme extend {
   --color-yellow: #DFFF00;
   --color-yellow-hover: #CBE600;
   --color-yellow-dark: #EAB308;
   --color-yellow-light: #FEFCE8;
-  --color-black: #050505;
-  --color-dark-gray: #111827;
-  --color-mid-gray: #4B5563;
-  --color-muted-gray: #6B7280;
-  --color-light-gray: #F9FAFB;
-  --color-border-gray: #E5E7EB;
-  --color-white: #FFFFFF;
+  --color-brand-black: #050505;
 
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-@theme {
-  --color-yellow: #DFFF00;
-  --color-yellow-hover: #CBE600;
-  --color-yellow-dark: #EAB308;
-  --color-yellow-light: #FEFCE8;
-  --color-black: #050505;
-  --color-dark-gray: #111827;
-  --color-mid-gray: #4B5563;
-  --color-muted-gray: #6B7280;
-  --color-light-gray: #F9FAFB;
-  --color-border-gray: #E5E7EB;
-  --color-white: #FFFFFF;
-
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ============================================
+   Global Resets & Base Styles
+   ============================================ */
 
 html {
   scroll-behavior: smooth;
@@ -64,7 +41,6 @@ a {
 
 img {
   max-width: 100%;
-  height: auto;
   display: block;
 }
 
@@ -73,7 +49,10 @@ button {
   font-family: inherit;
 }
 
-/* Custom Scrollbar */
+/* ============================================
+   Custom Scrollbar
+   ============================================ */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -91,6 +70,22 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background: #9CA3AF;
 }
+
+/* ============================================
+   Utility: Hide scrollbar for carousel
+   ============================================ */
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   Animation Keyframes
+   ============================================ */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }

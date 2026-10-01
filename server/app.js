@@ -42,15 +42,11 @@ app.get('/api/health', (req, res) => {
 });
 
 // ------------------------------------
-// API Routes (will be added per phase)
+// API Routes
 // ------------------------------------
-// Phase 3: app.use('/api/auth', require('./routes/auth'));
-// Phase 4: app.use('/api/products', require('./routes/products'));
-// Phase 4: app.use('/api/categories', require('./routes/categories'));
-// Phase 5: app.use('/api/cart', require('./routes/cart'));
-// Phase 5: app.use('/api/wishlist', require('./routes/wishlist'));
-// Phase 6: app.use('/api/orders', require('./routes/orders'));
-// Phase 9: app.use('/api/admin', require('./routes/admin'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/categories'));
 
 // ------------------------------------
 // 404 Handler
