@@ -35,16 +35,16 @@ const lensOptions = [
 
 const LensEducation = () => {
   return (
-    <section className="bg-[#050505] py-20 px-4 sm:px-6 lg:px-8 border-b border-[#292929]">
+    <section className="bg-white py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#DFFF00]">
+          <span className="text-xs font-black uppercase tracking-widest text-[#111827] bg-[#DFFF00] px-3 py-1 rounded">
             Advanced Lens Technology
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black uppercase text-black tracking-tight pt-2">
             LENSES FOR YOUR LIFESTYLE
           </h2>
-          <p className="text-xs sm:text-sm text-gray-400">
+          <p className="text-xs sm:text-sm text-gray-600 font-medium">
             Tailor your optical lenses to your daily vision habits and screen time needs.
           </p>
         </div>
@@ -53,31 +53,31 @@ const LensEducation = () => {
           {lensOptions.map((lens, idx) => (
             <div
               key={idx}
-              className="bg-[#0B0B0B] border border-[#292929] hover:border-[#DFFF00]/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl"
+              className="bg-[#F8F9FA] border border-gray-200 hover:border-black rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 shadow-sm"
             >
               <div className="space-y-4">
-                <span className="inline-block px-2.5 py-1 bg-[#171717] text-[#DFFF00] text-[10px] font-extrabold uppercase tracking-widest rounded border border-[#292929]">
+                <span className="inline-block px-2.5 py-1 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded border border-gray-200 shadow-sm">
                   {lens.tag}
                 </span>
 
-                <h3 className="text-xl font-extrabold text-white">{lens.title}</h3>
+                <h3 className="text-xl font-extrabold text-black">{lens.title}</h3>
 
-                <p className="text-xs text-gray-400 leading-relaxed">{lens.desc}</p>
+                <p className="text-xs text-gray-600 leading-relaxed font-medium">{lens.desc}</p>
 
-                <ul className="space-y-2 pt-2 border-t border-[#292929]">
+                <ul className="space-y-2 pt-2 border-t border-gray-200">
                   {lens.features.map((feat, fIdx) => (
-                    <li key={fIdx} className="flex items-center gap-2 text-xs text-gray-300">
-                      <FiCheck className="text-[#DFFF00] w-3.5 h-3.5 flex-shrink-0" />
+                    <li key={fIdx} className="flex items-center gap-2 text-xs text-gray-800 font-medium">
+                      <FiCheck className="text-emerald-600 w-3.5 h-3.5 flex-shrink-0" />
                       <span>{feat}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-[#292929]">
+              <div className="pt-6 mt-6 border-t border-gray-200">
                 <Link
                   to={lens.link}
-                  className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#DFFF00] hover:underline"
+                  className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black hover:underline"
                 >
                   Learn More <FiArrowRight className="w-3.5 h-3.5" />
                 </Link>

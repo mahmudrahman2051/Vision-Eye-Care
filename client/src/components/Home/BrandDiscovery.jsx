@@ -14,24 +14,23 @@ const brands = [
 
 const BrandDiscovery = () => {
   return (
-    <section className="bg-[#0B0B0B] py-16 px-4 sm:px-6 lg:px-8 border-b border-[#292929]">
+    <section className="bg-[#F8F9FA] py-16 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
       <div className="max-w-7xl mx-auto text-center space-y-8">
         <div>
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#DFFF00]">
+          <span className="text-xs font-black uppercase tracking-widest text-gray-500">
             Authorized Retailer
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight mt-1">
+          <h2 className="text-2xl sm:text-3xl font-black uppercase text-black tracking-tight mt-1">
             SHOP PREMIUM BRANDS
           </h2>
         </div>
 
-        {/* Brand Chips Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {brands.map((b, idx) => (
             <Link
               key={idx}
               to={b.link}
-              className="py-5 px-3 bg-[#141414] border border-[#292929] hover:border-[#DFFF00] rounded-xl flex items-center justify-center font-black tracking-widest text-gray-300 hover:text-[#DFFF00] hover:bg-[#1A1A1A] transition-all text-xs uppercase"
+              className="py-5 px-3 bg-white border border-gray-200 hover:border-black rounded-xl flex items-center justify-center font-black tracking-widest text-gray-800 hover:text-black hover:bg-[#F4F4F4] transition-all text-xs uppercase shadow-sm"
             >
               {b.name}
             </Link>

@@ -22,18 +22,18 @@ const Pagination = ({ pagination, onPageChange }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-[#292929]">
-      <div className="text-xs text-gray-400">
-        Showing <span className="font-bold text-white">{startItem}</span> to{' '}
-        <span className="font-bold text-white">{endItem}</span> of{' '}
-        <span className="font-bold text-[#DFFF00]">{total}</span> products
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-gray-200">
+      <div className="text-xs text-gray-500 font-medium">
+        Showing <span className="font-extrabold text-black">{startItem}</span> to{' '}
+        <span className="font-extrabold text-black">{endItem}</span> of{' '}
+        <span className="font-extrabold text-black">{total}</span> products
       </div>
 
       <div className="flex items-center gap-1.5">
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          className="p-2 bg-[#171717] border border-[#292929] rounded-xl text-gray-300 hover:text-[#DFFF00] hover:border-[#DFFF00] disabled:opacity-30 disabled:hover:text-gray-300 disabled:hover:border-[#292929] transition-all"
+          className="p-2 bg-white border border-gray-200 rounded-xl text-gray-600 hover:text-black hover:border-black disabled:opacity-30 transition-all"
         >
           <FiChevronLeft className="w-4 h-4" />
         </button>
@@ -41,14 +41,14 @@ const Pagination = ({ pagination, onPageChange }) => {
         {getPageNumbers().map((p, idx) => (
           <React.Fragment key={idx}>
             {p === '...' ? (
-              <span className="px-2 text-xs text-gray-500">...</span>
+              <span className="px-2 text-xs text-gray-400">...</span>
             ) : (
               <button
                 onClick={() => onPageChange(p)}
-                className={`w-9 h-9 text-xs font-bold rounded-xl border transition-all ${
+                className={`w-9 h-9 text-xs font-black rounded-xl border transition-all ${
                   page === p
-                    ? 'bg-[#DFFF00] border-[#DFFF00] text-black shadow-md'
-                    : 'bg-[#171717] border-[#292929] text-gray-300 hover:border-[#DFFF00] hover:text-[#DFFF00]'
+                    ? 'bg-black border-black text-[#DFFF00] shadow'
+                    : 'bg-white border-gray-200 text-gray-700 hover:border-black hover:text-black'
                 }`}
               >
                 {p}
@@ -60,7 +60,7 @@ const Pagination = ({ pagination, onPageChange }) => {
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
-          className="p-2 bg-[#171717] border border-[#292929] rounded-xl text-gray-300 hover:text-[#DFFF00] hover:border-[#DFFF00] disabled:opacity-30 disabled:hover:text-gray-300 disabled:hover:border-[#292929] transition-all"
+          className="p-2 bg-white border border-gray-200 rounded-xl text-gray-600 hover:text-black hover:border-black disabled:opacity-30 transition-all"
         >
           <FiChevronRight className="w-4 h-4" />
         </button>

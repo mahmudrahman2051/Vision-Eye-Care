@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FiFilter, FiSliders, FiGrid, FiPackage } from 'react-icons/fi';
+import { FiSliders, FiPackage } from 'react-icons/fi';
 import productService from '../../services/productService';
 import ProductCard from '../../components/Product/ProductCard';
 import ProductFilters from '../../components/Product/ProductFilters';
@@ -14,7 +14,6 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  // Extract filter parameters from URL
   const currentFilters = {
     search: searchParams.get('search') || '',
     category: searchParams.get('category') || '',
@@ -28,7 +27,6 @@ const ShopPage = () => {
     page: searchParams.get('page') || '1',
   };
 
-  // Fetch Categories on mount
   useEffect(() => {
     const fetchCats = async () => {
       try {
@@ -43,7 +41,6 @@ const ShopPage = () => {
     fetchCats();
   }, []);
 
-  // Fetch Products whenever URL filters change
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -70,7 +67,6 @@ const ShopPage = () => {
     } else {
       newParams.delete(key);
     }
-    // Reset page to 1 when filter changes
     newParams.set('page', '1');
     setSearchParams(newParams);
   };
@@ -87,41 +83,41 @@ const ShopPage = () => {
   };
 
   return (
-    <div className="bg-[#050505] min-h-screen py-10 px-4 sm:px-6 lg:px-8 text-white">
+    <div className="bg-[#F8F9FA] min-h-screen py-10 px-4 sm:px-6 lg:px-8 text-gray-900">
       <div className="max-w-7xl mx-auto">
-        {/* Page Title & Breadcrumb */}
+        {/* Page Title & Description */}
         <div className="mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            Eyewear Shop <span className="text-[#DFFF00]">Collection</span>
+          <h1 className="text-3xl font-black tracking-tight text-black flex items-center gap-3 uppercase">
+            Eyewear Shop <span className="text-black underline decoration-[#DFFF00] decoration-4">Collection</span>
           </h1>
-          <p className="mt-2 text-sm text-gray-400">
-            Discover premium glasses, sunglasses, and optical frames engineered for style and clarity.
+          <p className="mt-2 text-sm text-gray-600 font-medium max-w-2xl">
+            Explore prescription frames, designer sunglasses, and blue light eyewear engineered for optical clarity.
           </p>
         </div>
 
         {/* Top Control Bar */}
-        <div className="bg-[#0B0B0B] border border-[#292929] rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="lg:hidden px-4 py-2 bg-[#171717] border border-[#292929] rounded-xl text-xs font-bold text-gray-200 flex items-center gap-2 hover:border-[#DFFF00]"
+              className="lg:hidden px-4 py-2 bg-black text-[#DFFF00] rounded-xl text-xs font-black uppercase flex items-center gap-2"
             >
-              <FiSliders className="text-[#DFFF00]" /> Filters
+              <FiSliders /> Filters
             </button>
-            <span className="text-xs text-gray-400">
-              Showing <span className="text-white font-bold">{pagination.total}</span> Results
+            <span className="text-xs text-gray-500 font-medium">
+              Showing <span className="text-black font-extrabold">{pagination.total}</span> Results
             </span>
           </div>
 
           {/* Sort By Dropdown */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider hidden sm:inline">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:inline">
               Sort By:
             </span>
             <select
               value={currentFilters.sort}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="bg-[#171717] border border-[#292929] text-white text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-[#DFFF00] transition-colors cursor-pointer"
+              className="bg-[#F8F9FA] border border-gray-200 text-black text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-black cursor-pointer"
             >
               <option value="newest">Newest Arrivals</option>
               <option value="popular">Most Popular</option>
@@ -150,15 +146,15 @@ const ShopPage = () => {
           {mobileFilterOpen && (
             <div className="fixed inset-0 z-50 lg:hidden flex">
               <div
-                className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm"
                 onClick={() => setMobileFilterOpen(false)}
               ></div>
-              <div className="relative ml-auto w-full max-w-xs bg-[#0B0B0B] h-full p-6 overflow-y-auto z-10 shadow-2xl">
+              <div className="relative ml-auto w-full max-w-xs bg-white h-full p-6 overflow-y-auto z-10 shadow-2xl">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="font-bold text-lg text-white">Filter Options</h3>
+                  <h3 className="font-extrabold text-lg text-black uppercase">Filter Options</h3>
                   <button
                     onClick={() => setMobileFilterOpen(false)}
-                    className="text-gray-400 hover:text-white text-xl"
+                    className="text-gray-500 hover:text-black text-xl"
                   >
                     ✕
                   </button>
@@ -176,40 +172,37 @@ const ShopPage = () => {
           {/* Product Grid Area */}
           <div className="lg:col-span-3">
             {loading ? (
-              // Loading Skeletons
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-[#0B0B0B] border border-[#292929] rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
+                    className="bg-white border border-gray-200 rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
                   >
-                    <div className="bg-[#171717] h-44 rounded-xl"></div>
+                    <div className="bg-gray-100 h-44 rounded-xl"></div>
                     <div className="space-y-2 mt-4">
-                      <div className="bg-[#171717] h-4 rounded w-3/4"></div>
-                      <div className="bg-[#171717] h-3 rounded w-1/2"></div>
+                      <div className="bg-gray-100 h-4 rounded w-3/4"></div>
+                      <div className="bg-gray-100 h-3 rounded w-1/2"></div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : products.length === 0 ? (
-              // Empty State
-              <div className="bg-[#0B0B0B] border border-[#292929] rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-16 h-16 bg-[#171717] text-[#DFFF00] rounded-full flex items-center justify-center text-2xl mb-4 border border-[#292929]">
+              <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-16 h-16 bg-[#F8F9FA] text-black rounded-full flex items-center justify-center text-2xl mb-4 border border-gray-200">
                   <FiPackage />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">No Products Found</h3>
-                <p className="text-sm text-gray-400 max-w-md mb-6">
-                  We couldn't find any eyewear matching your selected search or filter criteria. Try adjusting or clearing filters.
+                <h3 className="text-xl font-extrabold text-black mb-2">No Frames Found</h3>
+                <p className="text-sm text-gray-500 max-w-md mb-6 font-medium">
+                  We couldn't find any eyewear matching your selected criteria. Try adjusting your search or filters.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 bg-[#DFFF00] text-black font-extrabold rounded-xl hover:bg-[#cbe600] transition-colors text-xs uppercase tracking-wider"
+                  className="px-6 py-2.5 bg-black text-[#DFFF00] font-black rounded-xl hover:bg-gray-900 transition-colors text-xs uppercase tracking-wider"
                 >
                   Reset All Filters
                 </button>
               </div>
             ) : (
-              // Product Cards Grid
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {products.map((product) => (
@@ -217,7 +210,6 @@ const ShopPage = () => {
                   ))}
                 </div>
 
-                {/* Pagination Controls */}
                 <Pagination pagination={pagination} onPageChange={handlePageChange} />
               </>
             )}

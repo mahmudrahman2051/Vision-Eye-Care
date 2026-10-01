@@ -35,20 +35,20 @@ const categories = [
 
 const CategoryDiscoveryGrid = () => {
   return (
-    <section className="bg-[#050505] py-20 px-4 sm:px-6 lg:px-8 border-b border-[#292929]">
+    <section className="bg-white py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#DFFF00]">
+            <span className="text-xs font-black uppercase tracking-widest text-[#111827]">
               Curated Collections
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-tight mt-1">
+            <h2 className="text-3xl sm:text-4xl font-black uppercase text-black tracking-tight mt-1">
               DISCOVER BY CATEGORY
             </h2>
           </div>
           <Link
             to="/shop"
-            className="text-xs font-bold uppercase tracking-wider text-[#DFFF00] hover:underline flex items-center gap-1"
+            className="text-xs font-black uppercase tracking-wider text-black hover:underline flex items-center gap-1"
           >
             Explore All Categories <FiArrowRight className="w-3.5 h-3.5" />
           </Link>
@@ -59,12 +59,12 @@ const CategoryDiscoveryGrid = () => {
             <Link
               key={idx}
               to={cat.link}
-              className={`group relative bg-[#0B0B0B] border border-[#292929] hover:border-[#DFFF00] rounded-2xl overflow-hidden min-h-[280px] p-8 flex flex-col justify-end transition-all duration-500 shadow-xl ${cat.gridSpan}`}
+              className={`group relative bg-black rounded-2xl overflow-hidden min-h-[280px] p-8 flex flex-col justify-end transition-all duration-500 shadow-xl ${cat.gridSpan}`}
             >
               <img
                 src={cat.image}
                 alt={cat.name}
-                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-50 filter brightness-90"
+                className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 opacity-60 filter brightness-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
 
@@ -74,7 +74,7 @@ const CategoryDiscoveryGrid = () => {
                 </h3>
                 <p className="text-xs text-gray-300 font-medium">{cat.desc}</p>
                 <div className="pt-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#DFFF00] group-hover:translate-x-1 transition-transform">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#DFFF00] group-hover:translate-x-1 transition-transform">
                     Shop Category <FiArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </div>

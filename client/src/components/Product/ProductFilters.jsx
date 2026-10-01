@@ -21,15 +21,15 @@ const ProductFilters = ({
   )?.subcategories || [];
 
   return (
-    <div className="bg-[#0B0B0B] border border-[#292929] rounded-2xl p-6 space-y-6 text-gray-200">
+    <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-6 text-gray-900 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#292929]">
-        <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <FiFilter className="text-[#DFFF00]" /> Filters
+      <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+        <h3 className="text-sm font-black text-black uppercase tracking-wider flex items-center gap-2">
+          <FiFilter className="text-black" /> Filters
         </h3>
         <button
           onClick={onResetFilters}
-          className="text-xs font-semibold text-gray-400 hover:text-[#DFFF00] flex items-center gap-1 transition-colors"
+          className="text-xs font-bold text-gray-500 hover:text-black flex items-center gap-1 transition-colors"
         >
           <FiRotateCcw className="w-3.5 h-3.5" /> Reset
         </button>
@@ -37,24 +37,24 @@ const ProductFilters = ({
 
       {/* Search Filter */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-          Search Products
+        <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+          Search Frames
         </label>
         <div className="relative">
-          <FiSearch className="absolute left-3.5 top-3.5 text-gray-500 w-4 h-4" />
+          <FiSearch className="absolute left-3.5 top-3.5 text-gray-400 w-4 h-4" />
           <input
             type="text"
             placeholder="Name, brand, frame..."
             value={filters.search || ''}
             onChange={(e) => onFilterChange('search', e.target.value)}
-            className="w-full bg-[#171717] border border-[#292929] rounded-xl pl-10 pr-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#DFFF00] transition-colors"
+            className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl pl-10 pr-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-black focus:bg-white transition-all"
           />
         </div>
       </div>
 
       {/* Category */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           Category
         </label>
         <select
@@ -63,7 +63,7 @@ const ProductFilters = ({
             onFilterChange('category', e.target.value);
             onFilterChange('subcategory', '');
           }}
-          className="w-full bg-[#171717] border border-[#292929] rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#DFFF00] transition-colors"
+          className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-black focus:bg-white transition-all cursor-pointer font-medium"
         >
           <option value="">All Categories</option>
           {categories.map((cat) => (
@@ -74,16 +74,16 @@ const ProductFilters = ({
         </select>
       </div>
 
-      {/* Subcategory (If category selected) */}
+      {/* Subcategory */}
       {activeSubcategories.length > 0 && (
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
             Subcategory
           </label>
           <select
             value={filters.subcategory || ''}
             onChange={(e) => onFilterChange('subcategory', e.target.value)}
-            className="w-full bg-[#171717] border border-[#292929] rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#DFFF00] transition-colors"
+            className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-black focus:bg-white transition-all cursor-pointer font-medium"
           >
             <option value="">All Subcategories</option>
             {activeSubcategories.map((sub) => (
@@ -97,19 +97,19 @@ const ProductFilters = ({
 
       {/* Gender */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           Gender
         </label>
-        <div className="grid grid-cols-5 gap-1 bg-[#171717] p-1 rounded-xl border border-[#292929]">
+        <div className="grid grid-cols-5 gap-1 bg-[#F8F9FA] p-1 rounded-xl border border-gray-200">
           {genders.map((g) => (
             <button
               key={g.value}
               type="button"
               onClick={() => onFilterChange('gender', g.value)}
-              className={`py-1.5 text-xs font-semibold rounded-lg transition-all text-center ${
+              className={`py-1.5 text-xs font-extrabold rounded-lg transition-all text-center ${
                 (filters.gender || '') === g.value
-                  ? 'bg-[#DFFF00] text-black shadow'
-                  : 'text-gray-400 hover:text-white'
+                  ? 'bg-black text-[#DFFF00] shadow'
+                  : 'text-gray-600 hover:text-black'
               }`}
             >
               {g.label}
@@ -120,13 +120,13 @@ const ProductFilters = ({
 
       {/* Frame Shape */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           Frame Shape
         </label>
         <select
           value={filters.frame_shape || ''}
           onChange={(e) => onFilterChange('frame_shape', e.target.value)}
-          className="w-full bg-[#171717] border border-[#292929] rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-[#DFFF00] transition-colors"
+          className="w-full bg-[#F8F9FA] border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-black focus:bg-white transition-all cursor-pointer font-medium"
         >
           <option value="">All Shapes</option>
           {frameShapes.map((shape) => (
@@ -139,7 +139,7 @@ const ProductFilters = ({
 
       {/* Price Range */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
           Price Range ($)
         </label>
         <div className="flex items-center gap-2">
@@ -148,27 +148,27 @@ const ProductFilters = ({
             placeholder="Min"
             value={filters.min_price || ''}
             onChange={(e) => onFilterChange('min_price', e.target.value)}
-            className="w-1/2 bg-[#171717] border border-[#292929] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#DFFF00]"
+            className="w-1/2 bg-[#F8F9FA] border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-black"
           />
-          <span className="text-gray-500 text-xs">-</span>
+          <span className="text-gray-400 text-xs">-</span>
           <input
             type="number"
             placeholder="Max"
             value={filters.max_price || ''}
             onChange={(e) => onFilterChange('max_price', e.target.value)}
-            className="w-1/2 bg-[#171717] border border-[#292929] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#DFFF00]"
+            className="w-1/2 bg-[#F8F9FA] border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-black"
           />
         </div>
       </div>
 
       {/* Stock Availability */}
-      <div className="pt-2 border-t border-[#292929] flex items-center justify-between">
-        <span className="text-xs font-semibold text-gray-300">In Stock Only</span>
+      <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+        <span className="text-xs font-bold text-gray-700">In Stock Only</span>
         <input
           type="checkbox"
           checked={filters.in_stock === 'true'}
           onChange={(e) => onFilterChange('in_stock', e.target.checked ? 'true' : '')}
-          className="h-4 w-4 bg-[#171717] border-[#292929] rounded text-[#DFFF00] focus:ring-[#DFFF00]"
+          className="h-4 w-4 border-gray-300 rounded text-black focus:ring-black cursor-pointer"
         />
       </div>
     </div>
