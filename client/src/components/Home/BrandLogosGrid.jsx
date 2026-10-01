@@ -12,7 +12,7 @@ const brands = [
 
 const BrandLogosGrid = () => {
   return (
-    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
+    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8 border-b border-yellow-200">
       <div className="max-w-7xl mx-auto text-center space-y-10">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
           Enjoy our premium brands
@@ -23,7 +23,7 @@ const BrandLogosGrid = () => {
             <Link
               key={idx}
               to={b.link}
-              className={`text-gray-900 hover:text-black hover:scale-105 transition-all duration-200 ${b.style}`}
+              className={`text-gray-900 hover:text-yellow-600 hover:scale-105 transition-all duration-200 ${b.style}`}
             >
               {b.name}
             </Link>

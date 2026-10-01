@@ -50,21 +50,21 @@ const ProductCard = ({ product }) => {
   const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80`;
 
   return (
-    <div className="group relative bg-white border border-gray-200 hover:border-black rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-[390px] justify-between">
+    <div className="group relative bg-white border border-yellow-200 hover:border-[#DFFF00] rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-[390px] justify-between">
       {/* Badges Overlay */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
         {hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#DFFF00] text-black rounded shadow-xs">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#DFFF00] text-gray-900 border border-yellow-400 rounded shadow-xs">
             -{discountPercent}% OFF
           </span>
         )}
         {bestseller && !hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-black text-white rounded shadow-xs">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#DFFF00] text-gray-900 border border-yellow-400 rounded shadow-xs">
             Best Seller
           </span>
         )}
         {new_arrival && !bestseller && !hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#FEF9C3] text-black border border-black/20 rounded shadow-xs">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-yellow-100 text-gray-900 border border-yellow-300 rounded shadow-xs">
             NEW
           </span>
         )}
@@ -76,7 +76,7 @@ const ProductCard = ({ product }) => {
         className={`absolute top-3 right-3 z-10 p-2.5 rounded-full border transition-all duration-200 ${
           isWishlisted
             ? 'bg-red-50 border-red-200 text-red-500'
-            : 'bg-white/90 backdrop-blur border-gray-200 text-gray-400 hover:text-black hover:border-black'
+            : 'bg-white/90 backdrop-blur border-yellow-200 text-gray-400 hover:text-yellow-600 hover:border-[#DFFF00]'
         }`}
         aria-label="Wishlist"
       >
@@ -84,7 +84,7 @@ const ProductCard = ({ product }) => {
       </button>
 
       {/* Product Image Area - Fixed 176px (h-44) */}
-      <Link to={`/product/${slug || id}`} className="relative h-44 w-full bg-[#F8F9FA] overflow-hidden block flex-shrink-0">
+      <Link to={`/product/${slug || id}`} className="relative h-44 w-full bg-yellow-50/50 overflow-hidden block flex-shrink-0">
         <img
           src={primary_image || defaultImage}
           alt={name}
@@ -94,8 +94,8 @@ const ProductCard = ({ product }) => {
             e.target.src = defaultImage;
           }}
         />
-        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <span className="px-4 py-2 bg-black text-[#DFFF00] rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
+        <div className="absolute inset-0 bg-yellow-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <span className="px-4 py-2 bg-[#DFFF00] text-gray-900 border border-yellow-400 rounded-full text-xs font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform">
             <FiEye className="w-4 h-4" /> Quick View
           </span>
         </div>
@@ -105,14 +105,14 @@ const ProductCard = ({ product }) => {
       <div className="p-4 flex flex-col justify-between flex-grow bg-white">
         <div>
           {/* Brand & Shape */}
-          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-gray-500 mb-1">
+          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-yellow-700 mb-1">
             <span>{brand || 'RAY-BAN'}</span>
             {frame_shape && <span className="text-gray-400 font-normal">• {frame_shape}</span>}
           </div>
 
           {/* Product Title */}
           <Link to={`/product/${slug || id}`} className="block">
-            <h3 className="text-sm font-extrabold text-black group-hover:underline transition-colors line-clamp-1">
+            <h3 className="text-sm font-extrabold text-gray-900 group-hover:text-yellow-600 transition-colors line-clamp-1">
               {name}
             </h3>
           </Link>
@@ -130,10 +130,10 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Pricing & Cart Action */}
-        <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+        <div className="mt-2 pt-2 border-t border-yellow-100 flex items-center justify-between">
           <div className="flex flex-col">
             <div className="flex items-baseline gap-2">
-              <span className="text-base font-black text-black">
+              <span className="text-base font-black text-gray-900">
                 ${numericPrice.toFixed(2)}
               </span>
               {hasDiscount && (
@@ -154,7 +154,7 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="p-2.5 bg-black hover:bg-[#DFFF00] text-white hover:text-black rounded-xl font-bold active:scale-95 transition-all shadow disabled:opacity-30"
+            className="p-2.5 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 border border-yellow-500 rounded-xl font-bold active:scale-95 transition-all shadow disabled:opacity-30"
             title="Add to Cart"
           >
             <FiShoppingBag className="w-4 h-4" />

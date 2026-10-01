@@ -35,17 +35,17 @@ const LensesAccordionSection = () => {
   const currentLens = lensItems.find((l) => l.id === activeId) || lensItems[0];
 
   return (
-    <section className="bg-[#F9FAFB] py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
+    <section className="bg-white py-20 px-4 sm:px-6 lg:px-8 border-b border-yellow-200">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <span className="inline-block px-3 py-1 bg-[#DFFF00] text-black font-black text-xs uppercase tracking-widest rounded border border-black/10">
+          <span className="inline-block px-3 py-1 bg-[#DFFF00] text-gray-900 font-black text-xs uppercase tracking-widest rounded border border-yellow-400">
             ADVANCED OPTICS
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#050505] uppercase tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 uppercase tracking-tight">
             Our lenses
           </h2>
-          <p className="text-sm text-gray-600 font-medium leading-relaxed">
+          <p className="text-sm text-gray-600 font-bold leading-relaxed">
             Explore lens options designed to bring you clear vision and lasting comfort, all tailored to your vision needs.
           </p>
         </div>
@@ -53,7 +53,7 @@ const LensesAccordionSection = () => {
         {/* Content Box */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Preview Image */}
-          <div className="lg:col-span-6 bg-[#FEFCE8] rounded-3xl p-6 overflow-hidden flex items-center justify-center min-h-[380px] border-2 border-[#FEF08A] shadow-sm">
+          <div className="lg:col-span-6 bg-[#FEFCE8] rounded-3xl p-6 overflow-hidden flex items-center justify-center min-h-[380px] border-2 border-[#DFFF00] shadow-sm">
             <img
               src={currentLens.image}
               alt={currentLens.title}
@@ -69,27 +69,27 @@ const LensesAccordionSection = () => {
                 <div
                   key={item.id}
                   className={`bg-white border rounded-2xl overflow-hidden transition-all shadow-sm ${
-                    isOpen ? 'border-black ring-2 ring-black/5' : 'border-gray-200'
+                    isOpen ? 'border-[#DFFF00] ring-2 ring-yellow-400/30' : 'border-yellow-200'
                   }`}
                 >
                   <button
                     onClick={() => setActiveId(isOpen ? '' : item.id)}
-                    className="w-full flex items-center justify-between p-5 text-left font-black text-base text-black hover:text-gray-700 transition-colors"
+                    className="w-full flex items-center justify-between p-5 text-left font-black text-base text-gray-900 hover:text-yellow-700 transition-colors"
                   >
                     <span>{item.title}</span>
-                    <span className={`p-1.5 rounded-full border text-black ${isOpen ? 'bg-[#DFFF00] border-black' : 'bg-gray-100 border-gray-300'}`}>
+                    <span className={`p-1.5 rounded-full border text-gray-900 ${isOpen ? 'bg-[#DFFF00] border-yellow-400' : 'bg-yellow-50 border-yellow-200'}`}>
                       {isOpen ? <FiMinus className="w-4 h-4" /> : <FiPlus className="w-4 h-4" />}
                     </span>
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-6 pt-1 space-y-4 animate-fadeIn border-t border-gray-100">
+                    <div className="px-5 pb-6 pt-1 space-y-4 animate-fadeIn border-t border-yellow-100">
                       <p className="text-xs text-gray-700 leading-relaxed font-medium">
                         {item.content}
                       </p>
                       <Link
                         to={item.link}
-                        className="inline-block px-6 py-3 bg-[#050505] hover:bg-gray-800 text-[#DFFF00] font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow"
+                        className="inline-block px-6 py-3 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow border border-yellow-500"
                       >
                         {item.buttonText}
                       </Link>
