@@ -50,7 +50,7 @@ const ProductCard = ({ product }) => {
   const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80`;
 
   return (
-    <div className="group relative bg-white border border-gray-200 hover:border-black rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-full">
+    <div className="group relative bg-white border border-gray-200 hover:border-black rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl flex flex-col h-[380px] justify-between">
       {/* Badges Overlay */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
         {hasDiscount && (
@@ -83,8 +83,8 @@ const ProductCard = ({ product }) => {
         <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500' : ''}`} />
       </button>
 
-      {/* Product Image Area */}
-      <Link to={`/product/${slug || id}`} className="relative aspect-[4/3] bg-[#F8F9FA] overflow-hidden block">
+      {/* Product Image Area - Fixed 210px Height */}
+      <Link to={`/product/${slug || id}`} className="relative h-[210px] w-full bg-[#F8F9FA] overflow-hidden block flex-shrink-0">
         <img
           src={primary_image || defaultImage}
           alt={name}
@@ -101,8 +101,8 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
 
-      {/* Product Content Details */}
-      <div className="p-5 flex flex-col flex-grow justify-between bg-white">
+      {/* Product Content Details Area */}
+      <div className="p-4 flex flex-col justify-between flex-grow bg-white">
         <div>
           {/* Brand & Category */}
           <div className="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-widest text-gray-500 mb-1">
@@ -112,13 +112,13 @@ const ProductCard = ({ product }) => {
 
           {/* Product Title */}
           <Link to={`/product/${slug || id}`} className="block">
-            <h3 className="text-base font-extrabold text-black group-hover:underline transition-colors line-clamp-1">
+            <h3 className="text-sm font-extrabold text-black group-hover:underline transition-colors line-clamp-1">
               {name}
             </h3>
           </Link>
 
           {/* Rating */}
-          <div className="flex items-center gap-1 mt-2">
+          <div className="flex items-center gap-1 mt-1">
             <div className="flex items-center text-amber-500 text-xs">
               <FiStar className="w-3.5 h-3.5 fill-amber-400" />
             </div>
@@ -130,10 +130,10 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Pricing & Cart Action */}
-        <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+        <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
           <div className="flex flex-col">
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-black text-black">
+              <span className="text-base font-black text-black">
                 ${numericPrice.toFixed(2)}
               </span>
               {hasDiscount && (
@@ -154,7 +154,7 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="p-3 bg-black hover:bg-[#DFFF00] text-white hover:text-black rounded-xl font-bold active:scale-95 transition-all shadow disabled:opacity-30"
+            className="p-2.5 bg-black hover:bg-[#DFFF00] text-white hover:text-black rounded-xl font-bold active:scale-95 transition-all shadow disabled:opacity-30"
             title="Add to Cart"
           >
             <FiShoppingBag className="w-4 h-4" />

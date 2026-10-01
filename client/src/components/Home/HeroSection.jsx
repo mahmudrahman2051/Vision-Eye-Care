@@ -22,32 +22,32 @@ const HeroSection = () => {
             </div>
 
             {/* Main Title & Subtitle */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <p className="text-xs font-black uppercase tracking-widest text-gray-500">
                 Find Your New Fall Look And Save:
               </p>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#050505] leading-[1.15] tracking-tight uppercase">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#050505] leading-tight tracking-tight uppercase">
                 Up to 50% off <br />
                 <span className="inline-block bg-[#DFFF00] px-3 py-1 rounded-lg border border-black/10 mt-1 shadow-xs">
                   Frames & Lenses*
                 </span>
               </h1>
-              <p className="text-sm sm:text-base text-gray-700 max-w-lg font-medium leading-relaxed pt-1">
+              <p className="text-xs sm:text-sm text-gray-700 max-w-lg font-medium leading-relaxed pt-1">
                 Including Ray-Ban, Oakley, Versace & more. Including branded lenses. Get as low as 0% APR when you pay with Klarna.
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 to="/shop?sort=popular"
-                className="px-8 py-3.5 bg-[#050505] hover:bg-neutral-800 text-[#DFFF00] font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center gap-2"
+                className="px-7 py-3 bg-[#050505] hover:bg-neutral-800 text-[#DFFF00] font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center gap-2"
               >
                 SHOP THE DEAL <FiArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/shop"
-                className="px-8 py-3.5 bg-white hover:bg-gray-100 text-black border-2 border-black font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all shadow-xs"
+                className="px-7 py-3 bg-white hover:bg-gray-100 text-black border-2 border-black font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all shadow-xs"
               >
                 EXPLORE FRAMES
               </Link>
@@ -56,18 +56,18 @@ const HeroSection = () => {
 
           {/* Right Side Model Images - Perfectly Contained */}
           <div className="lg:col-span-6 grid grid-cols-2 gap-4 items-center max-w-md mx-auto lg:max-w-none">
-            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-xl bg-gray-100 h-[360px] sm:h-[420px]">
+            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-gray-50 h-[280px] sm:h-[340px]">
               <img
                 src="https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"
                 alt="Man wearing designer sunglasses"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-top"
               />
             </div>
-            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-xl bg-gray-100 h-[360px] sm:h-[420px]">
+            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-gray-50 h-[280px] sm:h-[340px]">
               <img
                 src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80"
                 alt="Woman wearing black optical glasses"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-top"
               />
             </div>
           </div>
