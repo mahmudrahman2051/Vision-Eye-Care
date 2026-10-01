@@ -1,11 +1,12 @@
 /* ============================================
-   Footer Styles
+   Footer Styles — White & Yellow Optical Theme
    ============================================ */
 
 .footer {
   background-color: var(--color-black);
-  border-top: 1px solid var(--color-border-gray);
+  border-top: 1px solid #1F2937;
   padding-top: 4rem;
+  color: var(--color-white);
 }
 
 .footer-grid {
@@ -43,7 +44,7 @@
 
 .footer-desc {
   font-size: 0.875rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
   line-height: 1.7;
   max-width: 280px;
 }
@@ -60,18 +61,18 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.825rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
 }
 
 .footer-contact-item svg {
-  color: var(--color-neon-yellow);
+  color: var(--color-yellow);
   flex-shrink: 0;
 }
 
 /* Link Columns */
 .footer-col-title {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 800;
   color: var(--color-white);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -87,19 +88,19 @@
 
 .footer-link {
   font-size: 0.875rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
   transition: color var(--transition-base);
   text-decoration: none;
 }
 
 .footer-link:hover {
-  color: var(--color-neon-yellow);
+  color: var(--color-yellow);
 }
 
 /* Newsletter */
 .footer-newsletter-text {
   font-size: 0.85rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
   margin-bottom: 0.75rem;
   line-height: 1.6;
 }
@@ -112,8 +113,8 @@
 .footer-newsletter-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  background-color: var(--color-dark-gray);
-  border: 1px solid var(--color-border-gray);
+  background-color: #111827;
+  border: 1px solid #374151;
   border-radius: var(--radius-md);
   color: var(--color-white);
   font-size: 0.825rem;
@@ -122,11 +123,11 @@
 }
 
 .footer-newsletter-input:focus {
-  border-color: var(--color-neon-yellow);
+  border-color: var(--color-yellow);
 }
 
 .footer-newsletter-input::placeholder {
-  color: var(--color-muted-gray);
+  color: #6B7280;
 }
 
 /* Social */
@@ -143,24 +144,24 @@
   width: 2.25rem;
   height: 2.25rem;
   border-radius: var(--radius-md);
-  background-color: var(--color-dark-gray);
-  border: 1px solid var(--color-border-gray);
-  color: var(--color-muted-gray);
+  background-color: #111827;
+  border: 1px solid #374151;
+  color: #9CA3AF;
   transition: all var(--transition-base);
   text-decoration: none;
 }
 
 .footer-social-link:hover {
-  color: var(--color-neon-yellow);
-  border-color: var(--color-neon-yellow);
-  background-color: var(--color-neon-yellow-light);
+  color: var(--color-black);
+  border-color: var(--color-yellow);
+  background-color: var(--color-yellow);
 }
 
 /* Bottom Bar */
 .footer-bottom {
   margin-top: 3rem;
   padding-block: 1.5rem;
-  border-top: 1px solid var(--color-border-gray);
+  border-top: 1px solid #1F2937;
 }
 
 .footer-bottom-inner {
@@ -179,7 +180,7 @@
 
 .footer-copyright {
   font-size: 0.8rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
 }
 
 .footer-legal-links {
@@ -189,11 +190,11 @@
 
 .footer-legal-link {
   font-size: 0.8rem;
-  color: var(--color-muted-gray);
+  color: #9CA3AF;
   transition: color var(--transition-base);
   text-decoration: none;
 }
 
 .footer-legal-link:hover {
-  color: var(--color-neon-yellow);
+  color: var(--color-yellow);
 }
