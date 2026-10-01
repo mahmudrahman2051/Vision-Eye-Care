@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import productService from '../../services/productService';
 import ProductCard from '../Product/ProductCard';
 
-const ProductCarousel = ({ title, subtitle, fetchParams = {}, viewAllLink = '/shop' }) => {
+const ProductCarousel = ({ title = 'AI Glasses', fetchParams = {}, viewAllLink = '/shop' }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
@@ -35,71 +35,65 @@ const ProductCarousel = ({ title, subtitle, fetchParams = {}, viewAllLink = '/sh
   };
 
   return (
-    <section className="bg-[#F8F9FA] py-16 px-4 sm:px-6 lg:px-8 border-b border-gray-200">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-black uppercase text-black tracking-tight">
-              {title}
-            </h2>
-            {subtitle && <p className="text-xs text-gray-500 mt-1 font-medium">{subtitle}</p>}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Link
-              to={viewAllLink}
-              className="text-xs font-black uppercase tracking-wider text-black hover:underline flex items-center gap-1 mr-2"
-            >
-              View All <FiArrowRight className="w-3.5 h-3.5" />
-            </Link>
-
-            <button
-              onClick={() => scroll('left')}
-              className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 hover:text-black hover:border-black transition-colors shadow-sm"
-              aria-label="Scroll left"
-            >
-              <FiChevronLeft className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => scroll('right')}
-              className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 hover:text-black hover:border-black transition-colors shadow-sm"
-              aria-label="Scroll right"
-            >
-              <FiChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+    <section className="bg-white py-16 px-4 sm:px-6 lg:px-8 border-b border-gray-100 relative">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Large Peach Header Title (Screenshot 2) */}
+        <div className="text-center">
+          <h2 className="text-4xl sm:text-6xl font-black text-[#F4D9C5] tracking-tight uppercase">
+            {title}
+          </h2>
         </div>
 
-        {/* Scrollable Container */}
-        {loading ? (
-          <div className="flex gap-6 overflow-hidden">
-            {[...Array(4)].map((_, idx) => (
-              <div
-                key={idx}
-                className="w-72 sm:w-80 flex-shrink-0 bg-white border border-gray-200 rounded-2xl h-80 animate-pulse p-4"
-              >
-                <div className="bg-gray-100 h-44 rounded-xl mb-4"></div>
-                <div className="bg-gray-100 h-4 w-3/4 rounded mb-2"></div>
-                <div className="bg-gray-100 h-3 w-1/2 rounded"></div>
-              </div>
-            ))}
-          </div>
-        ) : products.length === 0 ? (
-          <div className="py-8 text-center text-xs text-gray-400 font-medium">No frames available in this collection.</div>
-        ) : (
-          <div
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-none scroll-smooth pb-4 pt-1"
+        {/* Carousel Area with Side Navigation Arrows */}
+        <div className="relative group">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll('left')}
+            className="absolute -left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 hover:bg-[#EEF0F8] rounded-full text-gray-700 flex items-center justify-center shadow-lg transition-all"
+            aria-label="Previous"
           >
-            {products.map((product) => (
-              <div key={product.id} className="w-72 sm:w-80 flex-shrink-0">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        )}
+            <FiChevronLeft className="w-5 h-5 text-[#5B649E]" />
+          </button>
+
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll('right')}
+            className="absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-gray-200 hover:bg-[#EEF0F8] rounded-full text-gray-700 flex items-center justify-center shadow-lg transition-all"
+            aria-label="Next"
+          >
+            <FiChevronRight className="w-5 h-5 text-[#5B649E]" />
+          </button>
+
+          {/* Scrollable Container */}
+          {loading ? (
+            <div className="flex gap-6 overflow-hidden">
+              {[...Array(4)].map((_, idx) => (
+                <div key={idx} className="w-64 sm:w-72 flex-shrink-0 bg-gray-50 border border-gray-100 rounded-2xl h-72 animate-pulse p-4" />
+              ))}
+            </div>
+          ) : (
+            <div
+              ref={scrollRef}
+              className="flex gap-6 overflow-x-auto scrollbar-none scroll-smooth py-2 px-1"
+            >
+              {products.map((product) => (
+                <div key={product.id} className="w-64 sm:w-72 flex-shrink-0">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Center Pill Button (Screenshot 2) */}
+        <div className="text-center pt-2">
+          <Link
+            to={viewAllLink}
+            className="inline-block px-8 py-3 bg-[#5B649E] hover:bg-[#4A5288] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"
+          >
+            VIEW ALL
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -26,10 +26,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  const cartCount = 0; // Connected in Phase 5
-  const wishlistCount = 0; // Connected in Phase 5
+  const cartCount = 0;
+  const wishlistCount = 0;
 
-  // Close user dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -50,143 +49,126 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Announcement Bar */}
-      <AnnouncementBar />
-
-      <header className="navbar sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-[#292929]" id="main-navbar">
-        <div className="navbar-inner container relative flex items-center justify-between py-4">
-          {/* Brand Logo */}
-          <Link to="/" className="navbar-logo flex items-center gap-2 text-xl font-extrabold tracking-tight text-white" id="logo-link">
-            <span className="text-2xl">👓</span>
-            <span className="logo-text">
-              Vision<span className="text-[#DFFF00]"> Eye Care</span>
-            </span>
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-200" id="main-navbar">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+          {/* Glasses.com Style Logo */}
+          <Link to="/" className="flex items-center gap-1 text-lg sm:text-xl font-extrabold tracking-[0.2em] text-black uppercase" id="logo-link">
+            <span>VISION</span>
+            <span className="text-[#5B649E]">•</span>
+            <span>EYE CARE</span>
           </Link>
 
-          {/* Desktop Navigation Links with MegaMenu support */}
-          <nav className="hidden lg:flex items-center gap-8 font-bold text-xs uppercase tracking-wider text-gray-300" id="desktop-nav">
-            <NavLink to="/" className={({ isActive }) => (isActive ? 'text-[#DFFF00]' : 'hover:text-white transition-colors')} end>
-              Home
+          {/* Navigation Links */}
+          <nav className="hidden xl:flex items-center gap-7 font-bold text-xs text-gray-800 tracking-wide" id="desktop-nav">
+            <NavLink to="/shop?category=eyeglasses" className="hover:text-[#5B649E] transition-colors" onMouseEnter={() => setActiveMegaMenu('eyeglasses')}>
+              Eyeglasses
             </NavLink>
-            <div
-              className="relative py-2 cursor-pointer"
-              onMouseEnter={() => setActiveMegaMenu('eyeglasses')}
-            >
-              <NavLink to="/shop?category=eyeglasses" className="hover:text-white transition-colors">
-                Eyeglasses
-              </NavLink>
-            </div>
-            <div
-              className="relative py-2 cursor-pointer"
-              onMouseEnter={() => setActiveMegaMenu('sunglasses')}
-            >
-              <NavLink to="/shop?category=sunglasses" className="hover:text-white transition-colors">
-                Sunglasses
-              </NavLink>
-            </div>
-            <NavLink to="/shop?search=Designer" className="hover:text-white transition-colors">
+            <NavLink to="/shop?category=sunglasses" className="hover:text-[#5B649E] transition-colors" onMouseEnter={() => setActiveMegaMenu('sunglasses')}>
+              Sunglasses
+            </NavLink>
+            <NavLink to="/shop?search=Brands" className="hover:text-[#5B649E] transition-colors">
               Brands
             </NavLink>
-            <NavLink to="/shop?sort=newest" className="hover:text-white transition-colors">
-              New Arrivals
+            <NavLink to="/shop?sort=popular" className="hover:text-[#5B649E] transition-colors">
+              Offers
             </NavLink>
-            <NavLink to="/shop?search=Blue+Light" className="hover:text-white transition-colors">
-              Lenses
-            </NavLink>
-            <NavLink to="/about" className="hover:text-white transition-colors">
+            <NavLink to="/about" className="hover:text-[#5B649E] transition-colors">
               Services
             </NavLink>
+            <NavLink to="/shop?search=Lenses" className="hover:text-[#5B649E] transition-colors">
+              Lenses
+            </NavLink>
+            <NavLink to="/about" className="hover:text-[#5B649E] transition-colors">
+              Sync Insurance
+            </NavLink>
             {isAdmin && (
-              <NavLink to="/admin" className="text-[#DFFF00] font-extrabold hover:underline">
+              <NavLink to="/admin" className="text-[#5B649E] font-black uppercase">
                 Admin
               </NavLink>
             )}
           </nav>
 
-          {/* Actions Bar (Search, Wishlist, Cart, User) */}
-          <div className="navbar-actions flex items-center gap-4 text-gray-300">
-            {/* Search Trigger */}
+          {/* Right Utilities (Search Pill, Heart, User, Cart) */}
+          <div className="flex items-center gap-4 text-gray-700">
+            {/* Search Pill Input */}
             <button
-              className="nav-action-btn p-2 hover:text-[#DFFF00] transition-colors"
-              id="search-toggle"
               onClick={() => setSearchOpen(true)}
-              aria-label="Toggle search"
+              className="hidden sm:flex items-center gap-2 bg-[#F3F4F6] hover:bg-gray-200 text-gray-500 rounded-full px-4 py-1.5 text-xs font-medium w-44 transition-colors"
+            >
+              <HiOutlineMagnifyingGlass size={16} className="text-gray-600" />
+              <span>Search</span>
+            </button>
+
+            {/* Mobile Search Icon */}
+            <button
+              className="sm:hidden p-1.5 hover:text-black"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
             >
               <HiOutlineMagnifyingGlass size={22} />
             </button>
 
             {/* Wishlist */}
-            <Link to="/wishlist" className="nav-action-btn relative p-2 hover:text-[#DFFF00] transition-colors" id="wishlist-link" aria-label="Wishlist">
+            <Link to="/wishlist" className="relative p-1.5 hover:text-black transition-colors" aria-label="Wishlist">
               <HiOutlineHeart size={22} />
-              {wishlistCount > 0 && <span className="action-badge">{wishlistCount}</span>}
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#5B649E] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
 
-            {/* Cart */}
-            <Link to="/cart" className="nav-action-btn relative p-2 hover:text-[#DFFF00] transition-colors" id="cart-link" aria-label="Cart">
-              <HiOutlineShoppingBag size={22} />
-              {cartCount > 0 && <span className="action-badge">{cartCount}</span>}
-            </Link>
-
-            {/* User Profile */}
+            {/* Account */}
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-1.5 focus:outline-none"
-                  id="user-menu-btn"
+                  className="p-1 flex items-center justify-center focus:outline-none"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#DFFF00] text-black font-extrabold flex items-center justify-center text-xs shadow-md">
+                  <div className="w-7 h-7 rounded-full bg-[#5B649E] text-white font-black text-xs flex items-center justify-center shadow">
                     {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-[#0B0B0B] border border-[#292929] rounded-xl shadow-2xl py-2 z-50 animate-fadeIn">
-                    <div className="px-4 py-2 border-b border-[#292929]">
-                      <p className="text-xs font-bold text-white truncate">{user?.full_name}</p>
-                      <p className="text-[11px] text-gray-400 truncate">{user?.email}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded bg-[#171717] text-[#DFFF00] border border-[#292929]">
-                        {user?.role}
-                      </span>
+                  <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-2xl py-2 z-50 animate-fadeIn">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-xs font-bold text-black truncate">{user?.full_name}</p>
+                      <p className="text-[11px] text-gray-500 truncate">{user?.email}</p>
                     </div>
-
-                    <Link
-                      to="/account"
-                      onClick={() => setUserDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#171717] hover:text-[#DFFF00] transition-colors"
-                    >
-                      <HiOutlineUser size={15} /> My Account
+                    <Link to="/account" onClick={() => setUserDropdownOpen(false)} className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50">
+                      My Account
                     </Link>
-
                     {isAdmin && (
-                      <Link
-                        to="/admin"
-                        onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-xs text-[#DFFF00] hover:bg-[#171717] transition-colors"
-                      >
-                        <HiOutlineCog6Tooth size={15} /> Admin Portal
+                      <Link to="/admin" onClick={() => setUserDropdownOpen(false)} className="block px-4 py-2 text-xs text-[#5B649E] font-bold hover:bg-gray-50">
+                        Admin Portal
                       </Link>
                     )}
-
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#171717] hover:text-red-300 transition-colors text-left border-t border-[#292929] mt-1"
-                    >
-                      <HiOutlineArrowRightOnRectangle size={15} /> Sign Out
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-gray-50 border-t border-gray-100 mt-1">
+                      Sign Out
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Link to="/login" className="nav-action-btn p-2 hover:text-[#DFFF00] transition-colors" id="account-link" aria-label="Account">
+              <Link to="/login" className="p-1.5 hover:text-black transition-colors" aria-label="Account">
                 <HiOutlineUser size={22} />
               </Link>
             )}
 
-            {/* Mobile Menu Toggle */}
+            {/* Shopping Cart */}
+            <Link to="/cart" className="relative p-1.5 hover:text-black transition-colors" aria-label="Cart">
+              <HiOutlineShoppingBag size={22} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#5B649E] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Mobile Toggle */}
             <button
-              className="lg:hidden p-2 text-gray-300 hover:text-white"
-              id="mobile-menu-toggle"
+              className="xl:hidden p-1.5 text-gray-700 hover:text-black"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
@@ -194,28 +176,28 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mega Menu Dropdown */}
           <MegaMenu activeMenu={activeMegaMenu} onClose={() => setActiveMegaMenu(null)} />
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Nav */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[#0B0B0B] border-t border-[#292929] px-6 py-6 space-y-4 animate-fadeIn">
-            <nav className="flex flex-col space-y-3 text-sm font-bold text-gray-300">
-              <NavLink to="/" onClick={closeMobile} className="hover:text-[#DFFF00]">Home</NavLink>
-              <NavLink to="/shop?category=eyeglasses" onClick={closeMobile} className="hover:text-[#DFFF00]">Eyeglasses</NavLink>
-              <NavLink to="/shop?category=sunglasses" onClick={closeMobile} className="hover:text-[#DFFF00]">Sunglasses</NavLink>
-              <NavLink to="/shop?search=Designer" onClick={closeMobile} className="hover:text-[#DFFF00]">Brands</NavLink>
-              <NavLink to="/shop?sort=newest" onClick={closeMobile} className="hover:text-[#DFFF00]">New Arrivals</NavLink>
-              <NavLink to="/shop?search=Blue+Light" onClick={closeMobile} className="hover:text-[#DFFF00]">Lenses</NavLink>
-              <NavLink to="/about" onClick={closeMobile} className="hover:text-[#DFFF00]">Services</NavLink>
-              {isAdmin && <NavLink to="/admin" onClick={closeMobile} className="text-[#DFFF00]">Admin Dashboard</NavLink>}
+          <div className="xl:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-3">
+            <nav className="flex flex-col space-y-2 text-xs font-bold uppercase tracking-wider text-gray-800">
+              <NavLink to="/shop?category=eyeglasses" onClick={closeMobile}>Eyeglasses</NavLink>
+              <NavLink to="/shop?category=sunglasses" onClick={closeMobile}>Sunglasses</NavLink>
+              <NavLink to="/shop?search=Brands" onClick={closeMobile}>Brands</NavLink>
+              <NavLink to="/shop?sort=popular" onClick={closeMobile}>Offers</NavLink>
+              <NavLink to="/about" onClick={closeMobile}>Services</NavLink>
+              <NavLink to="/shop?search=Lenses" onClick={closeMobile}>Lenses</NavLink>
+              <NavLink to="/about" onClick={closeMobile}>Sync Insurance</NavLink>
             </nav>
           </div>
         )}
       </header>
 
-      {/* Instant Search Overlay */}
+      {/* Top Lavender Banner */}
+      <AnnouncementBar />
+
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );

@@ -1,70 +1,64 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiShield, FiTruck, FiRotateCcw } from 'react-icons/fi';
+import { FiShield, FiChevronRight } from 'react-icons/fi';
 
 const HeroSection = () => {
   return (
-    <section className="relative bg-[#050505] text-white overflow-hidden py-20 lg:py-32 border-b border-[#292929]">
-      {/* Editorial Background Image with Gradient Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1577803645773-f96470509666?w=1600&auto=format&fit=crop&q=80"
-          alt="Vision Eye Care Hero"
-          className="w-full h-full object-cover object-center opacity-35 filter brightness-75 scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/90 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl space-y-6">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#171717] border border-[#292929] text-xs font-bold uppercase tracking-widest text-[#DFFF00]">
-            <span className="w-2 h-2 rounded-full bg-[#DFFF00] animate-ping"></span>
-            Spring / Summer 2026 Collection
-          </div>
-
-          {/* Heading */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none uppercase text-white">
-            SEE THE <br />
-            <span className="text-[#DFFF00]">DIFFERENCE.</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-gray-300 max-w-xl font-normal leading-relaxed">
-            Premium eyewear designed around your style, comfort, and everyday vision. Hand-crafted frames with anti-reflective optical clarity.
-          </p>
-
-          {/* Dual CTAs */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+    <section className="relative overflow-hidden bg-gradient-to-r from-[#6B3418] via-[#A85C32] to-[#D98E5B] text-white py-12 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left Text Content */}
+          <div className="lg:col-span-6 space-y-6 text-left">
+            {/* Top Insurance Tag */}
             <Link
-              to="/shop?category=eyeglasses"
-              className="w-full sm:w-auto px-8 py-4 bg-[#DFFF00] hover:bg-[#cbe600] text-black font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all shadow-xl hover:shadow-[#DFFF00]/20 flex items-center justify-center gap-2 group"
+              to="/about"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D8F3F5] text-[#006070] hover:bg-white text-xs font-bold transition-all shadow"
             >
-              Shop Eyeglasses <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <FiShield className="w-4 h-4 text-[#006070]" />
+              <span>You can pay with insurance</span>
+              <FiChevronRight className="w-3.5 h-3.5" />
             </Link>
 
-            <Link
-              to="/shop?category=sunglasses"
-              className="w-full sm:w-auto px-8 py-4 bg-[#141414] hover:bg-[#1F1F1F] text-white border border-[#292929] hover:border-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 group"
-            >
-              Shop Sunglasses <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            {/* Main Header */}
+            <div className="space-y-3">
+              <p className="text-sm sm:text-base font-semibold text-gray-200 tracking-wide">
+                Find Your New Fall Look And Save:
+              </p>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                Up to 50% off <br />
+                Frames & Lenses*
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-200 max-w-md font-medium leading-relaxed">
+                Including Versace, Burberry & more. Including branded lenses. Get as low as 0% APR when you pay with Klarna.
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <div className="pt-2">
+              <Link
+                to="/shop?sort=popular"
+                className="inline-block px-8 py-3.5 bg-[#5B649E] hover:bg-[#4A5288] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-xl"
+              >
+                SHOP THE DEAL
+              </Link>
+            </div>
           </div>
 
-          {/* Trust Highlights */}
-          <div className="pt-10 grid grid-cols-3 gap-4 border-t border-[#292929]/80 text-xs text-gray-400">
-            <div className="flex items-center gap-2">
-              <FiTruck className="w-4 h-4 text-[#DFFF00]" />
-              <span>Fast Shipping</span>
+          {/* Right Model Photography (Screenshot 1) */}
+          <div className="lg:col-span-6 flex items-end justify-center lg:justify-end gap-2 relative mt-6 lg:mt-0">
+            <div className="relative w-1/2 max-w-[280px] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+              <img
+                src="https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"
+                alt="Man wearing designer sunglasses"
+                className="w-full h-[320px] sm:h-[400px] object-cover object-top"
+              />
             </div>
-            <div className="flex items-center gap-2">
-              <FiShield className="w-4 h-4 text-[#DFFF00]" />
-              <span>100% Authentic</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FiRotateCcw className="w-4 h-4 text-[#DFFF00]" />
-              <span>30-Day Guarantee</span>
+            <div className="relative w-1/2 max-w-[280px] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 -translate-y-4">
+              <img
+                src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80"
+                alt="Woman wearing black optical glasses"
+                className="w-full h-[320px] sm:h-[400px] object-cover object-top"
+              />
             </div>
           </div>
         </div>

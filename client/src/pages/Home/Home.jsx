@@ -1,56 +1,43 @@
 import React from 'react';
 import HeroSection from '../../components/Home/HeroSection';
-import PromoCampaignCards from '../../components/Home/PromoCampaignCards';
 import ProductCarousel from '../../components/Home/ProductCarousel';
-import GuidedShopping from '../../components/Home/GuidedShopping';
-import CategoryDiscoveryGrid from '../../components/Home/CategoryDiscoveryGrid';
-import BrandDiscovery from '../../components/Home/BrandDiscovery';
-import LensEducation from '../../components/Home/LensEducation';
-import VisionBenefitsBanner from '../../components/Home/VisionBenefitsBanner';
-import TrustBar from '../../components/Home/TrustBar';
+import PromoDealsGrid from '../../components/Home/PromoDealsGrid';
+import SpeedyDeliveryBanner from '../../components/Home/SpeedyDeliveryBanner';
+import BrandLogosGrid from '../../components/Home/BrandLogosGrid';
+import InsuranceBanner from '../../components/Home/InsuranceBanner';
+import LensesAccordionSection from '../../components/Home/LensesAccordionSection';
+import TrustFooterBar from '../../components/Home/TrustFooterBar';
 
 export default function Home() {
   return (
-    <div className="home-page bg-[#050505] min-h-screen text-white">
-      {/* 1. Hero Section */}
+    <div className="home-page bg-white min-h-screen text-gray-900">
+      {/* Screenshot 1: Cognac Gradient Hero */}
       <HeroSection />
 
-      {/* 2. Promotional Campaign Cards */}
-      <PromoCampaignCards />
-
-      {/* 3. Product Carousel: Best Sellers */}
+      {/* Screenshot 2: AI Glasses Carousel */}
       <ProductCarousel
-        title="Trending Best Sellers"
-        subtitle="Our most popular optical frames and designer sunglasses"
+        title="AI Glasses"
         fetchParams={{ bestseller: 'true' }}
-        viewAllLink="/shop?sort=popular"
+        viewAllLink="/shop?search=AI+Glasses"
       />
 
-      {/* 4. Guided Shopping Flow */}
-      <GuidedShopping />
+      {/* Screenshot 2: Top Deals 3 Cards Grid */}
+      <PromoDealsGrid />
 
-      {/* 5. Category Discovery Grid */}
-      <CategoryDiscoveryGrid />
+      {/* Screenshot 3: Speedy Delivery Banner + 4-Step Cards */}
+      <SpeedyDeliveryBanner />
 
-      {/* 6. Product Carousel: New Arrivals */}
-      <ProductCarousel
-        title="New Season Arrivals"
-        subtitle="Freshly crafted styles engineered for modern aesthetics"
-        fetchParams={{ new_arrival: 'true' }}
-        viewAllLink="/shop?sort=newest"
-      />
+      {/* Screenshot 4: Premium Brands Logo Row */}
+      <BrandLogosGrid />
 
-      {/* 7. Brand Discovery Bar */}
-      <BrandDiscovery />
+      {/* Screenshot 4: Insurance Purchasing Banner */}
+      <InsuranceBanner />
 
-      {/* 8. Lens Education */}
-      <LensEducation />
+      {/* Screenshot 5: Our Lenses Accordion */}
+      <LensesAccordionSection />
 
-      {/* 9. Vision Benefits Banner */}
-      <VisionBenefitsBanner />
-
-      {/* 10. Trust & Service Bar */}
-      <TrustBar />
+      {/* Screenshot 5: Trust Bar */}
+      <TrustFooterBar />
     </div>
   );
 }
