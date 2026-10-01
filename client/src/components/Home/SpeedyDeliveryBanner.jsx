@@ -6,22 +6,22 @@ const steps = [
   {
     icon: <FiEye className="w-5 h-5 text-gray-900" />,
     title: 'Find your perfect pair',
-    desc: 'Browse our wide collection of designer frames available with 48hr Speedy Delivery.',
+    desc: 'Browse our wide collection of designer frames available with 24-48hr Bangladesh Delivery.',
   },
   {
     icon: <FiClock className="w-5 h-5 text-gray-900" />,
-    title: 'Select 2-Day Speedy Delivery',
-    desc: 'Once you’ve chosen your style, select the "2-Day Speedy Delivery" option before selecting your lenses.',
+    title: 'Select Express BD Delivery',
+    desc: 'Select 24hr Express Delivery for Dhaka City or 48hr nationwide courier across Bangladesh.',
   },
   {
     icon: <FiSliders className="w-5 h-5 text-gray-900" />,
-    title: 'Customize your lenses',
-    desc: 'Select your vision need, add your prescription and choose from specialized lens treatments.',
+    title: 'Customize your prescription',
+    desc: 'Upload your eye power doctor prescription or select anti-blue light non-prescription lenses.',
   },
   {
     icon: <FiTruck className="w-5 h-5 text-gray-900" />,
-    title: 'Complete your purchase',
-    desc: 'Add your shipping information, securely checkout online and receive your new prescription eyewear within 48 hours.',
+    title: 'bKash / Nagad / Cash on Delivery',
+    desc: 'Pay easily with bKash, Nagad, cards or Cash on Delivery right at your doorstep.',
   },
 ];
 
@@ -35,20 +35,20 @@ const SpeedyDeliveryBanner = () => {
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-block px-3 py-1 bg-[#DFFF00] text-gray-900 font-black text-xs uppercase tracking-widest rounded border border-yellow-400">
-                EXPRESS OPTICAL SHIPPING
+                EXPRESS BANGLADESH OPTICAL SHIPPING 🇧🇩
               </span>
               <h2 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight uppercase">
-                New! Now get 2-day speedy prescription delivery.
+                New! Get 24-48hr express home delivery in Bangladesh.
               </h2>
               <p className="text-sm text-gray-700 font-bold max-w-xl">
-                We're offering 2-Day Speedy Delivery on selected prescription eyewear for just $19.00.
+                We're offering 24hr Express Delivery in Dhaka City for just ৳80 and nationwide courier across Bangladesh for ৳120 (FREE on orders over ৳2,000).
               </p>
               <div className="pt-2">
                 <Link
                   to="/shop?sort=popular"
                   className="inline-block px-8 py-3.5 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md border border-yellow-500"
                 >
-                  SHOP THE DEAL
+                  SHOP EXPRESS DEALS
                 </Link>
               </div>
             </div>

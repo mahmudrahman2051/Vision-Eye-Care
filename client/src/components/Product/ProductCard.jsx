@@ -132,13 +132,13 @@ const ProductCard = ({ product }) => {
         {/* Pricing & Cart Action */}
         <div className="mt-2 pt-2 border-t border-yellow-100 flex items-center justify-between">
           <div className="flex flex-col">
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-1.5">
               <span className="text-base font-black text-gray-900">
-                ${numericPrice.toFixed(2)}
+                ৳{Math.round(numericPrice).toLocaleString()}
               </span>
               {hasDiscount && (
                 <span className="text-xs text-gray-400 line-through">
-                  ${numericComparePrice.toFixed(2)}
+                  ৳{Math.round(numericComparePrice).toLocaleString()}
                 </span>
               )}
             </div>
