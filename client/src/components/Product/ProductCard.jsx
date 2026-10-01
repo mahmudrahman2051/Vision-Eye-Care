@@ -21,7 +21,7 @@ const ProductCard = ({ product }) => {
     average_rating,
     review_count,
     brand,
-  } = product;
+  } = product || {};
 
   const numericPrice = parseFloat(price) || 0;
   const numericComparePrice = parseFloat(compare_price) || 0;
@@ -54,17 +54,17 @@ const ProductCard = ({ product }) => {
       {/* Badges Overlay */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 items-start">
         {hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-extrabold uppercase bg-[#DFFF00] text-black rounded shadow">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#DFFF00] text-black rounded shadow-xs">
             -{discountPercent}% OFF
           </span>
         )}
         {bestseller && !hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-extrabold uppercase bg-black text-white rounded shadow">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-black text-white rounded shadow-xs">
             Best Seller
           </span>
         )}
         {new_arrival && !bestseller && !hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-extrabold uppercase bg-[#FEF9C3] text-black border border-black/20 rounded shadow">
+          <span className="px-2.5 py-1 text-[11px] font-black uppercase bg-[#FEF9C3] text-black border border-black/20 rounded shadow-xs">
             NEW
           </span>
         )}
@@ -76,7 +76,7 @@ const ProductCard = ({ product }) => {
         className={`absolute top-3 right-3 z-10 p-2.5 rounded-full border transition-all duration-200 ${
           isWishlisted
             ? 'bg-red-50 border-red-200 text-red-500'
-            : 'bg-white/80 backdrop-blur border-gray-200 text-gray-400 hover:text-black hover:border-black'
+            : 'bg-white/90 backdrop-blur border-gray-200 text-gray-400 hover:text-black hover:border-black'
         }`}
         aria-label="Wishlist"
       >
@@ -101,11 +101,11 @@ const ProductCard = ({ product }) => {
         </div>
       </Link>
 
-      {/* Product Content Details Area */}
+      {/* Product Details Area - Remaining Height */}
       <div className="p-4 flex flex-col justify-between flex-grow bg-white">
         <div>
-          {/* Brand & Category */}
-          <div className="flex items-center justify-between text-[11px] font-extrabold uppercase tracking-widest text-gray-500 mb-1">
+          {/* Brand & Shape */}
+          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-gray-500 mb-1">
             <span>{brand || 'RAY-BAN'}</span>
             {frame_shape && <span className="text-gray-400 font-normal">• {frame_shape}</span>}
           </div>
