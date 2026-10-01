@@ -64,7 +64,7 @@ const ProductCard = ({ product }) => {
           </span>
         )}
         {new_arrival && !bestseller && !hasDiscount && (
-          <span className="px-2.5 py-1 text-[11px] font-extrabold uppercase bg-blue-600 text-white rounded shadow">
+          <span className="px-2.5 py-1 text-[11px] font-extrabold uppercase bg-[#FEF9C3] text-black border border-black/20 rounded shadow">
             NEW
           </span>
         )}
@@ -112,7 +112,7 @@ const ProductCard = ({ product }) => {
 
           {/* Product Title */}
           <Link to={`/product/${slug || id}`} className="block">
-            <h3 className="text-base font-extrabold text-black group-hover:text-blue-600 transition-colors line-clamp-1">
+            <h3 className="text-base font-extrabold text-black group-hover:underline transition-colors line-clamp-1">
               {name}
             </h3>
           </Link>

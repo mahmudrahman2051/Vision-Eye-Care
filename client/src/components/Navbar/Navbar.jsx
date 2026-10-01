@@ -46,7 +46,10 @@ export default function Navbar() {
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <>
+    <div className="w-full">
+      {/* Top Yellow Announcement Banner */}
+      <AnnouncementBar />
+
       <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm" id="main-navbar">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           {/* Logo */}
@@ -193,10 +196,7 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* Top Yellow Announcement Banner */}
-      <AnnouncementBar />
-
       <SearchOverlay isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-    </>
+    </div>
   );
 }
