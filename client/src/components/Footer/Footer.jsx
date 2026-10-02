@@ -1,136 +1,139 @@
 import { Link } from 'react-router-dom';
-import {
-  HiOutlineEnvelope,
-  HiOutlinePhone,
-  HiOutlineMapPin,
-} from 'react-icons/hi2';
-import { FaFacebookF, FaInstagram, FaXTwitter } from 'react-icons/fa6';
+import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2';
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok } from 'react-icons/fa6';
 
-const companyLinks = [
-  { to: '/about', label: 'About Us' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/faq', label: 'FAQ' },
-];
-
-const customerLinks = [
+const quickLinks = [
+  { to: '/', label: 'Home' },
   { to: '/shop', label: 'Shop' },
-  { to: '/cart', label: 'My Cart' },
-  { to: '/wishlist', label: 'Wishlist' },
-  { to: '/account/orders', label: 'Order Tracking' },
-];
-
-const legalLinks = [
+  { to: '/about', label: 'About Us' },
+  { to: '/faq', label: 'FAQ' },
   { to: '/privacy', label: 'Privacy Policy' },
   { to: '/terms', label: 'Terms & Conditions' },
+];
+
+const customerCareLinks = [
+  { to: '/about', label: 'Track Your Order' },
+  { to: '/about', label: 'Return & Refund Policy' },
+  { to: '/about', label: 'Shipping Information' },
+  { to: '/faq', label: 'Help & Support' },
+  { to: '/about', label: 'Size Guide' },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-yellow-50/50 text-gray-900 border-t-4 border-[#DFFF00] pt-16 pb-12" id="main-footer">
+    <footer className="bg-[#1A1A1A] text-[#AAAAAA] pt-14 pb-8" id="main-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
-          {/* Brand */}
-          <div className="lg:col-span-4 space-y-4">
-            <Link to="/" className="inline-flex items-center gap-2 text-lg font-black tracking-widest uppercase text-gray-900">
-              <span>VISION</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-[#DFFF00] border border-yellow-400"></span>
-              <span>EYE CARE</span>
-            </Link>
-            <p className="text-xs text-gray-600 font-medium max-w-sm leading-relaxed">
-              Premium eyewear for every style. Discover your perfect pair with
-              Vision Eye Care — where clarity meets fashion.
-            </p>
-            <div className="space-y-2 text-xs text-gray-700 font-medium">
-              <div className="flex items-center gap-2">
-                <HiOutlineMapPin size={16} className="text-yellow-600" />
-                <span>Dhaka, Bangladesh</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-[#2D2D2D]">
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Quick Links</h4>
+            <ul className="space-y-2.5">
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-sm text-[#888] hover:text-white transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Customer Care */}
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Customer Care</h4>
+            <ul className="space-y-2.5">
+              {customerCareLinks.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-sm text-[#888] hover:text-white transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Us */}
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Contact Us</h4>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2.5">
+                <HiOutlineMapPin className="w-4 h-4 text-[#8B7355] flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-[#888]">
+                  House 45, Road 11, Block D,<br />Banani, Dhaka-1213, Bangladesh
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <HiOutlinePhone size={16} className="text-yellow-600" />
-                <span>+880 1XXX-XXXXXX</span>
+              <div className="flex items-center gap-2.5">
+                <HiOutlinePhone className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
+                <a href="tel:+8809612888999" className="text-sm text-[#888] hover:text-white transition-colors">
+                  +880 9612-888999
+                </a>
               </div>
-              <div className="flex items-center gap-2">
-                <HiOutlineEnvelope size={16} className="text-yellow-600" />
-                <span>support@visioneyecare.com</span>
+              <div className="flex items-center gap-2.5">
+                <FaWhatsapp className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
+                <a href="https://wa.me/8801711000000" className="text-sm text-[#888] hover:text-white transition-colors">
+                  +880 1711-000000
+                </a>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <HiOutlineEnvelope className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
+                <a href="mailto:support@visioneyecare.com.bd" className="text-sm text-[#888] hover:text-white transition-colors">
+                  support@visioneyecare.com.bd
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Company Links */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-widest text-gray-900">Company</h4>
-            <ul className="space-y-2 text-xs">
-              {companyLinks.map((link) => (
-                <li key={link.to}>
-                  <Link to={link.to} className="text-gray-600 hover:text-yellow-700 font-medium transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Customer Service */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-widest text-gray-900">Customer Service</h4>
-            <ul className="space-y-2 text-xs">
-              {customerLinks.map((link) => (
-                <li key={link.to}>
-                  <Link to={link.to} className="text-gray-600 hover:text-yellow-700 font-medium transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div className="lg:col-span-4 space-y-4">
-            <h4 className="text-xs font-black uppercase tracking-widest text-gray-900">Stay Updated</h4>
-            <p className="text-xs text-gray-600 font-medium leading-relaxed">
-              Subscribe to get the latest offers and new arrivals.
-            </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 bg-white border border-yellow-300 rounded-xl px-3 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-yellow-500"
-                id="newsletter-email"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 border border-yellow-500 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs"
-                id="newsletter-subscribe"
-              >
-                Subscribe
-              </button>
-            </form>
-            <div className="flex gap-2 pt-2">
-              <a href="#" className="w-9 h-9 bg-white border border-yellow-300 rounded-xl flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-[#DFFF00] hover:border-yellow-400 transition-all" aria-label="Facebook">
+          {/* Social Media + Payment + Delivery */}
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Follow Us</h4>
+            <div className="flex items-center gap-2.5 mb-6">
+              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Facebook">
                 <FaFacebookF size={14} />
               </a>
-              <a href="#" className="w-9 h-9 bg-white border border-yellow-300 rounded-xl flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-[#DFFF00] hover:border-yellow-400 transition-all" aria-label="Instagram">
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Instagram">
                 <FaInstagram size={14} />
               </a>
-              <a href="#" className="w-9 h-9 bg-white border border-yellow-300 rounded-xl flex items-center justify-center text-gray-700 hover:text-gray-900 hover:bg-[#DFFF00] hover:border-yellow-400 transition-all" aria-label="X / Twitter">
-                <FaXTwitter size={14} />
+              <a href="https://whatsapp.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="WhatsApp">
+                <FaWhatsapp size={14} />
               </a>
+              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="YouTube">
+                <FaYoutube size={14} />
+              </a>
+              <a href="https://tiktok.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="TikTok">
+                <FaTiktok size={14} />
+              </a>
+            </div>
+
+            {/* Payment Methods */}
+            <h4 className="text-sm font-semibold text-white mb-3">Payment Methods</h4>
+            <div className="flex flex-wrap gap-2 mb-5">
+              {['bKash', 'Nagad', 'Rocket', 'Visa', 'Mastercard', 'COD'].map(m => (
+                <span key={m} className="px-2.5 py-1 bg-[#2D2D2D] text-[#AAA] text-xs font-medium rounded border border-[#3A3A3A]">
+                  {m}
+                </span>
+              ))}
+            </div>
+
+            {/* Delivery Partners */}
+            <h4 className="text-sm font-semibold text-white mb-3">Delivery Partners</h4>
+            <div className="flex flex-wrap gap-2">
+              {['Pathao', 'Steadfast', 'RedX', 'Sundarban'].map(d => (
+                <span key={d} className="px-2.5 py-1 bg-[#2D2D2D] text-[#AAA] text-xs font-medium rounded border border-[#3A3A3A]">
+                  {d}
+                </span>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-yellow-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 font-medium">
-          <p>© {currentYear} Vision Eye Care. All rights reserved.</p>
-          <div className="flex gap-6">
-            {legalLinks.map((link) => (
-              <Link key={link.to} to={link.to} className="hover:text-yellow-700 transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </div>
+        {/* Copyright */}
+        <div className="pt-6 text-center">
+          <p className="text-sm text-[#666]">
+            © {currentYear} Vision Eye Care Bangladesh. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

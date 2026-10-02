@@ -1,77 +1,82 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiShield, FiChevronRight, FiArrowRight } from 'react-icons/fi';
+import React, { useState, useEffect, useCallback } from 'react';
+
+const banners = [
+  { id: 1, src: '/hero_banner_1.png', alt: 'Premium Eyewear Collection' },
+  { id: 2, src: '/hero_banner_2.png', alt: 'Designer Sunglasses' },
+  { id: 3, src: '/hero_banner_3.png', alt: 'Fashionable Frames' },
+];
 
 const HeroSection = () => {
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % banners.length);
+  }, []);
+
+  const prev = useCallback(() => {
+    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [next]);
+
   return (
-    <section className="relative overflow-hidden bg-white text-gray-800 py-12 lg:py-20 border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-14 items-center">
-          {/* Left Text Content */}
-          <div className="md:col-span-6 flex flex-col justify-center text-left">
-            {/* Top Insurance Tag */}
-            <div className="mb-3">
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FEFCE8] text-gray-800 border border-[#FEF08A] hover:bg-[#DFFF00] text-xs font-bold transition-all shadow-xs"
-              >
-                <FiShield className="w-4 h-4 text-gray-700" />
-                <span>You can pay with insurance</span>
-                <FiChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {/* Main Title & Subtitle */}
-            <div className="space-y-3">
-              <p className="text-xs font-black uppercase tracking-widest text-gray-500">
-                Find Your New Fall Look And Save:
-              </p>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 leading-tight tracking-tight uppercase">
-                Up to 50% off <br />
-                <span className="inline-block bg-[#DFFF00] px-3.5 py-1 rounded-xl border border-[#CBE600] mt-1 shadow-xs">
-                  Frames & Lenses*
-                </span>
-              </h1>
-              <p className="text-xs sm:text-sm text-gray-600 max-w-md font-medium leading-relaxed pt-1">
-                Including Ray-Ban, Oakley, Versace & more. Including branded lenses. Get as low as 0% APR when you pay with Klarna.
-              </p>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-4">
-              <Link
-                to="/shop?sort=popular"
-                className="px-7 py-3.5 bg-[#DFFF00] hover:bg-[#CBE600] text-gray-900 font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-md flex items-center gap-2 border border-[#CBE600]"
-              >
-                SHOP THE DEAL <FiArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/shop"
-                className="px-7 py-3.5 bg-white hover:bg-[#FEFCE8] text-gray-800 border-2 border-[#DFFF00] font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all shadow-xs"
-              >
-                EXPLORE FRAMES
-              </Link>
-            </div>
+    <section className="relative w-full overflow-hidden bg-[#F5EFE3]" id="hero-section">
+      {/* Banner Container */}
+      <div className="relative w-full aspect-[21/9] sm:aspect-[21/8] md:aspect-[21/7]">
+        {banners.map((banner, idx) => (
+          <div
+            key={banner.id}
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+              idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            }`}
+          >
+            <img
+              src={banner.src}
+              alt={banner.alt}
+              className="w-full h-full object-cover object-center"
+              draggable={false}
+            />
           </div>
+        ))}
+      </div>
 
-          {/* Right Side Model Images */}
-          <div className="md:col-span-6 grid grid-cols-2 gap-3 items-center max-w-md mx-auto md:max-w-none">
-            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-gray-100 aspect-[3/4] max-h-[380px]">
-              <img
-                src="https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"
-                alt="Man wearing designer sunglasses"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-            <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-md bg-gray-100 aspect-[3/4] max-h-[380px]">
-              <img
-                src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80"
-                alt="Woman wearing black optical glasses"
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
-          </div>
-        </div>
+      {/* Navigation Arrows */}
+      <button
+        onClick={prev}
+        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all shadow-md backdrop-blur-sm"
+        aria-label="Previous slide"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all shadow-md backdrop-blur-sm"
+        aria-label="Next slide"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      {/* Dot Indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {banners.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            className={`rounded-full transition-all duration-300 ${
+              idx === current
+                ? 'w-7 h-2.5 bg-[#1A1A1A]'
+                : 'w-2.5 h-2.5 bg-white/70 hover:bg-white'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

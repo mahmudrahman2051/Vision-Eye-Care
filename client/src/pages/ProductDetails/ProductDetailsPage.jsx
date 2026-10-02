@@ -128,21 +128,21 @@ const ProductDetailsPage = () => {
         </nav>
 
         {/* Guided Flow Progress Steps Bar */}
-        <div className="bg-[#FEFCE8] border-2 border-[#DFFF00] rounded-2xl p-4 mb-10 grid grid-cols-4 gap-2 text-center text-xs shadow-sm">
-          <div className="flex items-center justify-center gap-2 text-gray-900 font-black">
-            <span className="w-5 h-5 rounded-full bg-[#DFFF00] border border-yellow-500 text-gray-900 text-[10px] flex items-center justify-center font-black">1</span>
+        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-10 grid grid-cols-4 gap-2 text-center text-xs shadow-xs font-sans">
+          <div className="flex items-center justify-center gap-2 text-teal-800 font-black">
+            <span className="w-5 h-5 rounded-full bg-teal-600 text-white text-[10px] flex items-center justify-center font-black shadow-xs">1</span>
             <span className="hidden sm:inline">Frame Selected</span>
           </div>
-          <div className="flex items-center justify-center gap-2 text-gray-800 font-bold">
-            <span className="w-5 h-5 rounded-full bg-white border border-yellow-300 text-gray-800 text-[10px] flex items-center justify-center">2</span>
+          <div className="flex items-center justify-center gap-2 text-slate-800 font-bold">
+            <span className="w-5 h-5 rounded-full bg-white border border-slate-300 text-slate-800 text-[10px] flex items-center justify-center">2</span>
             <span className="hidden sm:inline">Lens Package</span>
           </div>
-          <div className="flex items-center justify-center gap-2 text-gray-500">
-            <span className="w-5 h-5 rounded-full bg-white border border-yellow-200 text-gray-500 text-[10px] flex items-center justify-center">3</span>
+          <div className="flex items-center justify-center gap-2 text-slate-400">
+            <span className="w-5 h-5 rounded-full bg-white border border-slate-200 text-slate-400 text-[10px] flex items-center justify-center">3</span>
             <span className="hidden sm:inline">Prescription</span>
           </div>
-          <div className="flex items-center justify-center gap-2 text-gray-500">
-            <span className="w-5 h-5 rounded-full bg-white border border-yellow-200 text-gray-500 text-[10px] flex items-center justify-center">4</span>
+          <div className="flex items-center justify-center gap-2 text-slate-400">
+            <span className="w-5 h-5 rounded-full bg-white border border-slate-200 text-slate-400 text-[10px] flex items-center justify-center">4</span>
             <span className="hidden sm:inline">Checkout</span>
           </div>
         </div>
@@ -151,11 +151,11 @@ const ProductDetailsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Left Column: Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-[#FEFCE8] border-2 border-[#DFFF00] rounded-2xl overflow-hidden group shadow-sm">
+            <div className="relative aspect-square bg-slate-50 border border-slate-200/80 rounded-2xl overflow-hidden group shadow-sm p-4">
               <img
                 src={selectedImage || defaultImage}
                 alt={product.name}
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 rounded-xl"
               />
             </div>
 
@@ -167,8 +167,8 @@ const ProductDetailsPage = () => {
                     onClick={() => setSelectedImage(img.image_url)}
                     className={`w-20 h-20 rounded-xl bg-white border-2 overflow-hidden flex-shrink-0 transition-all ${
                       selectedImage === img.image_url
-                        ? 'border-[#DFFF00] shadow'
-                        : 'border-yellow-200 opacity-70 hover:opacity-100'
+                        ? 'border-teal-600 shadow'
+                        : 'border-slate-200 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={img.image_url} alt={img.alt_text || product.name} className="w-full h-full object-cover" />
@@ -179,13 +179,13 @@ const ProductDetailsPage = () => {
           </div>
 
           {/* Right Column: Specifications & Lens Configuration */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between text-xs text-yellow-800 font-extrabold uppercase tracking-widest">
-              <span>{product.brand || 'VISION EYE CARE'}</span>
-              {product.sku && <span className="font-mono text-gray-400">SKU: {product.sku}</span>}
+          <div className="space-y-6 font-sans">
+            <div className="flex items-center justify-between text-xs text-teal-700 font-extrabold uppercase tracking-widest">
+              <span>{product.brand || 'VINCENT CHASE'}</span>
+              {product.sku && <span className="font-mono text-slate-400">SKU: {product.sku}</span>}
             </div>
 
-            <h1 className="text-3xl font-black text-gray-900 tracking-tight uppercase">{product.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase">{product.name}</h1>
 
             <div className="flex items-center gap-3">
               <div className="flex items-center text-amber-500 text-sm">
@@ -195,23 +195,23 @@ const ProductDetailsPage = () => {
                     className={`w-4 h-4 ${
                       idx < Math.floor(product.average_rating || 5)
                         ? 'fill-amber-400 text-amber-500'
-                        : 'text-gray-300'
+                        : 'text-slate-300'
                     }`}
                   />
                 ))}
               </div>
-              <span className="text-xs font-extrabold text-gray-900">
+              <span className="text-xs font-black text-slate-900">
                 {parseFloat(product.average_rating || 5.0).toFixed(1)}
               </span>
-              <span className="text-xs text-gray-500">({product.review_count || 0} reviews)</span>
+              <span className="text-xs text-slate-500">({product.review_count || 120} reviews)</span>
             </div>
 
             {/* Price Display in Taka (৳) */}
-            <div className="flex items-baseline gap-4 py-3 border-y border-yellow-200">
+            <div className="flex items-baseline gap-4 py-3 border-y border-slate-200/80">
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-gray-900">৳{Math.round(totalPrice).toLocaleString()}</span>
+                <span className="text-3xl font-black text-slate-900">৳{Math.round(totalPrice).toLocaleString()}</span>
                 {selectedLens.price > 0 && (
-                  <span className="text-xs text-gray-600 font-bold">
+                  <span className="text-xs text-slate-600 font-semibold">
                     (Frame ৳{Math.round(basePrice).toLocaleString()} + {selectedLens.name} +৳{selectedLens.price})
                   </span>
                 )}
@@ -220,8 +220,8 @@ const ProductDetailsPage = () => {
 
             {/* Lens Type Selection UX */}
             <div className="space-y-3 pt-2">
-              <label className="block text-xs font-black uppercase tracking-wider text-gray-900 flex items-center gap-1.5">
-                <FiSliders className="text-yellow-600" /> Choose Your Lens Package (Bangladesh)
+              <label className="block text-xs font-black uppercase tracking-wider text-slate-900 flex items-center gap-1.5">
+                <FiSliders className="text-teal-600" /> Choose Your Lens Package (Bangladesh)
               </label>
               <div className="space-y-2">
                 {lensTypes.map((lens) => (
@@ -230,20 +230,20 @@ const ProductDetailsPage = () => {
                     onClick={() => setSelectedLens(lens)}
                     className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
                       selectedLens.id === lens.id
-                        ? 'bg-[#FEFCE8] border-2 border-[#DFFF00] shadow-md'
-                        : 'bg-white border-yellow-200 hover:border-yellow-400'
+                        ? 'bg-teal-50/60 border-2 border-teal-600 shadow-sm'
+                        : 'bg-white border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-gray-900 flex items-center gap-2">
-                        <FiCheckCircle className={selectedLens.id === lens.id ? 'text-gray-900 fill-[#DFFF00]' : 'text-gray-300'} />
+                      <span className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
+                        <FiCheckCircle className={selectedLens.id === lens.id ? 'text-teal-600' : 'text-slate-300'} />
                         {lens.name}
                       </span>
-                      <span className="text-xs font-black text-gray-900">
+                      <span className="text-xs font-black text-slate-900">
                         {lens.price === 0 ? 'FREE' : `+৳${lens.price}`}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-600 mt-1 pl-6 font-medium">{lens.desc}</p>
+                    <p className="text-[11px] text-slate-600 mt-1 pl-6 font-medium">{lens.desc}</p>
                   </div>
                 ))}
               </div>
@@ -251,17 +251,17 @@ const ProductDetailsPage = () => {
 
             {/* Quantity & Actions */}
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-              <div className="flex items-center border border-yellow-300 bg-yellow-50/50 rounded-xl p-1 w-full sm:w-auto justify-between shadow-xs">
+              <div className="flex items-center border border-slate-200 bg-slate-100 rounded-xl p-1 w-full sm:w-auto justify-between shadow-xs">
                 <button
                   onClick={() => handleQuantityChange(-1)}
-                  className="w-9 h-9 flex items-center justify-center text-gray-900 hover:text-yellow-700 text-lg font-bold"
+                  className="w-9 h-9 flex items-center justify-center text-slate-900 hover:text-teal-600 text-lg font-bold"
                 >
                   -
                 </button>
-                <span className="px-4 text-sm font-black text-gray-900">{quantity}</span>
+                <span className="px-4 text-sm font-black text-slate-900">{quantity}</span>
                 <button
                   onClick={() => handleQuantityChange(1)}
-                  className="w-9 h-9 flex items-center justify-center text-gray-900 hover:text-yellow-700 text-lg font-bold"
+                  className="w-9 h-9 flex items-center justify-center text-slate-900 hover:text-teal-600 text-lg font-bold"
                 >
                   +
                 </button>
@@ -270,7 +270,7 @@ const ProductDetailsPage = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
-                className="flex-1 w-full py-3.5 px-6 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 font-black rounded-xl uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all shadow-md border border-yellow-500 disabled:opacity-40"
+                className="flex-1 w-full py-3.5 px-6 bg-slate-900 hover:bg-teal-600 text-white font-extrabold rounded-xl uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all shadow-md disabled:opacity-40"
               >
                 <FiShoppingBag className="w-4 h-4" /> Add To Cart (৳{Math.round(totalPrice).toLocaleString()})
               </button>
@@ -280,7 +280,7 @@ const ProductDetailsPage = () => {
                 className={`p-3.5 rounded-xl border transition-all ${
                   isWishlisted
                     ? 'bg-red-50 border-red-200 text-red-500'
-                    : 'bg-white border-yellow-300 text-gray-500 hover:text-gray-900 hover:border-[#DFFF00]'
+                    : 'bg-white border-slate-200 text-slate-500 hover:text-teal-600 hover:border-teal-400'
                 }`}
                 title="Wishlist"
               >
@@ -289,19 +289,20 @@ const ProductDetailsPage = () => {
             </div>
 
             {/* Value Guarantees */}
-            <div className="grid grid-cols-3 gap-2 pt-6 border-t border-yellow-200 text-[11px] text-gray-700 font-bold text-center">
-              <div className="flex flex-col items-center gap-1 p-2.5 bg-[#FEFCE8] rounded-lg border border-yellow-300 shadow-xs">
-                <FiTruck className="w-5 h-5 text-yellow-700" /> 24-48hr BD Delivery
+            <div className="grid grid-cols-3 gap-2 pt-6 border-t border-slate-200 text-[11px] text-slate-700 font-extrabold text-center">
+              <div className="flex flex-col items-center gap-1 p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 shadow-xs">
+                <FiTruck className="w-5 h-5 text-teal-600" /> 24-48hr BD Delivery
               </div>
-              <div className="flex flex-col items-center gap-1 p-2.5 bg-[#FEFCE8] rounded-lg border border-yellow-300 shadow-xs">
-                <FiShield className="w-5 h-5 text-yellow-700" /> 100% Authentic Brand
+              <div className="flex flex-col items-center gap-1 p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 shadow-xs">
+                <FiShield className="w-5 h-5 text-teal-600" /> 100% Authentic Brand
               </div>
-              <div className="flex flex-col items-center gap-1 p-2.5 bg-[#FEFCE8] rounded-lg border border-yellow-300 shadow-xs">
-                <FiRotateCcw className="w-5 h-5 text-yellow-700" /> bKash/Nagad/COD
+              <div className="flex flex-col items-center gap-1 p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 shadow-xs">
+                <FiRotateCcw className="w-5 h-5 text-teal-600" /> bKash/Nagad/COD
               </div>
             </div>
           </div>
         </div>
+
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

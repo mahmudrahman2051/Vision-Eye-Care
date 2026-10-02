@@ -1,9 +1,13 @@
+import { useState, useCallback } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
+
+// Splash Screen
+import SplashScreen from './components/SplashScreen/SplashScreen';
 
 // Pages
 import Home from './pages/Home/Home';
@@ -15,8 +19,11 @@ import ShopPage from './pages/Shop/ShopPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const handleSplashFinish = useCallback(() => setShowSplash(false), []);
   return (
     <AuthProvider>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <BrowserRouter>
         <Toaster
           position="top-right"
@@ -31,8 +38,8 @@ export default function App() {
             },
             success: {
               iconTheme: {
-                primary: '#DFFF00',
-                secondary: '#050505',
+                primary: '#8B7355',
+                secondary: '#FFFFFF',
               },
             },
             error: {

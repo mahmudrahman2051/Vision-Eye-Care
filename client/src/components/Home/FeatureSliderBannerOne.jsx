@@ -54,30 +54,30 @@ const FeatureSliderBannerOne = () => {
   const current = slides[currentIndex];
 
   return (
-    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8 border-b border-yellow-200">
+    <section className="bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto">
-        <div className="relative bg-[#FEFCE8] border-2 border-[#DFFF00] rounded-3xl overflow-hidden shadow-lg min-h-[380px] lg:min-h-[420px] flex items-center">
-          {/* Background Image with Light Yellow Overlay */}
+        <div className="relative bg-slate-900 border border-slate-800 text-white rounded-3xl overflow-hidden shadow-2xl min-h-[380px] lg:min-h-[420px] flex items-center">
+          {/* Background Image Overlay */}
           <div className="absolute inset-0 z-0">
             <img
               src={current.image}
               alt={current.title}
-              className="w-full h-full object-cover object-center transition-all duration-700 opacity-25 scale-105"
+              className="w-full h-full object-cover object-center transition-all duration-700 opacity-20 scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FEFCE8] via-[#FEFCE8]/90 to-[#FEFCE8]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-slate-900/40" />
           </div>
 
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 z-20 p-3 bg-white/90 hover:bg-[#DFFF00] text-gray-900 border border-yellow-400 rounded-full shadow-md transition-all"
+            className="absolute left-4 z-20 p-3 bg-white/10 hover:bg-teal-600 text-white border border-white/20 rounded-full shadow-lg transition-all backdrop-blur"
             aria-label="Previous Slide"
           >
             <FiChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 z-20 p-3 bg-white/90 hover:bg-[#DFFF00] text-gray-900 border border-yellow-400 rounded-full shadow-md transition-all"
+            className="absolute right-4 z-20 p-3 bg-white/10 hover:bg-teal-600 text-white border border-white/20 rounded-full shadow-lg transition-all backdrop-blur"
             aria-label="Next Slide"
           >
             <FiChevronRight className="w-5 h-5" />
@@ -87,30 +87,30 @@ const FeatureSliderBannerOne = () => {
           <div className="relative z-10 w-full px-12 sm:px-16 py-10 lg:py-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-1 bg-[#DFFF00] text-gray-900 font-black text-xs uppercase tracking-widest rounded border border-yellow-400">
+                <span className="px-3 py-1 bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-widest rounded-full shadow-xs">
                   {current.tag}
                 </span>
-                <span className="px-3 py-1 bg-white text-yellow-800 font-bold text-xs uppercase tracking-wider rounded border border-yellow-300">
+                <span className="px-3 py-1 bg-teal-500/20 text-teal-300 font-extrabold text-xs uppercase tracking-wider rounded-full border border-teal-500/30">
                   {current.bgBadge}
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight uppercase leading-tight">
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-tight">
                 {current.title}
               </h2>
 
-              <p className="text-sm sm:text-base text-gray-700 font-bold max-w-2xl">
+              <p className="text-sm sm:text-base text-slate-300 font-medium max-w-2xl leading-relaxed">
                 {current.subtitle}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-3">
                 <Link
                   to={current.link}
-                  className="px-8 py-3.5 bg-[#DFFF00] hover:bg-yellow-400 text-gray-900 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md border border-yellow-500"
+                  className="px-8 py-3.5 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg"
                 >
                   {current.buttonText}
                 </Link>
-                <span className="text-sm font-black text-gray-900 bg-white px-4 py-3 rounded-xl border border-yellow-300 shadow-xs">
+                <span className="text-xs font-black text-amber-300 bg-white/10 backdrop-blur px-4 py-3 rounded-xl border border-white/20">
                   {current.priceText}
                 </span>
               </div>
@@ -118,27 +118,27 @@ const FeatureSliderBannerOne = () => {
 
             {/* Right Highlights */}
             <div className="hidden lg:flex lg:col-span-4 flex-col gap-3">
-              <div className="bg-white/90 backdrop-blur p-4 rounded-2xl border border-yellow-300 flex items-center gap-3 shadow-xs">
-                <FiTruck className="w-6 h-6 text-yellow-600 flex-shrink-0" />
+              <div className="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10 flex items-center gap-3 shadow-xs">
+                <FiTruck className="w-6 h-6 text-teal-400 flex-shrink-0" />
                 <div>
-                  <h4 className="text-xs font-black text-gray-900">24-48hr Delivery</h4>
-                  <p className="text-[11px] text-gray-600 font-medium">Dhaka & Nationwide Bangladesh</p>
+                  <h4 className="text-xs font-black text-white">24-48hr Delivery</h4>
+                  <p className="text-[11px] text-slate-300 font-medium">Dhaka & Nationwide Bangladesh</p>
                 </div>
               </div>
 
-              <div className="bg-white/90 backdrop-blur p-4 rounded-2xl border border-yellow-300 flex items-center gap-3 shadow-xs">
-                <FiCreditCard className="w-6 h-6 text-yellow-600 flex-shrink-0" />
+              <div className="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10 flex items-center gap-3 shadow-xs">
+                <FiCreditCard className="w-6 h-6 text-amber-400 flex-shrink-0" />
                 <div>
-                  <h4 className="text-xs font-black text-gray-900">bKash / Nagad / COD</h4>
-                  <p className="text-[11px] text-gray-600 font-medium">Easy & secure payments in BDT</p>
+                  <h4 className="text-xs font-black text-white">bKash / Nagad / COD</h4>
+                  <p className="text-[11px] text-slate-300 font-medium">Easy & secure payments in BDT</p>
                 </div>
               </div>
 
-              <div className="bg-white/90 backdrop-blur p-4 rounded-2xl border border-yellow-300 flex items-center gap-3 shadow-xs">
-                <FiShield className="w-6 h-6 text-yellow-600 flex-shrink-0" />
+              <div className="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10 flex items-center gap-3 shadow-xs">
+                <FiShield className="w-6 h-6 text-teal-400 flex-shrink-0" />
                 <div>
-                  <h4 className="text-xs font-black text-gray-900">100% Eye Test Guarantee</h4>
-                  <p className="text-[11px] text-gray-600 font-medium">Doctor prescription accuracy</p>
+                  <h4 className="text-xs font-black text-white">100% Eye Test Guarantee</h4>
+                  <p className="text-[11px] text-slate-300 font-medium">Doctor prescription accuracy</p>
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@ const FeatureSliderBannerOne = () => {
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`h-2.5 rounded-full transition-all ${
-                  currentIndex === idx ? 'w-8 bg-[#DFFF00] border border-yellow-500' : 'w-2.5 bg-yellow-300'
+                  currentIndex === idx ? 'w-8 bg-teal-400' : 'w-2.5 bg-slate-700'
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
@@ -164,3 +164,4 @@ const FeatureSliderBannerOne = () => {
 };
 
 export default FeatureSliderBannerOne;
+

@@ -83,41 +83,44 @@ const ShopPage = () => {
   };
 
   return (
-    <div className="bg-[#F8F9FA] min-h-screen py-10 px-4 sm:px-6 lg:px-8 text-gray-900">
+    <div className="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Page Title & Description */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-black tracking-tight text-black flex items-center gap-3 uppercase">
-            Eyewear Shop <span className="text-black underline decoration-[#DFFF00] decoration-4">Collection</span>
+        <div className="mb-6 space-y-1">
+          <span className="text-[11px] font-extrabold uppercase tracking-widest text-teal-700">
+            BANGLADESH OPTICAL COLLECTION
+          </span>
+          <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 uppercase">
+            Eyewear & Frame Catalog
           </h1>
-          <p className="mt-2 text-sm text-gray-600 font-medium max-w-2xl">
-            Explore prescription frames, designer sunglasses, and blue light eyewear engineered for optical clarity.
+          <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-2xl">
+            Explore 1,000+ prescription eyeglasses, computer blue-cut frames & designer sunglasses in BDT (৳).
           </p>
         </div>
 
         {/* Top Control Bar */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="lg:hidden px-4 py-2 bg-black text-[#DFFF00] rounded-xl text-xs font-black uppercase flex items-center gap-2"
+              className="lg:hidden px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase flex items-center gap-2"
             >
               <FiSliders /> Filters
             </button>
-            <span className="text-xs text-gray-500 font-medium">
-              Showing <span className="text-black font-extrabold">{pagination.total}</span> Results
+            <span className="text-xs text-slate-500 font-medium">
+              Showing <span className="text-slate-900 font-black">{pagination.total}</span> Frames
             </span>
           </div>
 
           {/* Sort By Dropdown */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider hidden sm:inline">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">
               Sort By:
             </span>
             <select
               value={currentFilters.sort}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="bg-[#F8F9FA] border border-gray-200 text-black text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-black cursor-pointer"
+              className="bg-slate-50 border border-slate-200 text-slate-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-teal-500 cursor-pointer"
             >
               <option value="newest">Newest Arrivals</option>
               <option value="popular">Most Popular</option>
@@ -146,15 +149,15 @@ const ShopPage = () => {
           {mobileFilterOpen && (
             <div className="fixed inset-0 z-50 lg:hidden flex">
               <div
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+                className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
                 onClick={() => setMobileFilterOpen(false)}
               ></div>
               <div className="relative ml-auto w-full max-w-xs bg-white h-full p-6 overflow-y-auto z-10 shadow-2xl">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="font-extrabold text-lg text-black uppercase">Filter Options</h3>
+                  <h3 className="font-black text-base text-slate-900 uppercase">Filter Options</h3>
                   <button
                     onClick={() => setMobileFilterOpen(false)}
-                    className="text-gray-500 hover:text-black text-xl"
+                    className="text-slate-400 hover:text-slate-900 text-xl font-bold"
                   >
                     ✕
                   </button>
@@ -172,39 +175,39 @@ const ShopPage = () => {
           {/* Product Grid Area */}
           <div className="lg:col-span-3">
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                 {[...Array(6)].map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-white border border-gray-200 rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
+                    className="bg-white border border-slate-200 rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
                   >
-                    <div className="bg-gray-100 h-44 rounded-xl"></div>
+                    <div className="bg-slate-100 h-44 rounded-xl"></div>
                     <div className="space-y-2 mt-4">
-                      <div className="bg-gray-100 h-4 rounded w-3/4"></div>
-                      <div className="bg-gray-100 h-3 rounded w-1/2"></div>
+                      <div className="bg-slate-100 h-4 rounded w-3/4"></div>
+                      <div className="bg-slate-100 h-3 rounded w-1/2"></div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-16 h-16 bg-[#F8F9FA] text-black rounded-full flex items-center justify-center text-2xl mb-4 border border-gray-200">
+              <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-16 h-16 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center text-2xl mb-4 border border-slate-200">
                   <FiPackage />
                 </div>
-                <h3 className="text-xl font-extrabold text-black mb-2">No Frames Found</h3>
-                <p className="text-sm text-gray-500 max-w-md mb-6 font-medium">
+                <h3 className="text-lg font-black text-slate-900 mb-1">No Frames Found</h3>
+                <p className="text-xs text-slate-500 max-w-md mb-6 font-medium">
                   We couldn't find any eyewear matching your selected criteria. Try adjusting your search or filters.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 bg-black text-[#DFFF00] font-black rounded-xl hover:bg-gray-900 transition-colors text-xs uppercase tracking-wider"
+                  className="px-6 py-2.5 bg-teal-600 text-white font-extrabold rounded-xl hover:bg-teal-700 transition-colors text-xs uppercase tracking-wider"
                 >
                   Reset All Filters
                 </button>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -221,3 +224,4 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
+
