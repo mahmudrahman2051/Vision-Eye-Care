@@ -22,6 +22,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
@@ -30,6 +31,15 @@ export default function Navbar() {
 
   const cartCount = 0;
   const wishlistCount = 0;
+
+  // Scroll listener for glass effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -56,9 +66,17 @@ export default function Navbar() {
     }
   };
 
+  // Dynamic header classes based on scroll state
+  const headerClasses = scrolled
+    ? 'bg-white/75 backdrop-blur-xl backdrop-saturate-150 border-b border-white/40 shadow-lg shadow-black/5'
+    : 'bg-white border-b border-[#F5EFE3] shadow-sm';
+
   return (
     <div className="w-full font-sans sticky top-0 z-50">
-      <header className="bg-white border-b border-[#F5EFE3] shadow-sm" id="main-navbar">
+      <header
+        className={`transition-all duration-500 ease-out ${headerClasses}`}
+        id="main-navbar"
+      >
         {/* Main Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3 sm:gap-4">
 
@@ -94,7 +112,7 @@ export default function Navbar() {
               />
               <button
                 type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-full transition-colors cursor-pointer"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 bg-[#8B7355] hover:bg-[#6B5840] text-white rounded-full transition-colors cursor-pointer"
                 aria-label="Search"
               >
                 <HiOutlineMagnifyingGlass className="w-3.5 h-3.5" />
@@ -107,9 +125,9 @@ export default function Navbar() {
             {/* Wishlist */}
             <Link
               to="/wishlist"
-              className={`relative p-2 rounded-full transition-colors ${
+              className={`relative p-2 rounded-full transition-all duration-200 ${
                 location.pathname === '/wishlist'
-                  ? 'bg-[#1A1A1A] text-white'
+                  ? 'bg-[#8B7355] text-white shadow-sm'
                   : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
               }`}
               aria-label="Wishlist"
@@ -129,12 +147,12 @@ export default function Navbar() {
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   className={`p-1 flex items-center gap-2 rounded-full px-2.5 py-1 transition-all border ${
                     userDropdownOpen
-                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                      ? 'bg-[#8B7355] text-white border-[#8B7355]'
                       : 'hover:bg-[#F5EFE3] text-[#1A1A1A] border-transparent'
                   }`}
                 >
                   <div className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center ${
-                    userDropdownOpen ? 'bg-white text-[#1A1A1A]' : 'bg-[#1A1A1A] text-white'
+                    userDropdownOpen ? 'bg-white text-[#8B7355]' : 'bg-[#8B7355] text-white'
                   }`}>
                     {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
@@ -142,7 +160,7 @@ export default function Navbar() {
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-white border border-[#E8DFD0] rounded-xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
+                  <div className="absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-xl border border-[#E8DFD0] rounded-xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
                     <div className="px-4 py-2 border-b border-[#F5EFE3]">
                       <p className="font-bold text-[#1A1A1A] truncate">{user?.full_name}</p>
                       <p className="text-xs text-[#888] truncate">{user?.email}</p>
@@ -152,7 +170,7 @@ export default function Navbar() {
                       onClick={() => setUserDropdownOpen(false)}
                       className={`block px-4 py-2.5 transition-colors font-medium ${
                         location.pathname === '/account'
-                          ? 'bg-[#F5EFE3] text-[#1A1A1A] font-bold'
+                          ? 'bg-[#F5EFE3] text-[#8B7355] font-bold'
                           : 'text-[#333] hover:bg-[#F5EFE3]/60 hover:text-[#8B7355]'
                       }`}
                     >
@@ -173,7 +191,7 @@ export default function Navbar() {
                     )}
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2.5 text-red-600 font-bold hover:bg-red-50 border-t border-[#F5EFE3] mt-1 transition-colors"
+                      className="w-full text-left px-4 py-2.5 text-red-600 font-bold hover:bg-red-50 border-t border-[#F5EFE3] mt-1 transition-colors cursor-pointer"
                     >
                       Sign Out
                     </button>
@@ -183,9 +201,9 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className={`p-2 rounded-full transition-colors flex items-center gap-1.5 ${
+                className={`p-2 rounded-full transition-all flex items-center gap-1.5 ${
                   location.pathname === '/login'
-                    ? 'bg-[#1A1A1A] text-white px-3'
+                    ? 'bg-[#8B7355] text-white px-3 shadow-sm'
                     : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
                 }`}
                 aria-label="Sign In"
@@ -198,9 +216,9 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               to="/cart"
-              className={`relative p-2 rounded-full transition-colors ${
+              className={`relative p-2 rounded-full transition-all duration-200 ${
                 location.pathname === '/cart'
-                  ? 'bg-[#1A1A1A] text-white'
+                  ? 'bg-[#8B7355] text-white shadow-sm'
                   : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
               }`}
               aria-label="Cart"
@@ -220,8 +238,8 @@ export default function Navbar() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs ${
                 mobileOpen
-                  ? 'bg-[#1A1A1A] text-white shadow-md'
-                  : 'bg-[#F5EFE3] hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A]'
+                  ? 'bg-[#8B7355] text-white shadow-md'
+                  : 'bg-[#F5EFE3] hover:bg-[#8B7355] hover:text-white text-[#1A1A1A]'
               }`}
               aria-label="Toggle Navigation Menu"
             >
@@ -232,7 +250,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Category Bar */}
-        <div className="hidden lg:block border-t border-[#F5EFE3]">
+        <div className="hidden lg:block border-t border-[#F5EFE3]/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex items-center justify-center gap-8 py-2.5">
               {navCategories.map((cat) => (
@@ -242,8 +260,8 @@ export default function Navbar() {
                   className={({ isActive }) =>
                     `text-sm font-bold py-1 px-3 rounded-full transition-all relative group ${
                       isActive || location.search.includes(encodeURIComponent(cat.label))
-                        ? 'bg-[#F5EFE3] text-[#1A1A1A] shadow-2xs'
-                        : 'text-[#555] hover:text-[#1A1A1A] hover:bg-[#F5EFE3]/50'
+                        ? 'bg-[#F5EFE3] text-[#8B7355]'
+                        : 'text-[#555] hover:text-[#8B7355] hover:bg-[#F5EFE3]/50'
                     }`
                   }
                 >
@@ -256,7 +274,7 @@ export default function Navbar() {
 
         {/* Mobile Complete Dropdown Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-white border-t border-[#F5EFE3] px-4 py-5 shadow-2xl animate-fadeIn space-y-5">
+          <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-[#F5EFE3] px-4 py-5 shadow-2xl animate-fadeIn space-y-5">
 
             {/* 1. Mobile Search Bar */}
             <form onSubmit={handleSearchSubmit} className="relative">
@@ -267,7 +285,7 @@ export default function Navbar() {
                 placeholder="Search glasses, sunglasses, lenses..."
                 className="w-full bg-[#F5EFE3]/60 text-[#1A1A1A] text-sm rounded-full py-2.5 pl-4 pr-11 border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all"
               />
-              <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-full transition-colors">
+              <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-[#8B7355] hover:bg-[#6B5840] text-white rounded-full transition-colors cursor-pointer">
                 <HiOutlineMagnifyingGlass className="w-3.5 h-3.5" />
               </button>
             </form>
@@ -280,8 +298,8 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all relative ${
                   location.pathname === '/wishlist'
-                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
-                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                    ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-md'
+                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#555] border-[#E8DFD0]'
                 }`}
               >
                 <div className="relative mb-1">
@@ -301,8 +319,8 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all relative ${
                   location.pathname === '/cart'
-                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
-                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                    ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-md'
+                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#555] border-[#E8DFD0]'
                 }`}
               >
                 <div className="relative mb-1">
@@ -323,8 +341,8 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all ${
                     location.pathname.startsWith('/account')
-                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
-                      : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                      ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-md'
+                      : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#555] border-[#E8DFD0]'
                   }`}
                 >
                   <HiOutlineUser size={20} className="mb-1" />
@@ -337,7 +355,7 @@ export default function Navbar() {
                   className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all ${
                     location.pathname === '/login'
                       ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-md'
-                      : 'bg-[#1A1A1A] hover:bg-[#8B7355] text-white border-[#1A1A1A]'
+                      : 'bg-[#F5EFE3] hover:bg-[#8B7355] hover:text-white text-[#1A1A1A] border-[#E8DFD0]'
                   }`}
                 >
                   <HiOutlineUser size={20} className="mb-1" />
@@ -387,8 +405,8 @@ export default function Navbar() {
                     className={({ isActive }) =>
                       `flex items-center justify-between text-sm font-bold py-2.5 px-3.5 rounded-xl transition-all border ${
                         isActive
-                          ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-xs'
-                          : 'text-[#333] hover:text-[#1A1A1A] hover:bg-[#F5EFE3] border-[#F5EFE3]'
+                          ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-sm'
+                          : 'text-[#444] hover:text-[#8B7355] hover:bg-[#F5EFE3] border-[#E8DFD0]/70'
                       }`
                     }
                   >
