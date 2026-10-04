@@ -1,8 +1,10 @@
 import React from 'react';
 import HeroSection from '../../components/Home/HeroSection';
 import TopCategorySection from '../../components/Home/TopCategorySection';
+import FeaturedCollectionsGrid from '../../components/Home/FeaturedCollectionsGrid';
 import CategoryPromoBanner from '../../components/Home/CategoryPromoBanner';
 import ProductCarousel from '../../components/Home/ProductCarousel';
+import LowerPromoBanner from '../../components/Home/LowerPromoBanner';
 
 export default function Home() {
   return (
@@ -13,10 +15,13 @@ export default function Home() {
       {/* 2. Product Categories (1 Row) */}
       <TopCategorySection />
 
-      {/* 3. Secondary Promo Banner */}
+      {/* 3. Featured Square Collections Grid (2 cols mobile / 6 cols desktop) */}
+      <FeaturedCollectionsGrid />
+
+      {/* 4. Secondary Promo Banner */}
       <CategoryPromoBanner />
 
-      {/* 4. Featured Products (10 items) */}
+      {/* 5. Featured Products (10 items) */}
       <ProductCarousel
         title="Featured Products"
         fetchParams={{ featured: 'true' }}
@@ -29,13 +34,16 @@ export default function Home() {
         <hr className="border-slate-100" />
       </div>
 
-      {/* 5. Hot Selling Products (10 items) */}
+      {/* 6. Hot Selling Products (10 items) */}
       <ProductCarousel
         title="Hot Selling Products"
         fetchParams={{ bestseller: 'true' }}
         viewAllLink="/shop?sort=popular"
         productCount={10}
       />
+
+      {/* 7. Lower Promo Banner (Under Hot Selling Products) */}
+      <LowerPromoBanner />
     </div>
   );
 }
