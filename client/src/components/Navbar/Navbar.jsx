@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   HiOutlineShoppingBag,
   HiOutlineHeart,
@@ -25,6 +25,7 @@ export default function Navbar() {
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
 
   const cartCount = 0;
@@ -93,7 +94,7 @@ export default function Navbar() {
               />
               <button
                 type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 bg-[#1A1A1A] hover:bg-[#333] text-white rounded-full transition-colors"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1.5 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-full transition-colors cursor-pointer"
                 aria-label="Search"
               >
                 <HiOutlineMagnifyingGlass className="w-3.5 h-3.5" />
@@ -104,57 +105,106 @@ export default function Navbar() {
           {/* Desktop Action Icons */}
           <div className="hidden lg:flex items-center gap-2 text-[#1A1A1A] flex-shrink-0">
             {/* Wishlist */}
-            <Link to="/wishlist" className="relative p-2 hover:bg-[#F5EFE3] rounded-full transition-colors" aria-label="Wishlist">
+            <Link
+              to="/wishlist"
+              className={`relative p-2 rounded-full transition-colors ${
+                location.pathname === '/wishlist'
+                  ? 'bg-[#1A1A1A] text-white'
+                  : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
+              }`}
+              aria-label="Wishlist"
+            >
               <HiOutlineHeart size={20} />
               {wishlistCount > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-[#1A1A1A] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 w-4 h-4 bg-[#8B7355] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
             </Link>
 
-            {/* User */}
+            {/* User Dropdown */}
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="p-1 flex items-center gap-2 hover:bg-[#F5EFE3] rounded-full px-2 py-1 transition-colors"
+                  className={`p-1 flex items-center gap-2 rounded-full px-2.5 py-1 transition-all border ${
+                    userDropdownOpen
+                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                      : 'hover:bg-[#F5EFE3] text-[#1A1A1A] border-transparent'
+                  }`}
                 >
-                  <div className="w-7 h-7 rounded-full bg-[#1A1A1A] text-white text-xs font-bold flex items-center justify-center">
+                  <div className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center ${
+                    userDropdownOpen ? 'bg-white text-[#1A1A1A]' : 'bg-[#1A1A1A] text-white'
+                  }`}>
                     {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
-                  <span className="text-xs font-medium text-[#333]">{user?.full_name?.split(' ')[0]}</span>
+                  <span className="text-xs font-bold">{user?.full_name?.split(' ')[0]}</span>
                 </button>
 
                 {userDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-white border border-[#E8DFD0] rounded-xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
                     <div className="px-4 py-2 border-b border-[#F5EFE3]">
-                      <p className="font-semibold text-[#1A1A1A] truncate">{user?.full_name}</p>
+                      <p className="font-bold text-[#1A1A1A] truncate">{user?.full_name}</p>
                       <p className="text-xs text-[#888] truncate">{user?.email}</p>
                     </div>
-                    <Link to="/account" onClick={() => setUserDropdownOpen(false)} className="block px-4 py-2 text-[#333] hover:bg-[#F5EFE3]">
+                    <Link
+                      to="/account"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className={`block px-4 py-2.5 transition-colors font-medium ${
+                        location.pathname === '/account'
+                          ? 'bg-[#F5EFE3] text-[#1A1A1A] font-bold'
+                          : 'text-[#333] hover:bg-[#F5EFE3]/60 hover:text-[#8B7355]'
+                      }`}
+                    >
                       My Account
                     </Link>
                     {isAdmin && (
-                      <Link to="/admin" onClick={() => setUserDropdownOpen(false)} className="block px-4 py-2 text-[#8B7355] font-semibold hover:bg-[#F5EFE3]">
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className={`block px-4 py-2.5 transition-colors font-semibold ${
+                          location.pathname.startsWith('/admin')
+                            ? 'bg-[#8B7355] text-white font-bold'
+                            : 'text-[#8B7355] hover:bg-[#F5EFE3]'
+                        }`}
+                      >
                         Admin Portal
                       </Link>
                     )}
-                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 border-t border-[#F5EFE3] mt-1">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2.5 text-red-600 font-bold hover:bg-red-50 border-t border-[#F5EFE3] mt-1 transition-colors"
+                    >
                       Sign Out
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <Link to="/login" className="p-2 hover:bg-[#F5EFE3] rounded-full transition-colors flex items-center gap-1.5" aria-label="Sign In">
+              <Link
+                to="/login"
+                className={`p-2 rounded-full transition-colors flex items-center gap-1.5 ${
+                  location.pathname === '/login'
+                    ? 'bg-[#1A1A1A] text-white px-3'
+                    : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
+                }`}
+                aria-label="Sign In"
+              >
                 <HiOutlineUser size={20} />
-                <span className="text-sm font-medium">Sign In</span>
+                <span className="text-sm font-bold">Sign In</span>
               </Link>
             )}
 
             {/* Cart */}
-            <Link to="/cart" className="relative p-2 hover:bg-[#F5EFE3] rounded-full transition-colors" aria-label="Cart">
+            <Link
+              to="/cart"
+              className={`relative p-2 rounded-full transition-colors ${
+                location.pathname === '/cart'
+                  ? 'bg-[#1A1A1A] text-white'
+                  : 'hover:bg-[#F5EFE3] text-[#1A1A1A]'
+              }`}
+              aria-label="Cart"
+            >
               <HiOutlineShoppingBag size={20} />
               {cartCount > 0 && (
                 <span className="absolute top-0 right-0 w-4 h-4 bg-[#8B7355] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -164,14 +214,18 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Header Quick Actions & Menu Toggle */}
+          {/* Mobile Header Menu Toggle Button */}
           <div className="lg:hidden flex items-center gap-2">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-2.5 bg-[#F5EFE3] hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A] rounded-xl transition-all flex items-center gap-1.5 font-medium text-xs"
+              className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs ${
+                mobileOpen
+                  ? 'bg-[#1A1A1A] text-white shadow-md'
+                  : 'bg-[#F5EFE3] hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A]'
+              }`}
               aria-label="Toggle Navigation Menu"
             >
-              <span className="font-semibold">{mobileOpen ? 'Close' : 'Menu'}</span>
+              <span>{mobileOpen ? 'Close' : 'Menu'}</span>
               {mobileOpen ? <HiOutlineXMark size={20} /> : <HiOutlineBars3 size={20} />}
             </button>
           </div>
@@ -180,22 +234,27 @@ export default function Navbar() {
         {/* Desktop Category Bar */}
         <div className="hidden lg:block border-t border-[#F5EFE3]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center justify-center gap-10 py-2.5">
+            <nav className="flex items-center justify-center gap-8 py-2.5">
               {navCategories.map((cat) => (
                 <NavLink
                   key={cat.label}
                   to={cat.to}
-                  className="text-sm font-semibold text-[#555] hover:text-[#1A1A1A] transition-colors py-1 relative group"
+                  className={({ isActive }) =>
+                    `text-sm font-bold py-1 px-3 rounded-full transition-all relative group ${
+                      isActive || location.search.includes(encodeURIComponent(cat.label))
+                        ? 'bg-[#F5EFE3] text-[#1A1A1A] shadow-2xs'
+                        : 'text-[#555] hover:text-[#1A1A1A] hover:bg-[#F5EFE3]/50'
+                    }`
+                  }
                 >
                   {cat.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#8B7355] group-hover:w-full transition-all duration-300" />
                 </NavLink>
               ))}
             </nav>
           </div>
         </div>
 
-        {/* Mobile Complete Dropdown Menu (Contains All Buttons & Links) */}
+        {/* Mobile Complete Dropdown Menu */}
         {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-[#F5EFE3] px-4 py-5 shadow-2xl animate-fadeIn space-y-5">
 
@@ -206,74 +265,90 @@ export default function Navbar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search glasses, sunglasses, lenses..."
-                className="w-full bg-[#F5EFE3]/60 text-[#1A1A1A] text-sm rounded-full py-2.5 pl-4 pr-11 border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                className="w-full bg-[#F5EFE3]/60 text-[#1A1A1A] text-sm rounded-full py-2.5 pl-4 pr-11 border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all"
               />
-              <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-[#1A1A1A] text-white rounded-full">
+              <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-full transition-colors">
                 <HiOutlineMagnifyingGlass className="w-3.5 h-3.5" />
               </button>
             </form>
 
             {/* 2. Quick Action Buttons Grid */}
-            <div className="grid grid-cols-3 gap-2 pt-1">
+            <div className="grid grid-cols-3 gap-2.5 pt-1">
               {/* Wishlist Button */}
               <Link
                 to="/wishlist"
                 onClick={() => setMobileOpen(false)}
-                className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors relative"
+                className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all relative ${
+                  location.pathname === '/wishlist'
+                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
+                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                }`}
               >
                 <div className="relative mb-1">
-                  <HiOutlineHeart size={20} className="text-[#1A1A1A]" />
+                  <HiOutlineHeart size={20} />
                   {wishlistCount > 0 && (
-                    <span className="absolute -top-1 -right-2 w-4 h-4 bg-[#1A1A1A] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-2 w-4 h-4 bg-[#8B7355] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                       {wishlistCount}
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-semibold text-[#1A1A1A]">Wishlist</span>
+                <span className="text-xs font-bold">Wishlist</span>
               </Link>
 
               {/* Cart Button */}
               <Link
                 to="/cart"
                 onClick={() => setMobileOpen(false)}
-                className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors relative"
+                className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all relative ${
+                  location.pathname === '/cart'
+                    ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
+                    : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                }`}
               >
                 <div className="relative mb-1">
-                  <HiOutlineShoppingBag size={20} className="text-[#1A1A1A]" />
+                  <HiOutlineShoppingBag size={20} />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-2 w-4 h-4 bg-[#8B7355] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                       {cartCount}
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-semibold text-[#1A1A1A]">Cart</span>
+                <span className="text-xs font-bold">Cart</span>
               </Link>
 
-              {/* Account Button */}
+              {/* Account / Sign In Button */}
               {isAuthenticated ? (
                 <Link
                   to="/account"
                   onClick={() => setMobileOpen(false)}
-                  className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors"
+                  className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all ${
+                    location.pathname.startsWith('/account')
+                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md'
+                      : 'bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] text-[#1A1A1A] border-[#E8DFD0]'
+                  }`}
                 >
-                  <HiOutlineUser size={20} className="text-[#1A1A1A] mb-1" />
-                  <span className="text-xs font-semibold text-[#1A1A1A] truncate max-w-full">Account</span>
+                  <HiOutlineUser size={20} className="mb-1" />
+                  <span className="text-xs font-bold truncate max-w-full">Account</span>
                 </Link>
               ) : (
                 <Link
                   to="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#1A1A1A] text-white rounded-xl transition-colors"
+                  className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border transition-all ${
+                    location.pathname === '/login'
+                      ? 'bg-[#8B7355] text-white border-[#8B7355] shadow-md'
+                      : 'bg-[#1A1A1A] hover:bg-[#8B7355] text-white border-[#1A1A1A]'
+                  }`}
                 >
                   <HiOutlineUser size={20} className="mb-1" />
-                  <span className="text-xs font-semibold">Sign In</span>
+                  <span className="text-xs font-bold">Sign In</span>
                 </Link>
               )}
             </div>
 
             {/* Account Extra Options if Authenticated */}
             {isAuthenticated && (
-              <div className="bg-[#F5EFE3]/40 rounded-xl p-3 border border-[#E8DFD0] text-xs space-y-2">
+              <div className="bg-[#F5EFE3]/50 rounded-xl p-3.5 border border-[#E8DFD0] text-xs space-y-2">
                 <div className="flex items-center justify-between pb-2 border-b border-[#E8DFD0]">
                   <div>
                     <p className="font-bold text-[#1A1A1A]">{user?.full_name}</p>
@@ -283,7 +358,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       onClick={() => setMobileOpen(false)}
-                      className="px-2.5 py-1 bg-[#8B7355] text-white font-semibold rounded text-[10px]"
+                      className="px-2.5 py-1 bg-[#8B7355] text-white font-bold rounded-lg text-[10px] uppercase tracking-wider"
                     >
                       Admin
                     </Link>
@@ -291,7 +366,7 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left font-semibold text-red-600 pt-1"
+                  className="w-full text-left font-bold text-red-600 pt-1 hover:underline cursor-pointer"
                 >
                   Sign Out
                 </button>
@@ -303,16 +378,22 @@ export default function Navbar() {
               <p className="text-[11px] font-bold text-[#8B7355] uppercase tracking-wider mb-2.5">
                 Categories
               </p>
-              <nav className="grid grid-cols-1 gap-1">
+              <nav className="grid grid-cols-1 gap-1.5">
                 {navCategories.map((cat) => (
                   <NavLink
                     key={cat.label}
                     to={cat.to}
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-between text-sm font-medium text-[#333] hover:text-[#1A1A1A] py-2.5 px-3 rounded-lg hover:bg-[#F5EFE3] transition-colors border-b border-[#F5EFE3] last:border-0"
+                    className={({ isActive }) =>
+                      `flex items-center justify-between text-sm font-bold py-2.5 px-3.5 rounded-xl transition-all border ${
+                        isActive
+                          ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-xs'
+                          : 'text-[#333] hover:text-[#1A1A1A] hover:bg-[#F5EFE3] border-[#F5EFE3]'
+                      }`
+                    }
                   >
                     <span>{cat.label}</span>
-                    <span className="text-[#999] text-xs">→</span>
+                    <span className="text-xs opacity-70">→</span>
                   </NavLink>
                 ))}
               </nav>
