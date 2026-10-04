@@ -68,7 +68,7 @@ export default function Navbar() {
               alt="Vision Eye Care"
               className="h-7 sm:h-8 w-auto"
             />
-            <div className="flex flex-col leading-none">
+            <div className="flex flex-col leading-none font-logo">
               <span className="font-bold text-sm sm:text-base text-[#1A1A1A] tracking-tight">
                 VISION EYE CARE
               </span>

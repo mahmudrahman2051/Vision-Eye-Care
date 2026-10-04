@@ -1,9 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Clarity+City:ital,wght@0,100..900;1,100..900&family=Questrial&display=swap');
 @import "tailwindcss";
 
-/* ============================================
-   VISION EYE CARE — Warm Cream & White Theme
-   Primary: #F5EFE3 (warm cream) + White
-   ============================================ */
+.font-logo {
+  font-family: 'Clarity City', 'Questrial', sans-serif !important;
+}
 
 @theme extend {
   --color-brand-cream: #F5EFE3;
@@ -16,7 +16,7 @@
   --color-brand-accent: #8B7355;
   --color-brand-accent-hover: #7A6348;
 
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Questrial', sans-serif;
 }
 
 /* ============================================
@@ -30,12 +30,16 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), 'Questrial', sans-serif;
   background-color: #FFFFFF;
   color: #1A1A1A;
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
 }
 
 a {

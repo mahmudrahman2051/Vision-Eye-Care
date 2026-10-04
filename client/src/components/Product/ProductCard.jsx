@@ -34,10 +34,10 @@ const ProductCard = ({ product }) => {
   const defaultImage = 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80';
 
   return (
-    <div className="group relative bg-white border border-[#E8DFD0] hover:border-[#8B7355]/40 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-[340px]">
+    <div className="group relative bg-white border border-[#E8DFD0] hover:border-[#8B7355]/40 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md flex flex-col justify-between h-full min-h-[290px] sm:min-h-[340px]">
       {/* Discount Badge */}
       {hasDiscount && (
-        <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[10px] font-bold bg-[#1A1A1A] text-white rounded">
+        <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold bg-[#1A1A1A] text-white rounded">
           -{discountPercent}%
         </span>
       )}
@@ -45,20 +45,20 @@ const ProductCard = ({ product }) => {
       {/* Wishlist */}
       <button
         onClick={toggleWishlist}
-        className={`absolute top-2.5 right-2.5 z-10 p-1.5 rounded-full transition-all ${
+        className={`absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 p-1.5 rounded-full transition-all ${
           isWishlisted
             ? 'bg-red-50 text-red-500'
             : 'bg-white/90 text-[#999] hover:text-red-500'
         }`}
         aria-label="Wishlist"
       >
-        <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500' : ''}`} />
+        <FiHeart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-red-500' : ''}`} />
       </button>
 
       {/* Image */}
       <Link
         to={`/product/${slug || id}`}
-        className="relative h-40 w-full bg-[#F5EFE3]/30 overflow-hidden block flex-shrink-0"
+        className="relative h-32 sm:h-44 w-full bg-[#F5EFE3]/30 overflow-hidden block flex-shrink-0"
       >
         <img
           src={primary_image || defaultImage}
@@ -69,37 +69,37 @@ const ProductCard = ({ product }) => {
       </Link>
 
       {/* Info */}
-      <div className="p-3.5 flex flex-col justify-between flex-grow">
+      <div className="p-2.5 sm:p-3.5 flex flex-col justify-between flex-grow">
         <div>
-          <p className="text-[11px] font-medium text-[#8B7355] uppercase tracking-wide mb-0.5">
+          <p className="text-[10px] sm:text-[11px] font-bold text-[#8B7355] uppercase tracking-wide mb-0.5 truncate">
             {brand || 'Vision Care'}
           </p>
           <Link to={`/product/${slug || id}`}>
-            <h3 className="text-sm font-semibold text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors line-clamp-1">
+            <h3 className="text-xs sm:text-sm font-bold text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors line-clamp-1 leading-snug">
               {name}
             </h3>
           </Link>
 
           {/* Rating */}
-          <div className="flex items-center gap-1 mt-1.5">
+          <div className="flex items-center gap-1 mt-1 sm:mt-1.5">
             <FiStar className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span className="text-xs font-medium text-[#333]">
+            <span className="text-[11px] sm:text-xs font-semibold text-[#333]">
               {parseFloat(average_rating || 4.5).toFixed(1)}
             </span>
-            <span className="text-[11px] text-[#999]">
+            <span className="text-[10px] sm:text-[11px] text-[#999]">
               ({review_count || 0})
             </span>
           </div>
         </div>
 
         {/* Price + Cart */}
-        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-[#F5EFE3]">
-          <div>
-            <span className="text-base font-bold text-[#1A1A1A]">
+        <div className="flex items-center justify-between mt-2 sm:mt-3 pt-2 sm:pt-2.5 border-t border-[#F5EFE3]">
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-1">
+            <span className="text-sm sm:text-base font-extrabold text-[#1A1A1A]">
               ৳{Math.round(numericPrice).toLocaleString()}
             </span>
             {hasDiscount && (
-              <span className="text-xs text-[#999] line-through ml-1.5">
+              <span className="text-[10px] sm:text-xs text-[#999] line-through">
                 ৳{Math.round(numericComparePrice).toLocaleString()}
               </span>
             )}
@@ -107,7 +107,7 @@ const ProductCard = ({ product }) => {
           <button
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="p-2 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-lg transition-colors disabled:opacity-30"
+            className="p-1.5 sm:p-2 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-lg transition-colors disabled:opacity-30"
             title="Add to Cart"
           >
             <FiShoppingBag className="w-3.5 h-3.5" />

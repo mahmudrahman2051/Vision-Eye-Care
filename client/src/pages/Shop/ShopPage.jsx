@@ -323,15 +323,15 @@ const ShopPage = () => {
           {/* Product Grid Area */}
           <div className="lg:col-span-3">
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {[...Array(6)].map((_, idx) => (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
+                {[...Array(10)].map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-white border border-[#E8DFD0] rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
+                    className="bg-white border border-[#E8DFD0] rounded-xl h-72 animate-pulse p-3 flex flex-col justify-between"
                   >
-                    <div className="bg-[#F5EFE3]/50 h-44 rounded-xl"></div>
-                    <div className="space-y-2 mt-4">
-                      <div className="bg-[#F5EFE3]/60 h-4 rounded w-3/4"></div>
+                    <div className="bg-[#F5EFE3]/50 h-36 rounded-lg"></div>
+                    <div className="space-y-2 mt-3">
+                      <div className="bg-[#F5EFE3]/60 h-3 rounded w-3/4"></div>
                       <div className="bg-[#F5EFE3]/60 h-3 rounded w-1/2"></div>
                     </div>
                   </div>
@@ -355,7 +355,7 @@ const ShopPage = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
