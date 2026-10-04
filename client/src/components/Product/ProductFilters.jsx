@@ -15,29 +15,32 @@ const ProductFilters = ({
   filters,
   onFilterChange,
   onResetFilters,
+  isDrawer = false,
 }) => {
   const activeSubcategories = categories.find(
     (c) => c.id === parseInt(filters.category) || c.slug === filters.category
   )?.subcategories || [];
 
   return (
-    <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 space-y-6 text-[#1A1A1A] shadow-sm">
+    <div className={`bg-white text-[#1A1A1A] ${isDrawer ? 'space-y-5 p-1' : 'border border-[#E8DFD0] rounded-2xl p-5 sm:p-6 space-y-6 shadow-sm'}`}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE3]">
-        <h3 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2">
-          <FiFilter className="text-[#8B7355]" /> Filters
-        </h3>
-        <button
-          onClick={onResetFilters}
-          className="text-xs font-semibold text-[#888] hover:text-[#1A1A1A] flex items-center gap-1 transition-colors"
-        >
-          <FiRotateCcw className="w-3.5 h-3.5" /> Reset
-        </button>
-      </div>
+      {!isDrawer && (
+        <div className="flex items-center justify-between pb-4 border-b border-[#F5EFE3]">
+          <h3 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider flex items-center gap-2">
+            <FiFilter className="text-[#8B7355]" /> Filters
+          </h3>
+          <button
+            onClick={onResetFilters}
+            className="text-xs font-semibold text-[#888] hover:text-[#1A1A1A] flex items-center gap-1 transition-colors"
+          >
+            <FiRotateCcw className="w-3.5 h-3.5" /> Reset
+          </button>
+        </div>
+      )}
 
       {/* Search Filter */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
           Search Frames
         </label>
         <div className="relative">
@@ -54,7 +57,7 @@ const ProductFilters = ({
 
       {/* Category */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
           Category
         </label>
         <select
@@ -77,7 +80,7 @@ const ProductFilters = ({
       {/* Subcategory */}
       {activeSubcategories.length > 0 && (
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
             Subcategory
           </label>
           <select
@@ -97,19 +100,19 @@ const ProductFilters = ({
 
       {/* Gender */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
           Gender
         </label>
-        <div className="grid grid-cols-5 gap-1 bg-[#F5EFE3]/50 p-1 rounded-xl border border-[#E8DFD0]">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-[#F5EFE3]/50 p-1.5 rounded-xl border border-[#E8DFD0]">
           {genders.map((g) => (
             <button
               key={g.value}
               type="button"
               onClick={() => onFilterChange('gender', g.value)}
-              className={`py-1.5 text-xs font-bold rounded-lg transition-all text-center ${
+              className={`py-1.5 px-1 text-[11px] sm:text-xs font-bold rounded-lg transition-all text-center truncate ${
                 (filters.gender || '') === g.value
                   ? 'bg-[#1A1A1A] text-white shadow-xs'
-                  : 'text-[#666] hover:text-[#1A1A1A]'
+                  : 'text-[#555] hover:text-[#1A1A1A]'
               }`}
             >
               {g.label}
@@ -120,7 +123,7 @@ const ProductFilters = ({
 
       {/* Frame Shape */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
           Frame Shape
         </label>
         <select
@@ -139,7 +142,7 @@ const ProductFilters = ({
 
       {/* Price Range */}
       <div>
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#888] mb-2">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
           Price Range (৳ BDT)
         </label>
         <div className="flex items-center gap-2">
@@ -148,15 +151,15 @@ const ProductFilters = ({
             placeholder="Min (৳)"
             value={filters.min_price || ''}
             onChange={(e) => onFilterChange('min_price', e.target.value)}
-            className="w-1/2 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl px-3 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#8B7355]"
+            className="w-1/2 min-w-0 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl px-3 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#8B7355]"
           />
-          <span className="text-[#888] text-xs">-</span>
+          <span className="text-[#888] text-xs flex-shrink-0">-</span>
           <input
             type="number"
             placeholder="Max (৳)"
             value={filters.max_price || ''}
             onChange={(e) => onFilterChange('max_price', e.target.value)}
-            className="w-1/2 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl px-3 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#8B7355]"
+            className="w-1/2 min-w-0 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl px-3 py-2 text-xs text-[#1A1A1A] focus:outline-none focus:border-[#8B7355]"
           />
         </div>
       </div>
@@ -171,6 +174,18 @@ const ProductFilters = ({
           className="h-4 w-4 border-[#E8DFD0] rounded text-[#8B7355] focus:ring-[#8B7355] cursor-pointer"
         />
       </div>
+
+      {/* Mobile Drawer Action Buttons */}
+      {isDrawer && (
+        <div className="pt-4 flex gap-3">
+          <button
+            onClick={onResetFilters}
+            className="w-1/2 py-2.5 px-3 bg-[#F5EFE3] text-[#1A1A1A] font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-[#E8DFD0] transition-colors"
+          >
+            Reset
+          </button>
+        </div>
+      )}
     </div>
   );
 };
