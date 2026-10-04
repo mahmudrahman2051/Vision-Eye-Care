@@ -20,7 +20,6 @@ const navCategories = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -43,6 +42,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     setUserDropdownOpen(false);
+    setMobileOpen(false);
     await logout();
     navigate('/login');
   };
@@ -51,7 +51,7 @@ export default function Navbar() {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
+      setMobileOpen(false);
     }
   };
 
@@ -78,10 +78,10 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Search */}
+          {/* Desktop Search (Hidden on Mobile) */}
           <form
             onSubmit={handleSearchSubmit}
-            className="hidden md:flex flex-1 max-w-md items-center"
+            className="hidden lg:flex flex-1 max-w-md items-center mx-6"
           >
             <div className="relative w-full">
               <input
@@ -101,17 +101,8 @@ export default function Navbar() {
             </div>
           </form>
 
-          {/* Action Icons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 text-[#1A1A1A] flex-shrink-0">
-            {/* Mobile Search */}
-            <button
-              className="md:hidden p-2 hover:bg-[#F5EFE3] rounded-full transition-colors"
-              onClick={() => setSearchOpen(!searchOpen)}
-              aria-label="Search"
-            >
-              <HiOutlineMagnifyingGlass size={20} />
-            </button>
-
+          {/* Desktop Action Icons */}
+          <div className="hidden lg:flex items-center gap-2 text-[#1A1A1A] flex-shrink-0">
             {/* Wishlist */}
             <Link to="/wishlist" className="relative p-2 hover:bg-[#F5EFE3] rounded-full transition-colors" aria-label="Wishlist">
               <HiOutlineHeart size={20} />
@@ -127,11 +118,12 @@ export default function Navbar() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="p-1"
+                  className="p-1 flex items-center gap-2 hover:bg-[#F5EFE3] rounded-full px-2 py-1 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#1A1A1A] text-white text-xs font-bold flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-[#1A1A1A] text-white text-xs font-bold flex items-center justify-center">
                     {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
+                  <span className="text-xs font-medium text-[#333]">{user?.full_name?.split(' ')[0]}</span>
                 </button>
 
                 {userDropdownOpen && (
@@ -157,7 +149,7 @@ export default function Navbar() {
             ) : (
               <Link to="/login" className="p-2 hover:bg-[#F5EFE3] rounded-full transition-colors flex items-center gap-1.5" aria-label="Sign In">
                 <HiOutlineUser size={20} />
-                <span className="hidden sm:inline text-sm font-medium">Sign In</span>
+                <span className="text-sm font-medium">Sign In</span>
               </Link>
             )}
 
@@ -170,14 +162,17 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+          </div>
 
-            {/* Mobile Toggle */}
+          {/* Mobile Header Quick Actions & Menu Toggle */}
+          <div className="lg:hidden flex items-center gap-2">
             <button
-              className="lg:hidden p-2 hover:bg-[#F5EFE3] rounded-lg transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
+              className="p-2.5 bg-[#F5EFE3] hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A] rounded-xl transition-all flex items-center gap-1.5 font-medium text-xs"
+              aria-label="Toggle Navigation Menu"
             >
-              {mobileOpen ? <HiOutlineXMark size={22} /> : <HiOutlineBars3 size={22} />}
+              <span className="font-semibold">{mobileOpen ? 'Close' : 'Menu'}</span>
+              {mobileOpen ? <HiOutlineXMark size={20} /> : <HiOutlineBars3 size={20} />}
             </button>
           </div>
         </div>
@@ -185,54 +180,143 @@ export default function Navbar() {
         {/* Desktop Category Bar */}
         <div className="hidden lg:block border-t border-[#F5EFE3]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center gap-8 py-2">
+            <nav className="flex items-center justify-center gap-10 py-2.5">
               {navCategories.map((cat) => (
                 <NavLink
                   key={cat.label}
                   to={cat.to}
-                  className="text-sm font-medium text-[#555] hover:text-[#1A1A1A] transition-colors py-1"
+                  className="text-sm font-semibold text-[#555] hover:text-[#1A1A1A] transition-colors py-1 relative group"
                 >
                   {cat.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#8B7355] group-hover:w-full transition-all duration-300" />
                 </NavLink>
               ))}
             </nav>
           </div>
         </div>
 
-        {/* Mobile Search */}
-        {searchOpen && (
-          <div className="md:hidden px-4 pb-3 border-t border-[#F5EFE3] bg-white animate-fadeIn">
-            <form onSubmit={handleSearchSubmit} className="relative mt-3">
+        {/* Mobile Complete Dropdown Menu (Contains All Buttons & Links) */}
+        {mobileOpen && (
+          <div className="lg:hidden bg-white border-t border-[#F5EFE3] px-4 py-5 shadow-2xl animate-fadeIn space-y-5">
+
+            {/* 1. Mobile Search Bar */}
+            <form onSubmit={handleSearchSubmit} className="relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full bg-[#F5EFE3]/50 text-sm rounded-full py-2.5 pl-4 pr-10 border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
-                autoFocus
+                placeholder="Search glasses, sunglasses, lenses..."
+                className="w-full bg-[#F5EFE3]/60 text-[#1A1A1A] text-sm rounded-full py-2.5 pl-4 pr-11 border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
               />
-              <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-[#1A1A1A] text-white rounded-full">
+              <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-[#1A1A1A] text-white rounded-full">
                 <HiOutlineMagnifyingGlass className="w-3.5 h-3.5" />
               </button>
             </form>
-          </div>
-        )}
 
-        {/* Mobile Nav Drawer */}
-        {mobileOpen && (
-          <div className="lg:hidden bg-white border-t border-[#F5EFE3] px-6 py-4 animate-fadeIn">
-            <nav className="flex flex-col space-y-3">
-              {navCategories.map((cat) => (
-                <NavLink
-                  key={cat.label}
-                  to={cat.to}
+            {/* 2. Quick Action Buttons Grid */}
+            <div className="grid grid-cols-3 gap-2 pt-1">
+              {/* Wishlist Button */}
+              <Link
+                to="/wishlist"
+                onClick={() => setMobileOpen(false)}
+                className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors relative"
+              >
+                <div className="relative mb-1">
+                  <HiOutlineHeart size={20} className="text-[#1A1A1A]" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-1 -right-2 w-4 h-4 bg-[#1A1A1A] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs font-semibold text-[#1A1A1A]">Wishlist</span>
+              </Link>
+
+              {/* Cart Button */}
+              <Link
+                to="/cart"
+                onClick={() => setMobileOpen(false)}
+                className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors relative"
+              >
+                <div className="relative mb-1">
+                  <HiOutlineShoppingBag size={20} className="text-[#1A1A1A]" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-2 w-4 h-4 bg-[#8B7355] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs font-semibold text-[#1A1A1A]">Cart</span>
+              </Link>
+
+              {/* Account Button */}
+              {isAuthenticated ? (
+                <Link
+                  to="/account"
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium text-[#555] hover:text-[#1A1A1A] py-1 border-b border-[#F5EFE3] last:border-0 pb-3 last:pb-0"
+                  className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#F5EFE3]/50 hover:bg-[#F5EFE3] rounded-xl border border-[#E8DFD0] transition-colors"
                 >
-                  {cat.label}
-                </NavLink>
-              ))}
-            </nav>
+                  <HiOutlineUser size={20} className="text-[#1A1A1A] mb-1" />
+                  <span className="text-xs font-semibold text-[#1A1A1A] truncate max-w-full">Account</span>
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex flex-col items-center justify-center py-2.5 px-2 bg-[#1A1A1A] text-white rounded-xl transition-colors"
+                >
+                  <HiOutlineUser size={20} className="mb-1" />
+                  <span className="text-xs font-semibold">Sign In</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Account Extra Options if Authenticated */}
+            {isAuthenticated && (
+              <div className="bg-[#F5EFE3]/40 rounded-xl p-3 border border-[#E8DFD0] text-xs space-y-2">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E8DFD0]">
+                  <div>
+                    <p className="font-bold text-[#1A1A1A]">{user?.full_name}</p>
+                    <p className="text-[11px] text-[#777]">{user?.email}</p>
+                  </div>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileOpen(false)}
+                      className="px-2.5 py-1 bg-[#8B7355] text-white font-semibold rounded text-[10px]"
+                    >
+                      Admin
+                    </Link>
+                  )}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left font-semibold text-red-600 pt-1"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+
+            {/* 3. Category Navigation Links */}
+            <div>
+              <p className="text-[11px] font-bold text-[#8B7355] uppercase tracking-wider mb-2.5">
+                Categories
+              </p>
+              <nav className="grid grid-cols-1 gap-1">
+                {navCategories.map((cat) => (
+                  <NavLink
+                    key={cat.label}
+                    to={cat.to}
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between text-sm font-medium text-[#333] hover:text-[#1A1A1A] py-2.5 px-3 rounded-lg hover:bg-[#F5EFE3] transition-colors border-b border-[#F5EFE3] last:border-0"
+                  >
+                    <span>{cat.label}</span>
+                    <span className="text-[#999] text-xs">→</span>
+                  </NavLink>
+                ))}
+              </nav>
+            </div>
           </div>
         )}
       </header>

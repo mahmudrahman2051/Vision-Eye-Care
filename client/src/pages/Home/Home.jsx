@@ -1,6 +1,7 @@
 import React from 'react';
 import HeroSection from '../../components/Home/HeroSection';
 import TopCategorySection from '../../components/Home/TopCategorySection';
+import CategoryPromoBanner from '../../components/Home/CategoryPromoBanner';
 import ProductCarousel from '../../components/Home/ProductCarousel';
 
 export default function Home() {
@@ -9,10 +10,13 @@ export default function Home() {
       {/* 1. Hero Banner (Image Only) */}
       <HeroSection />
 
-      {/* 2. Product Categories */}
+      {/* 2. Product Categories (1 Row) */}
       <TopCategorySection />
 
-      {/* 3. Featured Products (10 items) */}
+      {/* 3. Secondary Promo Banner */}
+      <CategoryPromoBanner />
+
+      {/* 4. Featured Products (10 items) */}
       <ProductCarousel
         title="Featured Products"
         fetchParams={{ featured: 'true' }}
@@ -25,7 +29,7 @@ export default function Home() {
         <hr className="border-slate-100" />
       </div>
 
-      {/* 4. Hot Selling Products (10 items) */}
+      {/* 5. Hot Selling Products (10 items) */}
       <ProductCarousel
         title="Hot Selling Products"
         fetchParams={{ bestseller: 'true' }}
