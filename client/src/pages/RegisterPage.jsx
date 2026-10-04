@@ -73,28 +73,28 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#050505]">
-      <div className="max-w-md w-full space-y-8 bg-[#0B0B0B] p-8 rounded-2xl border border-[#292929] shadow-2xl relative overflow-hidden">
-        {/* Decorative Top Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#DFFF00] via-[#a6bf00] to-[#DFFF00]"></div>
+    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F5EFE3]/30 font-sans">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl border border-[#E8DFD0] shadow-xl relative overflow-hidden">
+        {/* Decorative Top Accent Bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#8B7355]"></div>
 
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] tracking-tight">
             Create Account
           </h2>
-          <p className="mt-2 text-sm text-gray-400">
-            Join <span className="text-[#DFFF00] font-semibold">Vision Eye Care</span> for exclusive eyewear
+          <p className="mt-2 text-xs sm:text-sm text-[#777]">
+            Join <span className="text-[#8B7355] font-semibold">Vision Eye Care</span> for exclusive eyewear
           </p>
         </div>
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           {/* Full Name */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-1">
               Full Name *
             </label>
-            <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            <div className="relative rounded-lg shadow-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#888]">
                 <FiUser className="h-5 w-5" />
               </div>
               <input
@@ -104,18 +104,18 @@ const RegisterPage = () => {
                 value={formData.full_name}
                 onChange={handleChange}
                 placeholder="John Doe"
-                className="block w-full pl-10 pr-3 py-3 bg-[#171717] border border-[#292929] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#DFFF00] focus:border-transparent transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
 
           {/* Email Address */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-1">
               Email Address *
             </label>
-            <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            <div className="relative rounded-lg shadow-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#888]">
                 <FiMail className="h-5 w-5" />
               </div>
               <input
@@ -125,18 +125,18 @@ const RegisterPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="john@example.com"
-                className="block w-full pl-10 pr-3 py-3 bg-[#171717] border border-[#292929] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#DFFF00] focus:border-transparent transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
 
-          {/* Phone Number (Optional) */}
+          {/* Phone Number */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">
-              Phone Number <span className="text-gray-500 lowercase">(optional)</span>
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-1">
+              Phone Number <span className="text-[#999] lowercase">(optional)</span>
             </label>
-            <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            <div className="relative rounded-lg shadow-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#888]">
                 <FiPhone className="h-5 w-5" />
               </div>
               <input
@@ -145,18 +145,18 @@ const RegisterPage = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+880 1712 345678"
-                className="block w-full pl-10 pr-3 py-3 bg-[#171717] border border-[#292929] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#DFFF00] focus:border-transparent transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-1">
               Password *
             </label>
-            <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            <div className="relative rounded-lg shadow-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#888]">
                 <FiLock className="h-5 w-5" />
               </div>
               <input
@@ -166,12 +166,12 @@ const RegisterPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="At least 6 characters"
-                className="block w-full pl-10 pr-10 py-3 bg-[#171717] border border-[#292929] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#DFFF00] focus:border-transparent transition-all text-sm"
+                className="block w-full pl-10 pr-10 py-3 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#888] hover:text-[#1A1A1A] transition-colors"
               >
                 {showPassword ? <FiEyeOff className="h-5 w-5" /> : <FiEye className="h-5 w-5" />}
               </button>
@@ -180,11 +180,11 @@ const RegisterPage = () => {
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-1">
               Confirm Password *
             </label>
-            <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            <div className="relative rounded-lg shadow-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#888]">
                 <FiLock className="h-5 w-5" />
               </div>
               <input
@@ -194,12 +194,12 @@ const RegisterPage = () => {
                 value={formData.confirm_password}
                 onChange={handleChange}
                 placeholder="Re-enter password"
-                className="block w-full pl-10 pr-10 py-3 bg-[#171717] border border-[#292929] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#DFFF00] focus:border-transparent transition-all text-sm"
+                className="block w-full pl-10 pr-10 py-3 bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-white transition-colors"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#888] hover:text-[#1A1A1A] transition-colors"
               >
                 {showConfirmPassword ? <FiEyeOff className="h-5 w-5" /> : <FiEye className="h-5 w-5" />}
               </button>
@@ -210,11 +210,11 @@ const RegisterPage = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-black font-bold bg-[#DFFF00] hover:bg-[#cbe600] active:scale-[0.99] transition-all shadow-lg hover:shadow-[#DFFF00]/20 disabled:opacity-50 text-sm tracking-wide uppercase mt-4"
+            className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-white font-bold bg-[#1A1A1A] hover:bg-[#8B7355] active:scale-[0.99] transition-all shadow-md disabled:opacity-50 text-sm tracking-wide uppercase mt-4"
           >
             {submitting ? (
               <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 Creating Account...
               </span>
             ) : (
@@ -226,10 +226,10 @@ const RegisterPage = () => {
         </form>
 
         {/* Login Link */}
-        <div className="text-center pt-4 border-t border-[#292929]">
-          <p className="text-xs text-gray-400">
+        <div className="text-center pt-4 border-t border-[#F5EFE3]">
+          <p className="text-xs text-[#777]">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-[#DFFF00] hover:underline">
+            <Link to="/login" className="font-semibold text-[#8B7355] hover:underline">
               Sign In
             </Link>
           </p>

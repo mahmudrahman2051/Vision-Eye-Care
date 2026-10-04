@@ -17,6 +17,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ShopPage from './pages/Shop/ShopPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
+import CartPage from './pages/CartPage';
+import WishlistPage from './pages/WishlistPage';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -67,8 +69,8 @@ export default function App() {
             <Route path="register" element={<RegisterPage />} />
 
             {/* Customer Routes (Phase 5–7) */}
-            <Route path="cart" element={<PlaceholderPage title="Shopping Cart" phase={5} />} />
-            <Route path="wishlist" element={<PlaceholderPage title="Wishlist" phase={5} />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="wishlist" element={<WishlistPage />} />
             <Route path="checkout" element={<PlaceholderPage title="Checkout" phase={6} />} />
             <Route path="order-success/:id" element={<PlaceholderPage title="Order Confirmation" phase={6} />} />
             <Route path="account" element={<PlaceholderPage title="My Account" phase={7} />} />

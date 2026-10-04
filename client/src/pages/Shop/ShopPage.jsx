@@ -83,44 +83,44 @@ const ShopPage = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-slate-900 font-sans">
+    <div className="bg-[#F5EFE3]/20 min-h-screen py-8 px-4 sm:px-6 lg:px-8 text-[#1A1A1A] font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Page Title & Description */}
-        <div className="mb-6 space-y-1">
-          <span className="text-[11px] font-extrabold uppercase tracking-widest text-teal-700">
-            BANGLADESH OPTICAL COLLECTION
+        <div className="mb-8 space-y-1 text-center sm:text-left">
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#8B7355]">
+            Bangladesh Optical Collection
           </span>
-          <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 uppercase">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#1A1A1A]">
             Eyewear & Frame Catalog
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#666] font-medium max-w-2xl">
             Explore 1,000+ prescription eyeglasses, computer blue-cut frames & designer sunglasses in BDT (৳).
           </p>
         </div>
 
         {/* Top Control Bar */}
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+        <div className="bg-white border border-[#E8DFD0] rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="lg:hidden px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase flex items-center gap-2"
+              className="lg:hidden px-4 py-2 bg-[#1A1A1A] text-white rounded-xl text-xs font-semibold uppercase flex items-center gap-2"
             >
               <FiSliders /> Filters
             </button>
-            <span className="text-xs text-slate-500 font-medium">
-              Showing <span className="text-slate-900 font-black">{pagination.total}</span> Frames
+            <span className="text-xs text-[#777] font-medium">
+              Showing <span className="text-[#1A1A1A] font-bold">{pagination.total}</span> Frames
             </span>
           </div>
 
           {/* Sort By Dropdown */}
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:inline">
+            <span className="text-xs font-bold text-[#777] uppercase tracking-wider hidden sm:inline">
               Sort By:
             </span>
             <select
               value={currentFilters.sort}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-teal-500 cursor-pointer"
+              className="bg-[#F5EFE3]/50 border border-[#E8DFD0] text-[#1A1A1A] text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-[#8B7355] cursor-pointer"
             >
               <option value="newest">Newest Arrivals</option>
               <option value="popular">Most Popular</option>
@@ -149,15 +149,15 @@ const ShopPage = () => {
           {mobileFilterOpen && (
             <div className="fixed inset-0 z-50 lg:hidden flex">
               <div
-                className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
+                className="fixed inset-0 bg-black/50 backdrop-blur-xs"
                 onClick={() => setMobileFilterOpen(false)}
               ></div>
               <div className="relative ml-auto w-full max-w-xs bg-white h-full p-6 overflow-y-auto z-10 shadow-2xl">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="font-black text-base text-slate-900 uppercase">Filter Options</h3>
+                  <h3 className="font-bold text-base text-[#1A1A1A] uppercase">Filter Options</h3>
                   <button
                     onClick={() => setMobileFilterOpen(false)}
-                    className="text-slate-400 hover:text-slate-900 text-xl font-bold"
+                    className="text-[#999] hover:text-[#1A1A1A] text-xl font-bold"
                   >
                     ✕
                   </button>
@@ -179,28 +179,28 @@ const ShopPage = () => {
                 {[...Array(6)].map((_, idx) => (
                   <div
                     key={idx}
-                    className="bg-white border border-slate-200 rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
+                    className="bg-white border border-[#E8DFD0] rounded-2xl h-80 animate-pulse p-4 flex flex-col justify-between"
                   >
-                    <div className="bg-slate-100 h-44 rounded-xl"></div>
+                    <div className="bg-[#F5EFE3]/50 h-44 rounded-xl"></div>
                     <div className="space-y-2 mt-4">
-                      <div className="bg-slate-100 h-4 rounded w-3/4"></div>
-                      <div className="bg-slate-100 h-3 rounded w-1/2"></div>
+                      <div className="bg-[#F5EFE3]/60 h-4 rounded w-3/4"></div>
+                      <div className="bg-[#F5EFE3]/60 h-3 rounded w-1/2"></div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-16 h-16 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center text-2xl mb-4 border border-slate-200">
+              <div className="bg-white border border-[#E8DFD0] rounded-2xl p-12 text-center my-6 flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-16 h-16 bg-[#F5EFE3] text-[#8B7355] rounded-full flex items-center justify-center text-2xl mb-4 border border-[#E8DFD0]">
                   <FiPackage />
                 </div>
-                <h3 className="text-lg font-black text-slate-900 mb-1">No Frames Found</h3>
-                <p className="text-xs text-slate-500 max-w-md mb-6 font-medium">
+                <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No Frames Found</h3>
+                <p className="text-xs text-[#777] max-w-md mb-6 font-medium">
                   We couldn't find any eyewear matching your selected criteria. Try adjusting your search or filters.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 bg-teal-600 text-white font-extrabold rounded-xl hover:bg-teal-700 transition-colors text-xs uppercase tracking-wider"
+                  className="px-6 py-2.5 bg-[#1A1A1A] text-white font-bold rounded-xl hover:bg-[#8B7355] transition-colors text-xs uppercase tracking-wider"
                 >
                   Reset All Filters
                 </button>
