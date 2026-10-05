@@ -1,0 +1,46 @@
+# ============================================
+# Vision Eye Care — Render Blueprint
+# ============================================
+# Deploy both services from the same repo.
+# Docs: https://docs.render.com/blueprint-spec
+
+services:
+  # ----- Client (Static Site) -----
+  - type: web
+    name: vision-eye-care-client
+    runtime: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://vision-eye-care-server.onrender.com/api
+
+  # ----- Server (Web Service) -----
+  - type: web
+    name: vision-eye-care-server
+    runtime: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: CLIENT_URL
+        sync: false   # Set manually in Render dashboard
+      - key: DATABASE_URL
+        sync: false   # Set manually in Render dashboard
+      - key: JWT_SECRET
+        sync: false   # Set manually in Render dashboard
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
