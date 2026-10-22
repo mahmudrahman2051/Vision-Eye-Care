@@ -15,6 +15,8 @@ import {
 import toast from 'react-hot-toast';
 import productService from '../../services/productService';
 import ProductCard from '../../components/Product/ProductCard';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=80`;
 
@@ -28,12 +30,14 @@ const lensTypes = [
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
+  const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist: toggleWishlistContext } = useWishlist();
+
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedLens, setSelectedLens] = useState(lensTypes[0]);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
@@ -74,12 +78,23 @@ const ProductDetailsPage = () => {
   };
 
   const handleAddToCart = () => {
-    toast.success(`Added ${quantity} x ${product.name} (${selectedLens.name}) to Cart!`);
+    if (!product) return;
+    addToCart(
+      {
+        ...product,
+        price: (parseFloat(product.price) || 0) + (selectedLens.price || 0),
+        name: selectedLens.price > 0 ? `${product.name} (${selectedLens.name})` : product.name,
+      },
+      quantity
+    );
   };
 
+  const isWishlisted = isInWishlist(product?.product_id || product?.id);
+
   const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast.success(isWishlisted ? 'Removed from Wishlist' : `Added ${product.name} to Wishlist`);
+    if (product) {
+      toggleWishlistContext(product);
+    }
   };
 
   if (loading) {

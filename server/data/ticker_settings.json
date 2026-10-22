@@ -1,0 +1,36 @@
+{
+  "enabled": true,
+  "speed": 28,
+  "direction": "left",
+  "backgroundColor": "#1A1A1A",
+  "textColor": "#FAF7F2",
+  "accentColor": "#8B7355",
+  "pauseOnHover": true,
+  "separator": "✦",
+  "messages": [
+    {
+      "id": "1",
+      "text": "Complimentary Nationwide Express Delivery on all orders over ৳5,000",
+      "badge": "FREE SHIPPING",
+      "link": "/shop"
+    },
+    {
+      "id": "2",
+      "text": "Custom Japanese CNC Lens Milling & Precision Anti-Reflective Coating in Dhaka",
+      "badge": "PRECISION LAB",
+      "link": "/about"
+    },
+    {
+      "id": "3",
+      "text": "Experience 100+ Designer Frames in the comfort of your home across Dhaka",
+      "badge": "HOME TRIAL",
+      "link": "/contact"
+    },
+    {
+      "id": "4",
+      "text": "1-Year International Warranty on All Titanium & Handcrafted Acetate Frames",
+      "badge": "WARRANTY",
+      "link": "/faq"
+    }
+  ]
+}

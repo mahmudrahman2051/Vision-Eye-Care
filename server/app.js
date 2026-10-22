@@ -47,6 +47,15 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));
+app.use('/api/cart', require('./routes/cart'));
+app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/orders', require('./routes/orders'));
+app.use('/api/coupons', require('./routes/coupons'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/admin', require('./routes/admin'));
+app.use('/api/ticker', require('./routes/ticker'));
+app.use('/api', require('./routes/contact'));
 
 // ------------------------------------
 // 404 Handler

@@ -112,3 +112,39 @@ button {
 .animate-fadeOut {
   animation: fadeOut 0.5s ease forwards;
 }
+
+/* ============================================
+   Marquee Ticker Keyframes & Utilities
+   ============================================ */
+
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left var(--marquee-duration, 28s) linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  animation: marquee-right var(--marquee-duration, 28s) linear infinite;
+  will-change: transform;
+}
+
+.pause-hover:hover .marquee-track {
+  animation-play-state: paused;
+}

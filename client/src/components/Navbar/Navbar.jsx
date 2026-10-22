@@ -9,6 +9,8 @@ import {
   HiOutlineXMark,
 } from 'react-icons/hi2';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const navCategories = [
   { to: '/shop?category=eyeglasses', label: 'Glasses' },
@@ -25,12 +27,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef(null);
-
-  const cartCount = 0;
-  const wishlistCount = 0;
 
   // Scroll listener for glass effect
   useEffect(() => {

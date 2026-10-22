@@ -8,10 +8,10 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050505] text-[#DFFF00]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] text-[#8B7355]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-[#DFFF00] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm tracking-wider font-semibold">VERIFYING AUTHENTICATION...</p>
+          <div className="w-10 h-10 border-4 border-[#8B7355] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xs tracking-wider font-bold uppercase text-[#1A1A1A]">Verifying Account Session...</p>
         </div>
       </div>
     );

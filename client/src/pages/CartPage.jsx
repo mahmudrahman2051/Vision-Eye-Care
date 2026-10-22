@@ -1,63 +1,51 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiTrash2, FiShoppingBag, FiArrowRight, FiPlus, FiMinus } from 'react-icons/fi';
+import { FiTrash2, FiShoppingBag, FiArrowRight, FiPlus, FiMinus, FiTag } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-
-const initialCartItems = [
-  {
-    id: 'sp-1',
-    name: 'Classic Wayfarer Frame',
-    brand: 'VINCENT CHASE',
-    price: 2450,
-    compare_price: 3200,
-    quantity: 1,
-    primary_image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-3',
-    name: 'Aviator Polarized Sunglasses',
-    brand: 'RAY-BAN',
-    price: 3800,
-    compare_price: 4600,
-    quantity: 1,
-    primary_image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80',
-  },
-];
+import { useCart } from '../context/CartContext';
+import couponService from '../services/couponService';
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const { cartItems, updateQuantity, removeFromCart, subtotal, deliveryFee, total, cartCount } = useCart();
 
-  const updateQuantity = (id, delta) => {
-    setCartItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          const newQty = Math.max(1, item.quantity + delta);
-          return { ...item, quantity: newQty };
-        }
-        return item;
-      })
-    );
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    if (!couponCode.trim()) {
+      toast.error('Enter a coupon code.');
+      return;
+    }
+    setCheckingCoupon(true);
+    try {
+      const res = await couponService.validateCoupon(couponCode, subtotal);
+      if (res.status === 'success') {
+        setAppliedCoupon(res.data);
+        toast.success(`Coupon "${res.data.code}" applied!`);
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invalid coupon.');
+      setAppliedCoupon(null);
+    } finally {
+      setCheckingCoupon(false);
+    }
   };
 
-  const removeItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-    toast.success('Item removed from cart');
-  };
-
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const deliveryFee = cartItems.length > 0 ? 100 : 0;
-  const total = subtotal + deliveryFee;
+  const discountAmount = appliedCoupon ? appliedCoupon.discount_amount : 0;
+  const grandTotal = Math.max(0, subtotal - discountAmount + deliveryFee);
 
   return (
-    <div className="bg-[#F5EFE3]/20 min-h-screen py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans text-[#1A1A1A]">
+    <div className="bg-[#FAF7F2] min-h-screen py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans text-[#1A1A1A]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8 border-b border-[#E8DFD0] pb-5">
           <span className="text-[11px] font-bold uppercase tracking-widest text-[#8B7355]">
-            Shopping Cart
+            Shopping Bag
           </span>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A1A1A]">
-            Your Selected Frames ({cartItems.reduce((a, b) => a + b.quantity, 0)})
+            Your Selected Frames ({cartCount})
           </h1>
         </div>
 
@@ -89,7 +77,10 @@ const CartPage = () => {
                   {/* Thumbnail */}
                   <div className="w-24 h-24 bg-[#F5EFE3]/40 rounded-xl overflow-hidden flex-shrink-0 border border-[#E8DFD0]">
                     <img
-                      src={item.primary_image}
+                      src={
+                        item.primary_image ||
+                        'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80'
+                      }
                       alt={item.name}
                       className="w-full h-full object-cover object-center"
                     />
@@ -98,14 +89,14 @@ const CartPage = () => {
                   {/* Details */}
                   <div className="flex-1 text-center sm:text-left space-y-1">
                     <p className="text-[10px] font-bold text-[#8B7355] uppercase tracking-wider">
-                      {item.brand}
+                      {item.brand || 'Drishti'}
                     </p>
                     <h3 className="text-sm font-bold text-[#1A1A1A]">{item.name}</h3>
                     <div className="text-sm font-extrabold text-[#1A1A1A]">
-                      ৳{item.price.toLocaleString()}
-                      {item.compare_price > item.price && (
+                      ৳{parseFloat(item.price).toLocaleString()}
+                      {item.compare_price && parseFloat(item.compare_price) > parseFloat(item.price) && (
                         <span className="text-xs text-[#999] line-through ml-2 font-normal">
-                          ৳{item.compare_price.toLocaleString()}
+                          ৳{parseFloat(item.compare_price).toLocaleString()}
                         </span>
                       )}
                     </div>
@@ -134,7 +125,7 @@ const CartPage = () => {
                     </div>
 
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                       title="Remove item"
                     >
@@ -152,18 +143,61 @@ const CartPage = () => {
                   Order Summary
                 </h2>
 
-                <div className="space-y-3 text-xs">
+                {/* Promo Code Input */}
+                <div>
+                  <label className="block text-xs font-bold text-[#555] mb-1.5 flex items-center gap-1.5">
+                    <FiTag className="text-[#8B7355]" /> Promo Code
+                  </label>
+                  {appliedCoupon ? (
+                    <div className="flex items-center justify-between p-2.5 bg-green-50 border border-green-200 rounded-xl text-xs">
+                      <span className="font-bold text-green-800">{appliedCoupon.code} (-৳{discountAmount})</span>
+                      <button
+                        onClick={() => setAppliedCoupon(null)}
+                        className="text-red-500 font-bold hover:underline text-[11px]"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        placeholder="e.g. WELCOME10"
+                        className="flex-1 text-xs p-2 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2] uppercase focus:outline-none focus:border-[#8B7355]"
+                      />
+                      <button
+                        type="submit"
+                        disabled={checkingCoupon}
+                        className="px-3 py-2 bg-[#1A1A1A] text-white rounded-xl text-xs font-bold hover:bg-[#8B7355] transition-colors disabled:opacity-50"
+                      >
+                        {checkingCoupon ? '...' : 'Apply'}
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+                <div className="space-y-3 text-xs border-t border-[#F5EFE3] pt-3">
                   <div className="flex justify-between text-[#666]">
                     <span>Subtotal</span>
                     <span className="font-bold text-[#1A1A1A]">৳{subtotal.toLocaleString()}</span>
                   </div>
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-green-700 font-bold">
+                      <span>Discount</span>
+                      <span>-৳{discountAmount.toLocaleString()}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-[#666]">
                     <span>Estimated Delivery (Inside BD)</span>
-                    <span className="font-bold text-[#1A1A1A]">৳{deliveryFee}</span>
+                    <span className="font-bold text-[#1A1A1A]">
+                      {deliveryFee === 0 ? 'FREE' : `৳${deliveryFee}`}
+                    </span>
                   </div>
                   <div className="pt-3 border-t border-[#F5EFE3] flex justify-between text-sm font-bold text-[#1A1A1A]">
                     <span>Total Amount</span>
-                    <span className="text-[#8B7355] text-base">৳{total.toLocaleString()}</span>
+                    <span className="text-[#8B7355] text-base">৳{grandTotal.toLocaleString()}</span>
                   </div>
                 </div>
 

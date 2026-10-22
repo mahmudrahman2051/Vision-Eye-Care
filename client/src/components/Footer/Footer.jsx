@@ -1,32 +1,84 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2';
 import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok } from 'react-icons/fa6';
+import toast from 'react-hot-toast';
+import contactService from '../../services/contactService';
 
 const quickLinks = [
   { to: '/', label: 'Home' },
   { to: '/shop', label: 'Shop' },
   { to: '/about', label: 'About Us' },
   { to: '/faq', label: 'FAQ' },
+  { to: '/contact', label: 'Contact Us' },
   { to: '/privacy', label: 'Privacy Policy' },
   { to: '/terms', label: 'Terms & Conditions' },
 ];
 
 const customerCareLinks = [
-  { to: '/about', label: 'Track Your Order' },
-  { to: '/about', label: 'Return & Refund Policy' },
-  { to: '/about', label: 'Shipping Information' },
-  { to: '/faq', label: 'Help & Support' },
-  { to: '/about', label: 'Size Guide' },
+  { to: '/account/orders', label: 'Track Your Order' },
+  { to: '/terms', label: 'Return & Refund Policy' },
+  { to: '/faq', label: 'Shipping Information' },
+  { to: '/contact', label: 'Help & Support' },
+  { to: '/faq', label: 'Lens Guide' },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [subscribing, setSubscribing] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubscribing(true);
+    try {
+      const res = await contactService.subscribeNewsletter(email);
+      if (res.status === 'success') {
+        toast.success(res.message || 'Subscribed successfully!');
+        setEmail('');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Subscription failed.');
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   return (
     <footer className="bg-[#1A1A1A] text-[#AAAAAA] pt-14 pb-8" id="main-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-[#2D2D2D]">
+        {/* Newsletter Subscription Row */}
+        <div className="pb-10 mb-10 border-b border-[#2D2D2D] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="text-white text-base font-bold tracking-tight">
+              Subscribe to Drishti Privileges
+            </h3>
+            <p className="text-xs text-[#888]">
+              Receive private previews of limited-run titanium frames and seasonal promotions.
+            </p>
+          </div>
 
+          <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto max-w-md">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address..."
+              className="flex-1 md:w-72 bg-[#2D2D2D] border border-[#3A3A3A] text-white text-xs px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#8B7355]"
+            />
+            <button
+              type="submit"
+              disabled={subscribing}
+              className="px-5 py-2.5 bg-[#8B7355] hover:bg-[#7A6348] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors disabled:opacity-50"
+            >
+              {subscribing ? '...' : 'Subscribe'}
+            </button>
+          </form>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-[#2D2D2D]">
           {/* Quick Links */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4">Quick Links</h4>
