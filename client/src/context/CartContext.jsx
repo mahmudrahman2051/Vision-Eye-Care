@@ -125,70 +125,68 @@ export function CartProvider({ children }) {
       return false;
     }
 
+    const maxStock = product.stock !== undefined ? product.stock : 99;
+
+    // 1. Update local storage cart immediately (Resilient for both guests & authenticated users)
+    const current = loadGuestCart();
+    const existingIdx = current.findIndex(
+      (i) => parseInt(String(i.product_id || i.id).replace(/\D/g, ''), 10) === productId
+    );
+
+    let updated = [...current];
+    if (existingIdx > -1) {
+      const newQty = current[existingIdx].quantity + qty;
+      if (newQty > maxStock) {
+        toast.error(`Cannot exceed available stock (${maxStock} units).`);
+        return false;
+      }
+      updated[existingIdx] = { ...current[existingIdx], quantity: newQty };
+    } else {
+      if (qty > maxStock) {
+        toast.error(`Cannot exceed available stock (${maxStock} units).`);
+        return false;
+      }
+      updated.unshift({
+        id: `cart-${productId}-${Date.now()}`,
+        product_id: productId,
+        name: product.name,
+        slug: product.slug,
+        brand: product.brand || 'VISION EYE CARE',
+        price: parseFloat(product.price) || 0,
+        compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
+        stock: maxStock,
+        quantity: qty,
+        primary_image:
+          product.primary_image ||
+          product.images?.[0]?.image_url ||
+          'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
+      });
+    }
+
+    saveGuestCart(updated);
+    setCartItems(updated);
+    toast.success(`Added ${product.name} to bag!`);
+    trackAddToCart(product, qty);
+    window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'local' } }));
+
+    // 2. If authenticated, attempt background sync with backend server
     if (isAuthenticated) {
       try {
         const res = await cartService.addToCart(productId, qty);
-        if (res.status === 'success') {
-          setCartItems(res.data?.items || []);
-          toast.success(`Added ${product.name} to bag!`);
-          trackAddToCart(product, qty);
-          window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'local' } }));
-          return true;
+        if (res.status === 'success' && res.data?.items && res.data.items.length > 0) {
+          setCartItems(res.data.items);
+          saveGuestCart(res.data.items);
         }
-      } catch (err) {
-        const msg = err.response?.data?.message || 'Failed to add item to bag.';
-        toast.error(msg);
-        return false;
+      } catch {
+        // Silently preserve local cart on static hosts (e.g. Vercel 405)
       }
-    } else {
-      // Guest local storage cart
-      const current = loadGuestCart();
-      const existingIdx = current.findIndex(
-        (i) => parseInt(String(i.product_id || i.id).replace(/\D/g, ''), 10) === productId
-      );
-
-      const maxStock = product.stock !== undefined ? product.stock : 99;
-
-      if (existingIdx > -1) {
-        const newQty = current[existingIdx].quantity + qty;
-        if (newQty > maxStock) {
-          toast.error(`Cannot exceed available stock (${maxStock} units).`);
-          return false;
-        }
-        current[existingIdx].quantity = newQty;
-      } else {
-        if (qty > maxStock) {
-          toast.error(`Cannot exceed available stock (${maxStock} units).`);
-          return false;
-        }
-        current.push({
-          id: `guest-${productId}`,
-          product_id: productId,
-          name: product.name,
-          slug: product.slug,
-          brand: product.brand || 'VISION EYE CARE',
-          price: parseFloat(product.price) || 0,
-          compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
-          stock: maxStock,
-          quantity: qty,
-          primary_image:
-            product.primary_image ||
-            product.images?.[0]?.image_url ||
-            'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
-        });
-      }
-
-      saveGuestCart(current);
-      setCartItems([...current]);
-      toast.success(`Added ${product.name} to bag!`);
-      trackAddToCart(product, qty);
-      return true;
     }
+
+    return true;
   };
 
   // Update item quantity with instant optimistic UI update
   const updateQuantity = async (itemIdOrProductId, delta) => {
-    const prevItems = [...cartItems];
     const item = cartItems.find(
       (i) => i.id === itemIdOrProductId || i.product_id === itemIdOrProductId
     );
@@ -204,7 +202,7 @@ export function CartProvider({ children }) {
       return;
     }
 
-    // 1. Optimistic update
+    // 1. Optimistic update & local save
     const updatedItems = cartItems.map((i) => {
       if (i.id === item.id || i.product_id === item.product_id) {
         return { ...i, quantity: newQty };
@@ -212,54 +210,48 @@ export function CartProvider({ children }) {
       return i;
     });
     setCartItems(updatedItems);
+    saveGuestCart(updatedItems);
 
-    // 2. Persist
+    // 2. Persist with backend if online
     if (isAuthenticated && typeof item.id === 'number') {
       try {
         const res = await cartService.updateQuantity(item.id, newQty);
         if (res.status === 'success' && res.data?.items) {
           setCartItems(res.data.items);
-          window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'local' } }));
+          saveGuestCart(res.data.items);
         }
-      } catch (err) {
-        // Rollback on failure
-        setCartItems(prevItems);
-        toast.error(err.response?.data?.message || 'Could not update quantity.');
+      } catch {
+        // Silently keep local cart
       }
-    } else {
-      saveGuestCart(updatedItems);
     }
   };
 
   // Remove single item with optimistic update
   const removeFromCart = async (itemIdOrProductId) => {
-    const prevItems = [...cartItems];
     const item = cartItems.find(
       (i) => i.id === itemIdOrProductId || i.product_id === itemIdOrProductId
     );
     if (!item) return;
 
-    // 1. Optimistic remove
+    // 1. Optimistic remove & local save
     const updated = cartItems.filter(
       (i) => i.id !== item.id && i.product_id !== item.product_id
     );
     setCartItems(updated);
+    saveGuestCart(updated);
     toast.success('Item removed from cart');
 
-    // 2. Persist
+    // 2. Persist with backend if online
     if (isAuthenticated && typeof item.id === 'number') {
       try {
         const res = await cartService.removeFromCart(item.id);
         if (res.status === 'success' && res.data?.items) {
           setCartItems(res.data.items);
-          window.dispatchEvent(new CustomEvent('cart-updated', { detail: { source: 'local' } }));
+          saveGuestCart(res.data.items);
         }
-      } catch (err) {
-        setCartItems(prevItems);
-        toast.error('Failed to remove item.');
+      } catch {
+        // Silently keep local cart
       }
-    } else {
-      saveGuestCart(updated);
     }
   };
 

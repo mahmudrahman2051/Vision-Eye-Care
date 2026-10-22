@@ -29,8 +29,16 @@ export const authService = {
    * Logout user
    */
   async logout() {
-    const response = await api.post('/auth/logout');
-    return response.data;
+    try {
+      const response = await api.post('/auth/logout');
+      return response.data;
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 405 || status === 404 || !err.response || err.code === 'ERR_NETWORK') {
+        return { status: 'success', message: 'Logged out locally' };
+      }
+      throw err;
+    }
   },
 };
 

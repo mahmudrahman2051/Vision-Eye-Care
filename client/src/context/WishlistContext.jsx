@@ -125,76 +125,77 @@ export function WishlistProvider({ children }) {
       return false;
     }
 
+    // 1. Update local storage wishlist immediately (Resilient for both guests & authenticated users)
+    const current = loadGuestWishlist();
+    const alreadyIn = current.some(
+      (i) => parseInt(String(i.product_id || i.id).replace(/\D/g, ''), 10) === productId
+    );
+
+    if (!alreadyIn) {
+      const newItem = {
+        id: `wishlist-${productId}`,
+        product_id: productId,
+        name: product.name,
+        slug: product.slug,
+        brand: product.brand || 'VISION EYE CARE',
+        price: parseFloat(product.price) || 0,
+        compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
+        primary_image:
+          product.primary_image ||
+          product.images?.[0]?.image_url ||
+          'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
+      };
+      const updated = [newItem, ...current];
+      saveGuestWishlist(updated);
+      setWishlistItems(updated);
+    }
+
+    toast.success('Saved to your wishlist!');
+    trackAddToWishlist(product);
+    window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { source: 'local' } }));
+
+    // 2. If authenticated, attempt background sync with backend server
     if (isAuthenticated) {
       try {
         const res = await wishlistService.addToWishlist(productId);
-        if (res.status === 'success') {
-          setWishlistItems(res.data || []);
-          toast.success('Saved to your wishlist!');
-          trackAddToWishlist(product);
-          window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { source: 'local' } }));
-          return true;
+        if (res.status === 'success' && Array.isArray(res.data) && res.data.length > 0) {
+          setWishlistItems(res.data);
+          saveGuestWishlist(res.data);
         }
-      } catch (err) {
-        toast.error('Could not add to wishlist.');
-        return false;
-      }
-    } else {
-      const current = loadGuestWishlist();
-      const alreadyIn = current.some(
-        (i) => parseInt(String(i.product_id || i.id).replace(/\D/g, ''), 10) === productId
-      );
-
-      if (!alreadyIn) {
-        current.push({
-          id: `guest-wish-${productId}`,
-          product_id: productId,
-          name: product.name,
-          slug: product.slug,
-          brand: product.brand || 'VISION EYE CARE',
-          price: parseFloat(product.price) || 0,
-          compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
-          primary_image:
-            product.primary_image ||
-            product.images?.[0]?.image_url ||
-            'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
-        });
-        saveGuestWishlist(current);
-        setWishlistItems([...current]);
-        toast.success('Saved to your wishlist!');
-        trackAddToWishlist(product);
-        return true;
+      } catch {
+        // Silently preserve local wishlist on static hosts (e.g. Vercel 405)
       }
     }
+
+    return true;
   };
 
   const removeFromWishlist = async (rawId) => {
     const targetId = parseInt(String(rawId).replace(/\D/g, ''), 10);
-    const prevItems = [...wishlistItems];
 
-    // Optimistic remove
+    // 1. Optimistic remove & local save
     const updated = wishlistItems.filter((i) => {
       const pId = parseInt(String(i.product_id || i.id).replace(/\D/g, ''), 10);
       return pId !== targetId;
     });
     setWishlistItems(updated);
+    saveGuestWishlist(updated);
     toast.success('Removed from wishlist');
+    window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { source: 'local' } }));
 
+    // 2. If authenticated, attempt background sync with backend server
     if (isAuthenticated) {
       try {
         const res = await wishlistService.removeFromWishlist(targetId);
-        if (res.status === 'success' && res.data) {
+        if (res.status === 'success' && Array.isArray(res.data)) {
           setWishlistItems(res.data);
-          window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { source: 'local' } }));
+          saveGuestWishlist(res.data);
         }
-      } catch (err) {
-        setWishlistItems(prevItems);
-        toast.error('Could not remove from wishlist.');
-        return false;
+      } catch {
+        // Silently preserve local wishlist on static hosts (e.g. Vercel 405)
       }
-    } else {
-      saveGuestWishlist(updated);
     }
+
     return true;
   };
 
