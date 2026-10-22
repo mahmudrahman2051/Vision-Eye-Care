@@ -199,8 +199,12 @@ export default function CheckoutPage() {
         coupon_code: appliedCoupon ? appliedCoupon.code : null,
         items: cartItems.map((item) => ({
           product_id: item.product_id || item.id,
-          quantity: item.quantity,
+          name: item.name,
+          slug: item.slug,
+          sku: item.sku,
           price: item.price,
+          quantity: item.quantity,
+          primary_image: item.primary_image,
         })),
       };
 
