@@ -217,7 +217,7 @@ export default function AdminProductFormPage() {
                 name="brand"
                 value={form.brand}
                 onChange={handleChange}
-                placeholder="e.g. Drishti, Vincent Chase"
+                placeholder="e.g. VISION EYE CARE, Vincent Chase"
                 className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2] focus:outline-none focus:border-[#8B7355]"
               />
             </div>

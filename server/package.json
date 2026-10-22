@@ -1,7 +1,7 @@
 {
-  "name": "Drishti-Atelier-server",
+  "name": "VISION EYE CARE-Atelier-server",
   "version": "1.0.0",
-  "description": "Drishti — E-commerce Backend API",
+  "description": "VISION EYE CARE — E-commerce Backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

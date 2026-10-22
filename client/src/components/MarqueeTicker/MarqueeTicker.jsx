@@ -99,7 +99,7 @@ export default function MarqueeTicker() {
 
   return (
     <aside
-      className={`relative w-full overflow-hidden select-none border-b border-black/10 text-xs font-medium z-30 ${
+      className={`relative w-full overflow-hidden select-none border-b border-black/10 text-xs font-medium z-10 ${
         pauseOnHover ? 'pause-hover' : ''
       }`}
       style={{

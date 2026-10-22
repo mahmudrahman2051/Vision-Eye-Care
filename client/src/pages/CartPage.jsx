@@ -89,7 +89,7 @@ const CartPage = () => {
                   {/* Details */}
                   <div className="flex-1 text-center sm:text-left space-y-1">
                     <p className="text-[10px] font-bold text-[#8B7355] uppercase tracking-wider">
-                      {item.brand || 'Drishti'}
+                      {item.brand || 'VISION EYE CARE'}
                     </p>
                     <h3 className="text-sm font-bold text-[#1A1A1A]">{item.name}</h3>
                     <div className="text-sm font-extrabold text-[#1A1A1A]">

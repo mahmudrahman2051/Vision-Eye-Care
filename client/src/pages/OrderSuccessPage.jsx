@@ -39,7 +39,7 @@ export default function OrderSuccessPage() {
           Order Confirmed
         </span>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1A1A1A] mt-1 mb-2">
-          Thank You for Choosing Drishti!
+          Thank You for Choosing VISION EYE CARE!
         </h1>
         <p className="text-xs text-[#666] max-w-md mx-auto mb-6">
           Your eyewear order has been confirmed. We are carefully preparing your frames for dispatch.

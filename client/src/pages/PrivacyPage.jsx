@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <section className="space-y-2">
             <h2 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">1. Information We Collect</h2>
             <p>
-              When you purchase eyewear from Drishti Atelier or create an account, we collect necessary customer details including your name, delivery address, phone number, email, and prescription details (Sphere, Cylinder, Axis, Pupillary Distance).
+              When you purchase eyewear from VISION EYE CARE Atelier or create an account, we collect necessary customer details including your name, delivery address, phone number, email, and prescription details (Sphere, Cylinder, Axis, Pupillary Distance).
             </p>
           </section>
 

@@ -46,7 +46,7 @@ const FAQ_DATA = [
       },
       {
         q: 'Do you offer a warranty on frames and lenses?',
-        a: 'Yes, all Drishti frames come with a 1-year manufacturing defect warranty covering hinges, metal plating, and structural joints. Lenses feature a 6-month anti-scratch and anti-reflective coating warranty.',
+        a: 'Yes, all VISION EYE CARE frames come with a 1-year manufacturing defect warranty covering hinges, metal plating, and structural joints. Lenses feature a 6-month anti-scratch and anti-reflective coating warranty.',
       },
     ],
   },
@@ -102,9 +102,8 @@ export default function FaqPage() {
                           {item.q}
                         </span>
                         <FiChevronDown
-                          className={`w-4 h-4 text-[#8B7355] transition-transform duration-200 flex-shrink-0 ${
-                            isOpen ? 'rotate-180' : ''
-                          }`}
+                          className={`w-4 h-4 text-[#8B7355] transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''
+                            }`}
                         />
                       </button>
 

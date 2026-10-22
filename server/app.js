@@ -68,7 +68,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    message: 'Drishti API is running',
+    message: 'VISION EYE CARE API is running',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
   });

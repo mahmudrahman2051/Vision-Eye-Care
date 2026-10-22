@@ -72,7 +72,7 @@ async function subscribeNewsletter(req, res, next) {
 
     res.status(200).json({
       status: 'success',
-      message: 'Thank you for subscribing to Drishti newsletter!',
+      message: 'Thank you for subscribing to VISION EYE CARE newsletter!',
     });
   } catch (error) {
     next(error);
@@ -221,7 +221,7 @@ async function deleteSubscriber(req, res, next) {
     const { id } = req.params;
     try {
       await query(`DELETE FROM newsletter_subscribers WHERE id = $1`, [id]);
-    } catch (dbErr) {}
+    } catch (dbErr) { }
     return res.json({ status: 'success', message: 'Subscriber removed successfully' });
   } catch (error) {
     next(error);

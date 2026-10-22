@@ -6,10 +6,10 @@ const DATA_FILE = path.join(__dirname, '..', 'data', 'store_settings.json');
 
 const DEFAULT_SETTINGS = {
   storeName: 'Vision Eye Care',
-  tagline: 'Drishti Atelier Bangladesh',
+  tagline: 'VISION EYE CARE Atelier Bangladesh',
   hotlinePhone: '+880 9612-888999',
   whatsappNumber: '+880 1711-000000',
-  supportEmail: 'care@drishti.com.bd',
+  supportEmail: 'care@VISION EYE CARE.com.bd',
   showroomAddress: 'House 45, Road 11, Block D, Banani, Dhaka-1213, Bangladesh',
   businessHours: 'Sat - Thu: 10:00 AM - 9:00 PM | Fri: 3:00 PM - 9:00 PM',
   insideDhakaFee: 60,
@@ -18,11 +18,11 @@ const DEFAULT_SETTINGS = {
   currency: 'BDT',
   currencySymbol: '৳',
   socialLinks: {
-    facebook: 'https://facebook.com/drishtieyecare',
-    instagram: 'https://instagram.com/drishtieyecare',
+    facebook: 'https://facebook.com/visioneyecare',
+    instagram: 'https://instagram.com/visioneyecare',
     whatsapp: 'https://wa.me/8801711000000',
-    youtube: 'https://youtube.com/@drishtieyecare',
-    tiktok: 'https://tiktok.com/@drishtieyecare',
+    youtube: 'https://youtube.com/@visioneyecare',
+    tiktok: 'https://tiktok.com/@visioneyecare',
   },
 };
 

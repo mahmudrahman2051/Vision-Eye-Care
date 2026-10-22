@@ -76,7 +76,7 @@ export default function Navbar() {
   return (
     <div className="w-full font-sans sticky top-0 z-50">
       <header
-        className={`transition-all duration-500 ease-out ${headerClasses}`}
+        className={`relative z-40 transition-all duration-500 ease-out ${headerClasses}`}
         id="main-navbar"
       >
         {/* Main Header */}
@@ -144,7 +144,7 @@ export default function Navbar() {
 
             {/* User Dropdown */}
             {isAuthenticated ? (
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative z-50" ref={dropdownRef}>
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   className={`p-1 flex items-center gap-2 rounded-full px-2.5 py-1 transition-all border ${
@@ -162,7 +162,7 @@ export default function Navbar() {
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-xl border border-[#E8DFD0] rounded-xl shadow-xl py-2 z-50 animate-fadeIn text-sm">
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-[#E8DFD0] rounded-xl shadow-2xl py-2 z-50 animate-fadeIn text-sm">
                     <div className="px-4 py-2 border-b border-[#F5EFE3]">
                       <p className="font-bold text-[#1A1A1A] truncate">{user?.full_name}</p>
                       <p className="text-xs text-[#888] truncate">{user?.email}</p>

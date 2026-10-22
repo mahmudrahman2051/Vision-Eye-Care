@@ -75,7 +75,7 @@ const WishlistPage = () => {
                 <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                   <div>
                     <p className="text-[10px] font-bold text-[#8B7355] uppercase tracking-wider mb-1">
-                      {item.brand || 'Drishti'}
+                      {item.brand || 'VISION EYE CARE'}
                     </p>
                     <h3 className="text-sm font-bold text-[#1A1A1A] line-clamp-1">{item.name}</h3>
                     <div className="mt-2 text-base font-extrabold text-[#1A1A1A]">

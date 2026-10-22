@@ -7,7 +7,7 @@ import { trackAddToCart } from '../utils/facebookPixel';
 
 const CartContext = createContext(null);
 
-const GUEST_CART_KEY = 'drishti_guest_cart';
+const GUEST_CART_KEY = 'vision_guest_cart';
 
 export function CartProvider({ children }) {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -166,7 +166,7 @@ export function CartProvider({ children }) {
           product_id: productId,
           name: product.name,
           slug: product.slug,
-          brand: product.brand || 'Drishti',
+          brand: product.brand || 'VISION EYE CARE',
           price: parseFloat(product.price) || 0,
           compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
           stock: maxStock,
