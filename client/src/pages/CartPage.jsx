@@ -138,7 +138,7 @@ const CartPage = () => {
 
             {/* Order Summary Card */}
             <div className="lg:col-span-1">
-              <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 space-y-5 shadow-sm sticky top-24">
+              <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 space-y-5 shadow-sm sticky top-36 sm:top-40">
                 <h2 className="text-base font-bold text-[#1A1A1A] pb-3 border-b border-[#F5EFE3]">
                   Order Summary
                 </h2>

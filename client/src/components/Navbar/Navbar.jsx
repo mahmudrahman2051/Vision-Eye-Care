@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import MarqueeTicker from '../MarqueeTicker/MarqueeTicker';
 
 const navCategories = [
   { to: '/shop?category=eyeglasses', label: 'Glasses' },
@@ -457,6 +458,7 @@ export default function Navbar() {
           </div>
         )}
       </header>
+      {!mobileOpen && <MarqueeTicker />}
     </div>
   );
 }

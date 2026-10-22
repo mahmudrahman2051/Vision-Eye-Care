@@ -440,7 +440,7 @@ export default function CheckoutPage() {
 
           {/* Right Column: Order Summary & Coupon */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 shadow-sm space-y-5 sticky top-24">
+            <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 shadow-sm space-y-5 sticky top-36 sm:top-40">
               <h2 className="text-sm font-bold uppercase tracking-wider text-[#1A1A1A] pb-3 border-b border-[#F5EFE3]">
                 Order Items ({cartItems.reduce((a, b) => a + (b.quantity || 1), 0)})
               </h2>
