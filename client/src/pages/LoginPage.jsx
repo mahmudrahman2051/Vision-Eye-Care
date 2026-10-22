@@ -30,8 +30,12 @@ const LoginPage = () => {
     try {
       const res = await login(formData.email, formData.password);
       if (res.status === 'success') {
-        toast.success(`Welcome back, ${res.user.full_name}!`);
-        navigate(from, { replace: true });
+        toast.success(`Welcome back, ${res.user.full_name || res.user.name || 'User'}!`);
+        if (res.user.role === 'admin' && (from === '/' || from === '/login')) {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
       } else {
         toast.error(res.message || 'Login failed');
       }
@@ -78,6 +82,7 @@ const LoginPage = () => {
                 <input
                   type="email"
                   name="email"
+                  autoComplete="email"
                   required
                   value={formData.email}
                   onChange={handleChange}
@@ -99,6 +104,7 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
+                  autoComplete="current-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
