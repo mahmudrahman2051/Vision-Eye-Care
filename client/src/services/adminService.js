@@ -1,4 +1,5 @@
 import api from './api';
+import couponService from './couponService';
 
 export const adminService = {
   /**
@@ -62,23 +63,19 @@ export const adminService = {
   },
 
   /**
-   * Coupons CRUD
+   * Coupons CRUD (Delegated to resilient couponService)
    */
-  async getCoupons() {
-    const response = await api.get('/admin/coupons');
-    return response.data;
+  getCoupons() {
+    return couponService.getCoupons();
   },
-  async createCoupon(data) {
-    const response = await api.post('/admin/coupons', data);
-    return response.data;
+  createCoupon(data) {
+    return couponService.createCoupon(data);
   },
-  async updateCoupon(id, data) {
-    const response = await api.put(`/admin/coupons/${id}`, data);
-    return response.data;
+  updateCoupon(id, data) {
+    return couponService.updateCoupon(id, data);
   },
-  async deleteCoupon(id) {
-    const response = await api.delete(`/admin/coupons/${id}`);
-    return response.data;
+  deleteCoupon(id) {
+    return couponService.deleteCoupon(id);
   },
 
   /**

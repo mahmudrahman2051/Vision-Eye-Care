@@ -36,9 +36,25 @@ export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
 
   // Submission state
   const [submitting, setSubmitting] = useState(false);
+
+  // Load available coupons
+  useEffect(() => {
+    couponService.getActiveCoupons().then((list) => {
+      if (Array.isArray(list)) setAvailableCoupons(list);
+    });
+
+    const handleUpdate = (e) => {
+      if (Array.isArray(e.detail)) {
+        setAvailableCoupons(e.detail.filter((c) => Boolean(c.is_active)));
+      }
+    };
+    window.addEventListener('coupons-updated', handleUpdate);
+    return () => window.removeEventListener('coupons-updated', handleUpdate);
+  }, []);
 
   // Autofill user information if logged in
   useEffect(() => {
@@ -113,7 +129,24 @@ export default function CheckoutPage() {
         toast.success(`Coupon "${res.data.code}" applied! You saved ৳${res.data.discount_amount}`);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Invalid or expired coupon code.');
+      toast.error(err.message || err.response?.data?.message || 'Invalid or expired coupon code.');
+      setAppliedCoupon(null);
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleQuickApplyCoupon = async (code) => {
+    setCouponCode(code);
+    setValidatingCoupon(true);
+    try {
+      const res = await couponService.validateCoupon(code, subtotal);
+      if (res.status === 'success') {
+        setAppliedCoupon(res.data);
+        toast.success(`Coupon "${res.data.code}" applied! You saved ৳${res.data.discount_amount}`);
+      }
+    } catch (err) {
+      toast.error(err.message || err.response?.data?.message || 'Invalid or expired coupon code.');
       setAppliedCoupon(null);
     } finally {
       setValidatingCoupon(false);
@@ -504,6 +537,67 @@ export default function CheckoutPage() {
                     >
                       {validatingCoupon ? 'Checking...' : 'Apply'}
                     </button>
+                  </div>
+                )}
+
+                {/* Available Coupons Quick Select */}
+                {availableCoupons.length > 0 && (
+                  <div className="space-y-2 pt-2.5 border-t border-[#F5EFE3] mt-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-[#1A1A1A]">
+                      <span className="flex items-center gap-1.5 text-[#8B7355]">
+                        <FiTag className="w-3.5 h-3.5" /> Available Offers
+                      </span>
+                      <span className="text-[10px] text-[#777] font-semibold">{availableCoupons.length} Active</span>
+                    </div>
+
+                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                      {availableCoupons.map((c) => {
+                        const isApplied = appliedCoupon?.code === c.code;
+                        const minOrder = parseFloat(c.min_order_amount) || 0;
+                        const isEligible = minOrder === 0 || subtotal >= minOrder;
+
+                        return (
+                          <div
+                            key={c.code}
+                            className={`p-2.5 rounded-xl border text-xs transition-all flex items-center justify-between gap-2 ${
+                              isApplied
+                                ? 'bg-green-50/80 border-green-300'
+                                : 'bg-[#FAF7F2] border-[#E8DFD0] hover:border-[#8B7355]/40'
+                            }`}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-mono font-black text-xs text-[#8B7355]">{c.code}</span>
+                                <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-[#8B7355]/15 text-[#8B7355]">
+                                  {c.discount_type === 'percentage' ? `${c.discount_value}% OFF` : `৳${c.discount_value} OFF`}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-[#666] truncate mt-0.5">{c.description}</p>
+                              {minOrder > 0 && (
+                                <span className="text-[9px] text-[#999] block">
+                                  Min. Order: ৳{minOrder.toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => (isApplied ? handleRemoveCoupon() : handleQuickApplyCoupon(c.code))}
+                              disabled={validatingCoupon || (!isEligible && !isApplied)}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex-shrink-0 ${
+                                isApplied
+                                  ? 'bg-green-600 text-white'
+                                  : isEligible
+                                  ? 'bg-[#1A1A1A] hover:bg-[#8B7355] text-white shadow-xs'
+                                  : 'bg-gray-200 text-gray-500 cursor-not-allowed text-[10px]'
+                              }`}
+                            >
+                              {isApplied ? 'Applied ✓' : isEligible ? 'Apply' : `৳${minOrder - subtotal} more`}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>

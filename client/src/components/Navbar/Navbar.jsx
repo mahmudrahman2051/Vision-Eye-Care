@@ -12,6 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import MarqueeTicker from '../MarqueeTicker/MarqueeTicker';
+import CouponMarqueeTicker from '../MarqueeTicker/CouponMarqueeTicker';
 
 const navCategories = [
   { to: '/shop?category=eyeglasses', label: 'Glasses' },
@@ -75,6 +76,7 @@ export default function Navbar() {
 
   return (
     <div className="w-full font-sans sticky top-0 z-50">
+      {!mobileOpen && <CouponMarqueeTicker />}
       <header
         className={`relative z-40 transition-all duration-500 ease-out ${headerClasses}`}
         id="main-navbar"
