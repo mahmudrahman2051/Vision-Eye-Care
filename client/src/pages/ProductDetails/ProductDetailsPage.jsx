@@ -18,8 +18,9 @@ import ProductCard from '../../components/Product/ProductCard';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { trackViewContent } from '../../utils/facebookPixel';
+import { realProducts } from '../../data/realProducts';
 
-const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=80`;
+const defaultImage = '';
 
 const lensTypes = [
   { id: 'frame-only', name: 'Non-Prescription / Frame Only', price: 0, desc: 'Standard demo lenses or optical frame only' },
@@ -46,10 +47,10 @@ const ProductDetailsPage = () => {
       setLoading(true);
       try {
         const res = await productService.getProductByIdOrSlug(id);
-        if (res.status === 'success') {
+        if (res.status === 'success' && res.data) {
           setProduct(res.data);
           trackViewContent(res.data);
-          const primary = res.data.images?.find((img) => img.is_primary)?.image_url || res.data.images?.[0]?.image_url || defaultImage;
+          const primary = res.data.images?.find((img) => img.is_primary)?.image_url || res.data.images?.[0]?.image_url || res.data.primary_image || null;
           setSelectedImage(primary);
 
           if (res.data.category_id) {
@@ -61,9 +62,24 @@ const ProductDetailsPage = () => {
               setRelatedProducts(relRes.data.products.filter((p) => p.id !== res.data.id));
             }
           }
+        } else {
+          throw new Error('Not found in API');
         }
-      } catch (err) {
-        console.error('Failed to load product details:', err);
+      } catch {
+        // Fallback to real local catalog
+        const match = realProducts.find(
+          (p) =>
+            String(p.id) === String(id) ||
+            p.slug === id ||
+            (p.product_code && p.product_code.toLowerCase() === id.toLowerCase()) ||
+            (p.sku && p.sku.toLowerCase() === id.toLowerCase())
+        );
+        if (match) {
+          setProduct(match);
+          setSelectedImage(match.primary_image || null);
+          const rel = realProducts.filter((p) => p.category_id === match.category_id && p.id !== match.id).slice(0, 4);
+          setRelatedProducts(rel);
+        }
       } finally {
         setLoading(false);
       }
@@ -168,12 +184,36 @@ const ProductDetailsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Left Column: Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-slate-50 border border-slate-200/80 rounded-2xl overflow-hidden group shadow-sm p-4">
-              <img
-                src={selectedImage || defaultImage}
-                alt={product.name}
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 rounded-xl"
-              />
+            <div className="relative aspect-square bg-[#FAF7F2] border border-[#E8DFD0] rounded-2xl overflow-hidden group shadow-sm p-4 flex items-center justify-center">
+              {selectedImage ? (
+                <img
+                  src={selectedImage}
+                  alt={product.name}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 rounded-xl"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-8 text-center select-none">
+                  <svg
+                    className="w-24 h-24 text-[#8B7355]/40 mb-3"
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="19" cy="34" r="13" />
+                    <circle cx="45" cy="34" r="13" />
+                    <path d="M32 32c1-2 3-3 5-3s4 1 5 3" />
+                    <path d="M6 31l4-1" />
+                    <path d="M58 31l-4-1" />
+                  </svg>
+                  <span className="text-sm font-mono font-bold text-[#8B7355] tracking-wider uppercase">
+                    {product.product_code || 'Optical Frame'}
+                  </span>
+                  <span className="text-xs text-[#888] mt-1">Image can be added from Admin Panel</span>
+                </div>
+              )}
             </div>
 
             {product.images && product.images.length > 1 && (
@@ -184,8 +224,8 @@ const ProductDetailsPage = () => {
                     onClick={() => setSelectedImage(img.image_url)}
                     className={`w-20 h-20 rounded-xl bg-white border-2 overflow-hidden flex-shrink-0 transition-all ${
                       selectedImage === img.image_url
-                        ? 'border-teal-600 shadow'
-                        : 'border-slate-200 opacity-70 hover:opacity-100'
+                        ? 'border-[#8B7355] shadow'
+                        : 'border-[#E8DFD0] opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={img.image_url} alt={img.alt_text || product.name} className="w-full h-full object-cover" />
@@ -197,9 +237,18 @@ const ProductDetailsPage = () => {
 
           {/* Right Column: Specifications & Lens Configuration */}
           <div className="space-y-6 font-sans">
-            <div className="flex items-center justify-between text-xs text-teal-700 font-extrabold uppercase tracking-widest">
-              <span>{product.brand || 'VINCENT CHASE'}</span>
-              {product.sku && <span className="font-mono text-slate-400">SKU: {product.sku}</span>}
+            <div className="flex items-center justify-between text-xs text-[#8B7355] font-extrabold uppercase tracking-widest">
+              <span>{product.brand || 'Vision Eye Care'}</span>
+              <div className="flex items-center gap-2">
+                {product.product_code && (
+                  <span className="font-mono text-[#8B7355] bg-[#FAF7F2] border border-[#E8DFD0] px-2.5 py-0.5 rounded text-xs font-black">
+                    Code: {product.product_code}
+                  </span>
+                )}
+                {product.sku && product.sku !== product.product_code && (
+                  <span className="font-mono text-slate-400">SKU: {product.sku}</span>
+                )}
+              </div>
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight uppercase">{product.name}</h1>

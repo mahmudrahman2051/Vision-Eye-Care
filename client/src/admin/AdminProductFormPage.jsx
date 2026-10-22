@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import productService from '../services/productService';
+import { realProducts } from '../data/realProducts';
 
 export default function AdminProductFormPage() {
   const { id } = useParams();
@@ -15,17 +16,19 @@ export default function AdminProductFormPage() {
 
   const [form, setForm] = useState({
     name: '',
-    brand: 'Drishti Atelier',
+    brand: 'Vision Eye Care',
+    product_code: '',
     sku: '',
     price: '',
     compare_price: '',
-    stock: 25,
-    low_stock_threshold: 5,
+    stock: 1,
+    low_stock_threshold: 1,
     category_id: '',
     subcategory_id: '',
-    frame_material: 'Titanium',
-    frame_shape: 'Round',
-    frame_color: 'Gold',
+    frame_material: 'Acetate',
+    frame_shape: 'Rectangle',
+    frame_color: 'Classic Black',
+    size: 'Standard',
     gender: 'unisex',
     status: 'active',
     featured: false,
@@ -53,22 +56,24 @@ export default function AdminProductFormPage() {
     if (isEdit) {
       productService.getProductByIdOrSlug(id)
         .then((res) => {
-          if (res.status === 'success') {
+          if (res.status === 'success' && res.data) {
             const p = res.data;
-            const primaryImg = p.images?.find((img) => img.is_primary)?.image_url || p.images?.[0]?.image_url || '';
+            const primaryImg = p.images?.find((img) => img.is_primary)?.image_url || p.images?.[0]?.image_url || p.primary_image || '';
             setForm({
               name: p.name || '',
               brand: p.brand || '',
+              product_code: p.product_code || '',
               sku: p.sku || '',
               price: p.price || '',
               compare_price: p.compare_price || '',
-              stock: p.stock || 0,
-              low_stock_threshold: p.low_stock_threshold || 5,
+              stock: p.stock ?? 1,
+              low_stock_threshold: p.low_stock_threshold || 1,
               category_id: p.category_id || '',
               subcategory_id: p.subcategory_id || '',
               frame_material: p.frame_material || '',
               frame_shape: p.frame_shape || '',
               frame_color: p.frame_color || '',
+              size: p.size || 'Standard',
               gender: p.gender || 'unisex',
               status: p.status || 'active',
               featured: Boolean(p.featured),
@@ -78,10 +83,43 @@ export default function AdminProductFormPage() {
               description: p.description || '',
               image_url: primaryImg,
             });
+          } else {
+            throw new Error('Not found');
           }
         })
-        .catch((err) => {
-          toast.error('Could not load product details.');
+        .catch(() => {
+          // Fallback to real local catalog
+          const local = realProducts.find(
+            (p) => String(p.id) === String(id) || p.slug === id || (p.product_code && p.product_code.toLowerCase() === id.toLowerCase())
+          );
+          if (local) {
+            setForm({
+              name: local.name || '',
+              brand: local.brand || '',
+              product_code: local.product_code || '',
+              sku: local.sku || '',
+              price: local.price || '',
+              compare_price: local.compare_price || '',
+              stock: local.stock ?? 1,
+              low_stock_threshold: local.low_stock_threshold || 1,
+              category_id: local.category_id || '',
+              subcategory_id: local.subcategory_id || '',
+              frame_material: local.frame_material || '',
+              frame_shape: local.frame_shape || '',
+              frame_color: local.frame_color || '',
+              size: local.size || 'Standard',
+              gender: local.gender || 'unisex',
+              status: local.status || 'active',
+              featured: Boolean(local.featured),
+              bestseller: Boolean(local.bestseller),
+              new_arrival: Boolean(local.new_arrival),
+              short_description: local.short_description || '',
+              description: local.description || '',
+              image_url: local.primary_image || '',
+            });
+          } else {
+            toast.error('Could not load product details.');
+          }
         })
         .finally(() => setLoading(false));
     }
@@ -185,7 +223,18 @@ export default function AdminProductFormPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-[#555] mb-1">Product Code</label>
+              <input
+                type="text"
+                name="product_code"
+                value={form.product_code}
+                onChange={handleChange}
+                placeholder="e.g. MRM-001"
+                className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2] font-mono font-bold text-[#8B7355]"
+              />
+            </div>
             <div>
               <label className="block text-xs font-bold text-[#555] mb-1">SKU</label>
               <input
@@ -193,8 +242,8 @@ export default function AdminProductFormPage() {
                 name="sku"
                 value={form.sku}
                 onChange={handleChange}
-                placeholder="VEC-SUN-101"
-                className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
+                placeholder="MRM-001"
+                className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2] font-mono"
               />
             </div>
             <div>
@@ -206,7 +255,7 @@ export default function AdminProductFormPage() {
                 name="price"
                 value={form.price}
                 onChange={handleChange}
-                placeholder="2450.00"
+                placeholder="300.00"
                 className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
               />
             </div>
@@ -218,7 +267,7 @@ export default function AdminProductFormPage() {
                 name="compare_price"
                 value={form.compare_price}
                 onChange={handleChange}
-                placeholder="3200.00"
+                placeholder="390.00"
                 className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
               />
             </div>
@@ -289,7 +338,7 @@ export default function AdminProductFormPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-bold text-[#555] mb-1">Frame Shape</label>
               <input
@@ -320,6 +369,17 @@ export default function AdminProductFormPage() {
                 value={form.frame_color}
                 onChange={handleChange}
                 placeholder="Matte Black, Gold, Tortoise"
+                className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-[#555] mb-1">Size Spec</label>
+              <input
+                type="text"
+                name="size"
+                value={form.size}
+                onChange={handleChange}
+                placeholder="e.g. 54-19-147"
                 className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
               />
             </div>
@@ -366,15 +426,31 @@ export default function AdminProductFormPage() {
           </h2>
 
           <div>
-            <label className="block text-xs font-bold text-[#555] mb-1">Primary Image URL</label>
-            <input
-              type="url"
-              name="image_url"
-              value={form.image_url}
-              onChange={handleChange}
-              placeholder="https://images.unsplash.com/photo-..."
-              className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
-            />
+            <label className="block text-xs font-bold text-[#555] mb-1">Primary Frame Image URL</label>
+            <div className="flex gap-3 items-center">
+              <input
+                type="url"
+                name="image_url"
+                value={form.image_url}
+                onChange={handleChange}
+                placeholder="https://images.unsplash.com/... or Cloudinary URL"
+                className="flex-1 text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
+              />
+              {form.image_url ? (
+                <img
+                  src={form.image_url}
+                  alt="Preview"
+                  className="w-14 h-14 rounded-xl object-cover border border-[#E8DFD0] flex-shrink-0"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-xl bg-[#FAF7F2] border border-dashed border-[#E8DFD0] flex items-center justify-center text-[10px] text-[#999] text-center flex-shrink-0">
+                  No Image
+                </div>
+              )}
+            </div>
+            <p className="text-[10px] text-[#777] mt-1.5">
+              Add image link directly from Cloudinary or an image host. You can add or replace images anytime.
+            </p>
           </div>
 
           <div>

@@ -86,6 +86,7 @@ CREATE TABLE products (
   id                  SERIAL PRIMARY KEY,
   name                VARCHAR(255) NOT NULL,
   slug                VARCHAR(280) NOT NULL UNIQUE,
+  product_code        VARCHAR(50) UNIQUE,
   sku                 VARCHAR(50) UNIQUE,
   description         TEXT,
   short_description   VARCHAR(500),
@@ -244,6 +245,7 @@ CREATE TABLE order_items (
   product_id   INTEGER REFERENCES products(id) ON DELETE SET NULL,
   product_name VARCHAR(255) NOT NULL,
   product_slug VARCHAR(280),
+  product_code VARCHAR(50),
   sku          VARCHAR(50),
   price        NUMERIC(10,2) NOT NULL,
   quantity     INTEGER NOT NULL CHECK (quantity > 0),
@@ -361,6 +363,7 @@ CREATE INDEX idx_products_bestseller ON products(bestseller) WHERE bestseller = 
 CREATE INDEX idx_products_new_arrival ON products(new_arrival) WHERE new_arrival = true;
 CREATE INDEX idx_products_brand ON products(brand);
 CREATE INDEX idx_products_sku ON products(sku);
+CREATE INDEX idx_products_product_code ON products(product_code);
 
 -- Product Images
 CREATE INDEX idx_product_images_product_id ON product_images(product_id);

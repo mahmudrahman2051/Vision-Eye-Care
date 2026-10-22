@@ -1,146 +1,131 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FiSliders, FiPackage } from 'react-icons/fi';
 import productService from '../../services/productService';
 import ProductCard from '../../components/Product/ProductCard';
 import ProductFilters from '../../components/Product/ProductFilters';
 import Pagination from '../../components/Product/Pagination';
+import { realProducts } from '../../data/realProducts';
 
 const fallbackCategories = [
-  { id: 1, name: 'Glasses', slug: 'eyeglasses', product_count: 8 },
-  { id: 2, name: 'Sunglasses', slug: 'sunglasses', product_count: 6 },
-  { id: 3, name: 'Contact Lenses', slug: 'contact-lenses', product_count: 4 },
-  { id: 4, name: 'Eyeglass Cases', slug: 'eyeglass-cases', product_count: 3 },
-  { id: 5, name: 'Lens Cleaning Solutions', slug: 'lens-cleaning', product_count: 2 },
-];
-
-const fallbackProducts = [
-  {
-    id: 'sp-1', name: 'Classic Wayfarer Frame', slug: 'classic-wayfarer-frame',
-    price: 2450, compare_price: 3200, brand: 'VINCENT CHASE', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'unisex', frame_shape: 'Wayfarer', stock: 12, bestseller: true, featured: true, average_rating: 4.8, review_count: 124,
-    primary_image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-2', name: 'Titanium Round Optical', slug: 'titanium-round-optical',
-    price: 3200, compare_price: 4000, brand: 'JOHN JACOBS', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'men', frame_shape: 'Round', stock: 8, new_arrival: true, average_rating: 4.7, review_count: 87,
-    primary_image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-3', name: 'Aviator Polarized Sunglasses', slug: 'aviator-polarized-sunglasses',
-    price: 3800, compare_price: 4600, brand: 'RAY-BAN', category_id: 2, category_slug: 'sunglasses', category_name: 'Sunglasses',
-    gender: 'men', frame_shape: 'Aviator', stock: 15, bestseller: true, average_rating: 4.9, review_count: 201,
-    primary_image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-4', name: 'Blue Light Block Lens', slug: 'blue-light-block-lens',
-    price: 1800, compare_price: 2500, brand: 'LENSKART BLU', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'women', frame_shape: 'Rectangle', stock: 20, bestseller: false, average_rating: 4.6, review_count: 95,
-    primary_image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-5', name: 'Retro Cat Eye Frame', slug: 'retro-cat-eye-frame',
-    price: 2800, compare_price: 3500, brand: 'VINCENT CHASE', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'women', frame_shape: 'Cat Eye', stock: 10, new_arrival: true, average_rating: 4.5, review_count: 67,
-    primary_image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-6', name: 'Sport Shield UV400 Sunglasses', slug: 'sport-shield-uv400',
-    price: 2200, compare_price: 2900, brand: 'OAKLEY', category_id: 2, category_slug: 'sunglasses', category_name: 'Sunglasses',
-    gender: 'unisex', frame_shape: 'Square', stock: 14, bestseller: false, average_rating: 4.7, review_count: 45,
-    primary_image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-7', name: 'Rimless Elegant Gold Frame', slug: 'rimless-elegant-frame',
-    price: 4200, compare_price: 5100, brand: 'JOHN JACOBS', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'men', frame_shape: 'Rectangle', stock: 5, bestseller: true, average_rating: 4.9, review_count: 150,
-    primary_image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-8', name: 'Oversized Fashion Sunglasses', slug: 'oversized-fashion-sunglasses',
-    price: 1950, compare_price: 2600, brand: 'VOGUE', category_id: 2, category_slug: 'sunglasses', category_name: 'Sunglasses',
-    gender: 'women', frame_shape: 'Round', stock: 18, new_arrival: true, average_rating: 4.4, review_count: 38,
-    primary_image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-9', name: 'Premium Computer Glasses', slug: 'premium-computer-glasses',
-    price: 2650, compare_price: 3300, brand: 'LENSKART BLU', category_id: 1, category_slug: 'eyeglasses', category_name: 'Glasses',
-    gender: 'unisex', frame_shape: 'Square', stock: 22, bestseller: false, average_rating: 4.8, review_count: 112,
-    primary_image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'sp-10', name: 'Clubmaster Gradient Sunglasses', slug: 'clubmaster-gradient-lens',
-    price: 3450, compare_price: 4200, brand: 'RAY-BAN', category_id: 2, category_slug: 'sunglasses', category_name: 'Sunglasses',
-    gender: 'men', frame_shape: 'Wayfarer', stock: 9, bestseller: true, average_rating: 4.9, review_count: 178,
-    primary_image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&auto=format&fit=crop&q=80',
-  },
+  { id: 1, name: 'Sunglasses', slug: 'sunglasses', product_count: 23 },
+  { id: 2, name: 'Prescription Glasses', slug: 'prescription-glasses', product_count: 54 },
+  { id: 4, name: 'Men', slug: 'men', product_count: 8 },
+  { id: 5, name: 'Women', slug: 'women', product_count: 15 },
+  { id: 7, name: 'Kids', slug: 'kids', product_count: 8 },
 ];
 
 const filterFallbackProducts = (filters) => {
-  let list = [...fallbackProducts];
+  let list = [...realProducts];
 
+  // Search by code, name, brand, model, size, color
   if (filters.search) {
-    const q = filters.search.toLowerCase();
+    const q = filters.search.toLowerCase().trim();
     list = list.filter((p) =>
-      p.name.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q) ||
-      p.frame_shape.toLowerCase().includes(q)
+      (p.name && p.name.toLowerCase().includes(q)) ||
+      (p.brand && p.brand.toLowerCase().includes(q)) ||
+      (p.product_code && p.product_code.toLowerCase().includes(q)) ||
+      (p.sku && p.sku.toLowerCase().includes(q)) ||
+      (p.model_no && p.model_no.toLowerCase().includes(q)) ||
+      (p.memo_no && p.memo_no.toLowerCase().includes(q)) ||
+      (p.frame_shape && p.frame_shape.toLowerCase().includes(q)) ||
+      (p.frame_color && p.frame_color.toLowerCase().includes(q)) ||
+      (p.size && p.size.toLowerCase().includes(q))
     );
   }
 
+  // Brand filter
+  if (filters.brand) {
+    const bVal = filters.brand.toLowerCase().trim();
+    list = list.filter((p) => p.brand && p.brand.toLowerCase() === bVal);
+  }
+
+  // Category filter
   if (filters.category) {
-    const catVal = filters.category.toLowerCase();
+    const catVal = filters.category.toLowerCase().trim();
     list = list.filter((p) =>
-      p.category_id.toString() === catVal ||
+      p.category_id?.toString() === catVal ||
       p.category_slug === catVal ||
-      p.category_name.toLowerCase().includes(catVal)
+      p.category_name?.toLowerCase().includes(catVal)
     );
   }
 
+  // Gender filter
   if (filters.gender) {
     list = list.filter((p) => p.gender === filters.gender.toLowerCase());
   }
 
+  // Frame shape
   if (filters.frame_shape) {
-    list = list.filter((p) => p.frame_shape.toLowerCase() === filters.frame_shape.toLowerCase());
+    list = list.filter((p) => p.frame_shape?.toLowerCase() === filters.frame_shape.toLowerCase());
   }
 
+  // Min price
   if (filters.min_price) {
     list = list.filter((p) => p.price >= parseFloat(filters.min_price));
   }
 
+  // Max price
   if (filters.max_price) {
     list = list.filter((p) => p.price <= parseFloat(filters.max_price));
   }
 
+  // Stock
   if (filters.in_stock === 'true') {
     list = list.filter((p) => p.stock > 0);
   }
 
+  // Sorting
   if (filters.sort === 'price_asc') {
     list.sort((a, b) => a.price - b.price);
   } else if (filters.sort === 'price_desc') {
     list.sort((a, b) => b.price - a.price);
-  } else if (filters.sort === 'popular') {
-    list.sort((a, b) => (b.bestseller ? 1 : 0) - (a.bestseller ? 1 : 0));
+  } else if (filters.sort === 'brand_asc') {
+    list.sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
+  } else if (filters.sort === 'brand_desc') {
+    list.sort((a, b) => (b.brand || '').localeCompare(a.brand || ''));
   } else if (filters.sort === 'name_asc') {
     list.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (filters.sort === 'popular') {
+    list.sort((a, b) => (b.bestseller ? 1 : 0) - (a.bestseller ? 1 : 0));
+  } else {
+    // Newest / Product Code order (MRM-001 ...)
+    list.sort((a, b) => (a.product_code || '').localeCompare(b.product_code || ''));
   }
 
-  return list;
+  const page = Math.max(1, parseInt(filters.page, 10) || 1);
+  const limit = Math.max(1, parseInt(filters.limit, 10) || 12);
+  const total = list.length;
+  const totalPages = Math.ceil(total / limit) || 1;
+  const paginated = list.slice((page - 1) * limit, page * limit);
+
+  return {
+    products: paginated,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages,
+    },
+  };
 };
 
 const ShopPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(fallbackCategories);
-  const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 12, totalPages: 1 });
+  const [pagination, setPagination] = useState({ total: realProducts.length, page: 1, limit: 12, totalPages: Math.ceil(realProducts.length / 12) });
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
+  // Extract all unique brands from real products
+  const brands = useMemo(() => {
+    return Array.from(new Set(realProducts.map((p) => p.brand).filter(Boolean))).sort();
+  }, []);
+
   const currentFilters = {
     search: searchParams.get('search') || '',
+    brand: searchParams.get('brand') || '',
     category: searchParams.get('category') || '',
     subcategory: searchParams.get('subcategory') || '',
     gender: searchParams.get('gender') || '',
@@ -177,14 +162,14 @@ const ShopPage = () => {
           setProducts(res.data.products);
           setPagination(res.data.pagination);
         } else {
-          const filtered = filterFallbackProducts(currentFilters);
-          setProducts(filtered);
-          setPagination({ total: filtered.length, page: 1, limit: 12, totalPages: 1 });
+          const { products: pList, pagination: pMeta } = filterFallbackProducts(currentFilters);
+          setProducts(pList);
+          setPagination(pMeta);
         }
       } catch {
-        const filtered = filterFallbackProducts(currentFilters);
-        setProducts(filtered);
-        setPagination({ total: filtered.length, page: 1, limit: 12, totalPages: 1 });
+        const { products: pList, pagination: pMeta } = filterFallbackProducts(currentFilters);
+        setProducts(pList);
+        setPagination(pMeta);
       } finally {
         setLoading(false);
       }
@@ -255,11 +240,13 @@ const ShopPage = () => {
               onChange={(e) => handleFilterChange('sort', e.target.value)}
               className="w-full sm:w-auto bg-[#F5EFE3]/50 border border-[#E8DFD0] text-[#1A1A1A] text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-[#8B7355] cursor-pointer"
             >
-              <option value="newest">Newest Arrivals</option>
-              <option value="popular">Most Popular</option>
+              <option value="newest">Product Code / Newest</option>
+              <option value="brand_asc">Brand: A to Z</option>
+              <option value="brand_desc">Brand: Z to A</option>
               <option value="price_asc">Price: Low to High</option>
               <option value="price_desc">Price: High to Low</option>
               <option value="name_asc">Name: A to Z</option>
+              <option value="popular">Most Popular</option>
             </select>
           </div>
         </div>
@@ -271,6 +258,7 @@ const ShopPage = () => {
             <div className="sticky top-36 sm:top-40">
               <ProductFilters
                 categories={categories}
+                brands={brands}
                 filters={currentFilters}
                 onFilterChange={handleFilterChange}
                 onResetFilters={handleResetFilters}
@@ -301,6 +289,7 @@ const ShopPage = () => {
                   </div>
                   <ProductFilters
                     categories={categories}
+                    brands={brands}
                     filters={currentFilters}
                     onFilterChange={handleFilterChange}
                     onResetFilters={handleResetFilters}

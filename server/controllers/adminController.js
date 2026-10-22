@@ -38,7 +38,7 @@ async function getDashboardStats(req, res, next) {
 
     // Low stock products alert
     const lowStockItems = await query(
-      `SELECT id, name, slug, sku, stock, low_stock_threshold, price, status
+      `SELECT id, name, product_code, slug, sku, stock, low_stock_threshold, price, status
        FROM products
        WHERE stock <= low_stock_threshold
        ORDER BY stock ASC
@@ -47,7 +47,7 @@ async function getDashboardStats(req, res, next) {
 
     // Top selling products
     const bestSellers = await query(
-      `SELECT p.id, p.name, p.slug, p.price, COALESCE(SUM(oi.quantity), 0) AS total_sold,
+      `SELECT p.id, p.name, p.product_code, p.slug, p.price, COALESCE(SUM(oi.quantity), 0) AS total_sold,
               COALESCE(
                 (SELECT image_url FROM product_images pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1),
                 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80'
