@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FiSearch, FiX, FiTrendingUp, FiArrowRight } from 'react-icons/fi';
 import productService from '../../services/productService';
+import { realProducts } from '../../data/realProducts';
 
-const popularSearches = ['Aviator', 'Ray-Ban', 'Titanium', 'Blue Light', 'Sunglasses', 'Rectangle'];
+const popularSearches = ['MRM-001', 'Ray-Ban', 'Moscot', 'Tom Ford', 'Oakley', 'Dior', 'Titan', 'Kids'];
 
 const SearchOverlay = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
@@ -18,7 +19,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // Debounced search API call
+  // Debounced search
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -27,17 +28,35 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
     const timer = setTimeout(async () => {
       setLoading(true);
+      const q = query.trim().toLowerCase();
       try {
-        const res = await productService.getProducts({ search: query.trim(), limit: 4 });
-        if (res.status === 'success') {
+        const res = await productService.getProducts({ search: query.trim(), limit: 6 });
+        if (res.status === 'success' && res.data.products && res.data.products.length > 0) {
           setResults(res.data.products);
+        } else {
+          // Fallback to local real catalog
+          const localResults = realProducts.filter((p) =>
+            (p.name && p.name.toLowerCase().includes(q)) ||
+            (p.brand && p.brand.toLowerCase().includes(q)) ||
+            (p.product_code && p.product_code.toLowerCase().includes(q)) ||
+            (p.sku && p.sku.toLowerCase().includes(q)) ||
+            (p.model_no && p.model_no.toLowerCase().includes(q))
+          ).slice(0, 6);
+          setResults(localResults);
         }
-      } catch (err) {
-        console.error('Search error:', err);
+      } catch {
+        const localResults = realProducts.filter((p) =>
+          (p.name && p.name.toLowerCase().includes(q)) ||
+          (p.brand && p.brand.toLowerCase().includes(q)) ||
+          (p.product_code && p.product_code.toLowerCase().includes(q)) ||
+          (p.sku && p.sku.toLowerCase().includes(q)) ||
+          (p.model_no && p.model_no.toLowerCase().includes(q))
+        ).slice(0, 6);
+        setResults(localResults);
       } finally {
         setLoading(false);
       }
-    }, 300);
+    }, 250);
 
     return () => clearTimeout(timer);
   }, [query]);
@@ -77,7 +96,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search eyewear by brand, shape, or material (e.g. Aviator, Titanium)..."
+            placeholder="Search by product code, name, or brand (e.g. MRM-001, Ray-Ban, Moscot)..."
             className="w-full bg-[#FEFCE8] border-2 border-[#DFFF00] focus:border-yellow-400 rounded-2xl pl-14 pr-16 py-4 text-lg text-gray-900 placeholder-gray-500 focus:outline-none transition-colors shadow-xl"
           />
           {query && (
@@ -95,7 +114,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         {!query && (
           <div className="space-y-3">
             <h4 className="text-xs font-extrabold uppercase tracking-widest text-gray-700 flex items-center gap-2">
-              <FiTrendingUp className="text-yellow-600" /> Popular Searches in Bangladesh
+              <FiTrendingUp className="text-yellow-600" /> Popular Searches in Vision Eye Care
             </h4>
             <div className="flex flex-wrap gap-2">
               {popularSearches.map((term) => (
@@ -116,7 +135,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           <div className="bg-white border-2 border-yellow-200 rounded-2xl p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-yellow-100">
               <span className="text-xs font-bold uppercase tracking-wider text-gray-600">
-                {loading ? 'Searching...' : `Results for "${query}"`}
+                {loading ? 'Searching...' : `Results for "${query}" (${results.length})`}
               </span>
               {results.length > 0 && (
                 <button
@@ -134,7 +153,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
               </div>
             ) : results.length === 0 ? (
               <div className="py-8 text-center text-xs text-gray-500">
-                No matching frames found for "{query}". Try another term like "Wayfarer" or "Sunglasses".
+                No matching optical frames found for "{query}". Try a Product Code like "MRM-001" or brand like "Ray-Ban".
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -145,17 +164,42 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     onClick={onClose}
                     className="flex items-center gap-4 p-3 bg-yellow-50/50 hover:bg-[#FEFCE8] border border-yellow-200 hover:border-[#DFFF00] rounded-xl transition-all group"
                   >
-                    <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-yellow-200">
-                      <img
-                        src={product.primary_image || 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200'}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
+                    <div className="w-16 h-16 bg-[#FAF7F2] rounded-lg overflow-hidden flex-shrink-0 border border-yellow-200 flex items-center justify-center">
+                      {product.primary_image ? (
+                        <img
+                          src={product.primary_image}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                        />
+                      ) : (
+                        <svg
+                          className="w-8 h-8 text-[#8B7355]/40"
+                          viewBox="0 0 64 64"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="19" cy="34" r="13" />
+                          <circle cx="45" cy="34" r="13" />
+                          <path d="M32 32c1-2 3-3 5-3s4 1 5 3" />
+                          <path d="M6 31l4-1" />
+                          <path d="M58 31l-4-1" />
+                        </svg>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-yellow-800 uppercase truncate">
-                        {product.brand || 'Vision Eye Care'}
-                      </p>
+                      <div className="flex items-center justify-between gap-1">
+                        <p className="text-xs font-bold text-yellow-800 uppercase truncate">
+                          {product.brand || 'Vision Eye Care'}
+                        </p>
+                        {(product.product_code || product.sku) && (
+                          <span className="font-mono text-[10px] font-bold text-gray-700 bg-white border border-yellow-300 px-1.5 py-0.2 rounded">
+                            {product.product_code || product.sku}
+                          </span>
+                        )}
+                      </div>
                       <h5 className="text-sm font-bold text-gray-900 truncate group-hover:text-yellow-700 transition-colors">
                         {product.name}
                       </h5>

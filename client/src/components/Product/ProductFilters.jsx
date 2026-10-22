@@ -12,6 +12,7 @@ const genders = [
 
 const ProductFilters = ({
   categories = [],
+  brands = [],
   filters,
   onFilterChange,
   onResetFilters,
@@ -41,19 +42,40 @@ const ProductFilters = ({
       {/* Search Filter */}
       <div>
         <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
-          Search Frames
+          Search Product / Code
         </label>
         <div className="relative">
           <FiSearch className="absolute left-3.5 top-3.5 text-[#8B7355] w-4 h-4" />
           <input
             type="text"
-            placeholder="Name, brand, shape..."
+            placeholder="Code (MRM-001), brand, name..."
             value={filters.search || ''}
             onChange={(e) => onFilterChange('search', e.target.value)}
             className="w-full bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl pl-10 pr-3 py-2.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all placeholder:text-[#999]"
           />
         </div>
       </div>
+
+      {/* Brand Filter */}
+      {brands.length > 0 && (
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-[#777] mb-2">
+            Brand
+          </label>
+          <select
+            value={filters.brand || ''}
+            onChange={(e) => onFilterChange('brand', e.target.value)}
+            className="w-full bg-[#F5EFE3]/40 border border-[#E8DFD0] rounded-xl px-3 py-2.5 text-sm text-[#1A1A1A] focus:outline-none focus:border-[#8B7355] focus:bg-white transition-all cursor-pointer font-medium"
+          >
+            <option value="">All Brands ({brands.length})</option>
+            {brands.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Category */}
       <div>

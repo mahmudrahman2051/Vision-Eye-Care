@@ -9,9 +9,11 @@ const ProductCard = ({ product }) => {
   const { isInWishlist, toggleWishlist } = useWishlist();
 
   const {
-    id, name, slug, price, compare_price, primary_image,
+    id, name, slug, price, compare_price, primary_image, product_code, sku,
     stock, bestseller, new_arrival, average_rating, review_count, brand,
   } = product || {};
+
+  const displayCode = product_code || sku || '';
 
   const isWishlisted = isInWishlist(product?.product_id || id);
 
@@ -33,8 +35,6 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     addToCart(product, 1);
   };
-
-  const defaultImage = 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80';
 
   return (
     <div className="group relative bg-white border border-[#E8DFD0] hover:border-[#8B7355]/40 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md flex flex-col justify-between h-full min-h-[290px] sm:min-h-[340px]">
@@ -58,25 +58,55 @@ const ProductCard = ({ product }) => {
         <FiHeart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} />
       </button>
 
-      {/* Image */}
+      {/* Image or Optical Placeholder */}
       <Link
         to={`/product/${slug || id}`}
-        className="relative h-32 sm:h-44 w-full bg-[#F5EFE3]/30 overflow-hidden block flex-shrink-0"
+        className="relative h-32 sm:h-44 w-full bg-[#FAF7F2] border-b border-[#F5EFE3] overflow-hidden block flex-shrink-0 flex items-center justify-center group-hover:bg-[#F5EFE3]/50 transition-colors"
       >
-        <img
-          src={primary_image || defaultImage}
-          alt={name}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => { e.target.onerror = null; e.target.src = defaultImage; }}
-        />
+        {primary_image ? (
+          <img
+            src={primary_image}
+            alt={name}
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center p-4 text-center select-none">
+            {/* Elegant Glasses Icon Frame */}
+            <svg
+              className="w-12 h-12 sm:w-16 sm:h-16 text-[#8B7355]/40 group-hover:text-[#8B7355]/70 transition-colors group-hover:scale-110 duration-300"
+              viewBox="0 0 64 64"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="19" cy="34" r="13" />
+              <circle cx="45" cy="34" r="13" />
+              <path d="M32 32c1-2 3-3 5-3s4 1 5 3" />
+              <path d="M6 31l4-1" />
+              <path d="M58 31l-4-1" />
+            </svg>
+            <span className="mt-1 text-[9px] font-mono font-bold tracking-wider text-[#8B7355] uppercase">
+              {displayCode || 'Optical Frame'}
+            </span>
+          </div>
+        )}
       </Link>
 
       {/* Info */}
       <div className="p-2.5 sm:p-3.5 flex flex-col justify-between flex-grow">
         <div>
-          <p className="text-[10px] sm:text-[11px] font-bold text-[#8B7355] uppercase tracking-wide mb-0.5 truncate">
-            {brand || 'Drishti'}
-          </p>
+          <div className="flex items-center justify-between gap-1 mb-1">
+            <p className="text-[10px] sm:text-[11px] font-bold text-[#8B7355] uppercase tracking-wide truncate">
+              {brand || 'Vision Eye Care'}
+            </p>
+            {displayCode && (
+              <span className="text-[9px] font-mono font-bold text-[#444] bg-[#F5EFE3] px-1.5 py-0.5 rounded border border-[#E8DFD0] flex-shrink-0">
+                {displayCode}
+              </span>
+            )}
+          </div>
           <Link to={`/product/${slug || id}`}>
             <h3 className="text-xs sm:text-sm font-bold text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors line-clamp-1 leading-snug">
               {name}

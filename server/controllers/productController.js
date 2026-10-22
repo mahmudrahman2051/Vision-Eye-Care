@@ -52,8 +52,14 @@ async function getProducts(req, res, next) {
       queryParams.push(`%${search.trim()}%`);
       const paramIdx = queryParams.length;
       whereConditions.push(
-        `(p.name ILIKE $${paramIdx} OR p.description ILIKE $${paramIdx} OR p.brand ILIKE $${paramIdx} OR p.sku ILIKE $${paramIdx})`
+        `(p.name ILIKE $${paramIdx} OR p.product_code ILIKE $${paramIdx} OR p.description ILIKE $${paramIdx} OR p.brand ILIKE $${paramIdx} OR p.sku ILIKE $${paramIdx})`
       );
+    }
+
+    // Brand filter
+    if (req.query.brand && req.query.brand.trim()) {
+      queryParams.push(req.query.brand.trim());
+      whereConditions.push(`p.brand ILIKE $${queryParams.length}`);
     }
 
     // Category filter
@@ -144,6 +150,12 @@ async function getProducts(req, res, next) {
       orderByClause = 'p.bestseller DESC, p.created_at DESC';
     } else if (sort === 'name_asc') {
       orderByClause = 'p.name ASC';
+    } else if (sort === 'name_desc') {
+      orderByClause = 'p.name DESC';
+    } else if (sort === 'brand_asc') {
+      orderByClause = 'p.brand ASC, p.name ASC';
+    } else if (sort === 'brand_desc') {
+      orderByClause = 'p.brand DESC, p.name ASC';
     }
 
     // Count Total
@@ -256,7 +268,7 @@ async function getProductByIdOrSlug(req, res, next) {
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       LEFT JOIN subcategories sc ON p.subcategory_id = sc.id
-      WHERE ${isId ? 'p.id = $1' : 'p.slug = $1'}
+      WHERE ${isId ? 'p.id = $1' : 'p.slug = $1 OR p.product_code = $1 OR p.sku = $1'}
     `;
 
     const result = await query(sql, [idOrSlug]);
@@ -308,6 +320,7 @@ async function createProduct(req, res, next) {
   try {
     const {
       name,
+      product_code,
       sku,
       description,
       short_description,
@@ -328,6 +341,7 @@ async function createProduct(req, res, next) {
       bestseller,
       new_arrival,
       image_urls,
+      image_url,
     } = req.body;
 
     if (!name || !price) {
@@ -335,20 +349,23 @@ async function createProduct(req, res, next) {
     }
 
     const slug = slugify(name) + '-' + Math.floor(1000 + Math.random() * 9000);
+    const finalCode = product_code ? product_code.trim() : null;
+    const finalSku = sku ? sku.trim() : (finalCode || null);
 
     const result = await query(
       `INSERT INTO products (
-        name, slug, sku, description, short_description, price, compare_price, 
+        name, product_code, slug, sku, description, short_description, price, compare_price, 
         stock, low_stock_threshold, category_id, subcategory_id, brand, 
         frame_material, frame_shape, frame_color, gender, size, status, 
         featured, bestseller, new_arrival
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
       ) RETURNING *`,
       [
         name.trim(),
+        finalCode,
         slug,
-        sku || null,
+        finalSku,
         description || null,
         short_description || null,
         parseFloat(price),
@@ -373,11 +390,16 @@ async function createProduct(req, res, next) {
     const product = result.rows[0];
 
     // If image URLs were provided in payload
-    if (image_urls && Array.isArray(image_urls) && image_urls.length > 0) {
-      for (let i = 0; i < image_urls.length; i++) {
+    const allImages = image_urls && Array.isArray(image_urls) ? [...image_urls] : [];
+    if (image_url && !allImages.includes(image_url)) {
+      allImages.unshift(image_url);
+    }
+
+    if (allImages.length > 0) {
+      for (let i = 0; i < allImages.length; i++) {
         await query(
           'INSERT INTO product_images (product_id, image_url, is_primary, sort_order) VALUES ($1, $2, $3, $4)',
-          [product.id, image_urls[i], i === 0, i]
+          [product.id, allImages[i], i === 0, i]
         );
       }
     }
@@ -389,7 +411,7 @@ async function createProduct(req, res, next) {
     });
   } catch (error) {
     if (error.code === '23505') {
-      return res.status(400).json({ status: 'fail', message: 'Product with this SKU or slug already exists.' });
+      return res.status(400).json({ status: 'fail', message: 'Product with this SKU, Product Code, or slug already exists.' });
     }
     next(error);
   }
@@ -431,8 +453,10 @@ async function updateProduct(req, res, next) {
         featured = COALESCE($17, featured),
         bestseller = COALESCE($18, bestseller),
         new_arrival = COALESCE($19, new_arrival),
+        product_code = COALESCE($20, product_code),
+        sku = COALESCE($21, sku),
         updated_at = NOW()
-       WHERE id = $20
+       WHERE id = $22
        RETURNING *`,
       [
         body.name ? body.name.trim() : null,
@@ -454,9 +478,30 @@ async function updateProduct(req, res, next) {
         body.featured !== undefined ? (body.featured === true || body.featured === 'true') : null,
         body.bestseller !== undefined ? (body.bestseller === true || body.bestseller === 'true') : null,
         body.new_arrival !== undefined ? (body.new_arrival === true || body.new_arrival === 'true') : null,
+        body.product_code !== undefined ? (body.product_code ? body.product_code.trim() : null) : null,
+        body.sku !== undefined ? (body.sku ? body.sku.trim() : null) : null,
         id,
       ]
     );
+
+    // If an image URL is supplied via admin panel, set as primary image
+    if (body.image_url && body.image_url.trim()) {
+      const primaryRes = await query(
+        'SELECT id FROM product_images WHERE product_id = $1 AND is_primary = true',
+        [id]
+      );
+      if (primaryRes.rows.length > 0) {
+        await query(
+          'UPDATE product_images SET image_url = $1 WHERE id = $2',
+          [body.image_url.trim(), primaryRes.rows[0].id]
+        );
+      } else {
+        await query(
+          'INSERT INTO product_images (product_id, image_url, is_primary, sort_order) VALUES ($1, $2, true, 0)',
+          [id, body.image_url.trim()]
+        );
+      }
+    }
 
     res.status(200).json({
       status: 'success',
