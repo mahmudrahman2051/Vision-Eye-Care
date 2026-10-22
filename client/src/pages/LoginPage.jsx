@@ -31,10 +31,14 @@ const LoginPage = () => {
       const res = await login(formData.email, formData.password);
       if (res.status === 'success') {
         toast.success(`Welcome back, ${res.user.full_name || res.user.name || 'User'}!`);
-        if (res.user.role === 'admin' && (from === '/' || from === '/login')) {
-          navigate('/admin', { replace: true });
+        if (res.user.role === 'admin') {
+          // If came from an admin page, go there; otherwise always take admin to dashboard
+          const adminDest = (from && from.startsWith('/admin')) ? from : '/admin';
+          navigate(adminDest, { replace: true });
         } else {
-          navigate(from, { replace: true });
+          // Normal customer: always take to homepage (or non-admin destination like checkout)
+          const customerDest = (from && !from.startsWith('/admin') && from !== '/login') ? from : '/';
+          navigate(customerDest, { replace: true });
         }
       } else {
         toast.error(res.message || 'Login failed');
