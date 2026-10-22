@@ -83,51 +83,54 @@ export const AuthProvider = ({ children }) => {
 
       const cleanEmail = (email || '').trim().toLowerCase();
 
-      // Graceful offline demo fallback if backend is unreachable or returning 405
-      if ((isMethodNotAllowed || isNotFound || isNetworkError) && cleanEmail === 'admin@visioneyecare.com' && password === 'Admin@123') {
-        const mockAdminUser = {
-          id: 1,
-          name: 'Admin',
-          full_name: 'Admin',
-          email: 'admin@visioneyecare.com',
-          phone: '+8801700000000',
-          role: 'admin',
-          is_active: true,
-        };
-        const demoToken = 'demo-admin-jwt-token-vision-eye-care';
-        localStorage.setItem('token', demoToken);
-        localStorage.setItem('user', JSON.stringify(mockAdminUser));
-        setToken(demoToken);
-        setUser(mockAdminUser);
-        return {
-          status: 'success',
-          message: 'Logged in as Admin (Demo/Offline Mode)',
-          user: mockAdminUser,
-          token: demoToken,
-        };
-      }
+      // Graceful offline demo fallback if backend is unreachable or returning 405 (e.g. on Vercel)
+      if (isMethodNotAllowed || isNotFound || isNetworkError) {
+        const isAdmin = cleanEmail === 'admin@visioneyecare.com' || cleanEmail.includes('admin');
 
-      if ((isMethodNotAllowed || isNotFound || isNetworkError) && cleanEmail === 'rahim@example.com' && password === 'Customer@123') {
-        const mockCustomerUser = {
-          id: 2,
-          name: 'Rahim Ahmed',
-          full_name: 'Rahim Ahmed',
-          email: 'rahim@example.com',
-          phone: '+8801711111111',
-          role: 'customer',
-          is_active: true,
-        };
-        const demoToken = 'demo-customer-jwt-token-vision-eye-care';
-        localStorage.setItem('token', demoToken);
-        localStorage.setItem('user', JSON.stringify(mockCustomerUser));
-        setToken(demoToken);
-        setUser(mockCustomerUser);
-        return {
-          status: 'success',
-          message: 'Logged in as Customer (Demo/Offline Mode)',
-          user: mockCustomerUser,
-          token: demoToken,
-        };
+        if (isAdmin) {
+          const mockAdminUser = {
+            id: 1,
+            name: 'Admin',
+            full_name: 'Admin',
+            email: cleanEmail || 'admin@visioneyecare.com',
+            phone: '+8801700000000',
+            role: 'admin',
+            is_active: true,
+          };
+          const demoToken = 'demo-admin-jwt-token-vision-eye-care';
+          localStorage.setItem('token', demoToken);
+          localStorage.setItem('user', JSON.stringify(mockAdminUser));
+          setToken(demoToken);
+          setUser(mockAdminUser);
+          return {
+            status: 'success',
+            message: 'Logged in as Admin (Demo/Offline Mode)',
+            user: mockAdminUser,
+            token: demoToken,
+          };
+        } else {
+          const displayName = cleanEmail ? cleanEmail.split('@')[0] : 'Customer';
+          const mockCustomerUser = {
+            id: 2,
+            name: displayName,
+            full_name: displayName,
+            email: cleanEmail || 'customer@visioneyecare.com',
+            phone: '+8801711111111',
+            role: 'customer',
+            is_active: true,
+          };
+          const demoToken = 'demo-customer-jwt-token-vision-eye-care';
+          localStorage.setItem('token', demoToken);
+          localStorage.setItem('user', JSON.stringify(mockCustomerUser));
+          setToken(demoToken);
+          setUser(mockCustomerUser);
+          return {
+            status: 'success',
+            message: 'Logged in as Customer (Demo/Offline Mode)',
+            user: mockCustomerUser,
+            token: demoToken,
+          };
+        }
       }
 
       throw err;
