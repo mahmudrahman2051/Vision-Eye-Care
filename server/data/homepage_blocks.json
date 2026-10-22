@@ -1,0 +1,98 @@
+{
+  "heroBanners": [
+    {
+      "id": 1,
+      "src": "/hero_banner_1.png",
+      "alt": "Premium Eyewear Collection",
+      "title": "Bespoke Titanium & Japanese Acetate",
+      "subtitle": "Engineered for uncompromising visual clarity",
+      "ctaText": "Explore Collection",
+      "ctaLink": "/shop"
+    },
+    {
+      "id": 2,
+      "src": "/hero_banner_2.png",
+      "alt": "Designer Sunglasses",
+      "title": "Polarized Architectural Sunglasses",
+      "subtitle": "100% UV400 Protection with anti-reflective back-coating",
+      "ctaText": "Shop Sunglasses",
+      "ctaLink": "/shop?category=sunglasses"
+    },
+    {
+      "id": 3,
+      "src": "/hero_banner_3.png",
+      "alt": "Fashionable Frames",
+      "title": "Featherlight Everyday Frames",
+      "subtitle": "Custom CNC Lens Milling crafted in Dhaka",
+      "ctaText": "Book Home Trial",
+      "ctaLink": "/contact"
+    }
+  ],
+  "heroInterval": 5000,
+  "categoryPromoBanner": {
+    "image": "/promo_banner.png",
+    "alt": "Special Eyewear Offer",
+    "link": "/shop?sort=featured"
+  },
+  "lowerPromoBanner": {
+    "image": "/promo_banner.png",
+    "alt": "Exclusive Seasonal Drop",
+    "link": "/shop?sort=popular"
+  },
+  "featuredCollections": [
+    {
+      "id": "computer-glasses",
+      "title": "Computer Glasses",
+      "tagline": "Zero Power Blu-Cut",
+      "badge": "MUST HAVE",
+      "dotColor": "bg-emerald-500",
+      "link": "/shop?search=computer",
+      "image": "https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "polarized-shades",
+      "title": "Polarized Shades",
+      "tagline": "100% UV Protection",
+      "badge": "POPULAR",
+      "dotColor": "bg-amber-500",
+      "link": "/shop?category=sunglasses",
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "progressive-lenses",
+      "title": "Progressive Vision",
+      "tagline": "Multi-Focal Comfort",
+      "badge": "PREMIUM",
+      "dotColor": "bg-indigo-500",
+      "link": "/shop?category=eyeglasses",
+      "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "acetate-frames",
+      "title": "Acetate Frames",
+      "tagline": "Italian Handcrafted",
+      "badge": "TRENDING",
+      "dotColor": "bg-rose-500",
+      "link": "/shop?search=acetate",
+      "image": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "contact-lenses",
+      "title": "Contact Lenses",
+      "tagline": "Daily & Monthly",
+      "badge": "ESSENTIAL",
+      "dotColor": "bg-sky-500",
+      "link": "/shop?search=Contact+Lenses",
+      "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "kids-eyewear",
+      "title": "Kids Eyewear",
+      "tagline": "Flexible & Safe",
+      "badge": "NEW",
+      "dotColor": "bg-violet-500",
+      "link": "/shop?gender=kids",
+      "image": "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"
+    }
+  ]
+}

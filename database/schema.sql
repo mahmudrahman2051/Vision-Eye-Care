@@ -453,6 +453,18 @@ CREATE TRIGGER trg_reviews_updated_at
   BEFORE UPDATE ON reviews FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================
+-- 15. SITE SETTINGS (MARQUEE TICKER & CONFIG)
+-- ============================================
+CREATE TABLE IF NOT EXISTS site_settings (
+  key         VARCHAR(50) PRIMARY KEY,
+  value       JSONB NOT NULL,
+  updated_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TRIGGER trg_site_settings_updated_at
+  BEFORE UPDATE ON site_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
 -- DONE
 -- ============================================
 -- Schema created successfully.

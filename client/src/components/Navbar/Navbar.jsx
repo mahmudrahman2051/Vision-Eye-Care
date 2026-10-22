@@ -9,6 +9,8 @@ import {
   HiOutlineXMark,
 } from 'react-icons/hi2';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const navCategories = [
   { to: '/shop?category=eyeglasses', label: 'Glasses' },
@@ -25,12 +27,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef(null);
-
-  const cartCount = 0;
-  const wishlistCount = 0;
 
   // Scroll listener for glass effect
   useEffect(() => {
@@ -232,18 +233,55 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Header Menu Toggle Button */}
-          <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Header Action Icons & Menu Toggle */}
+          <div className="lg:hidden flex items-center gap-1.5 sm:gap-2">
+            {/* Mobile Wishlist */}
+            <Link
+              to="/wishlist"
+              className={`relative p-2 rounded-xl transition-all ${
+                location.pathname === '/wishlist'
+                  ? 'bg-[#8B7355] text-white shadow-xs'
+                  : 'bg-[#F5EFE3]/70 text-[#1A1A1A] hover:bg-[#8B7355] hover:text-white'
+              }`}
+              aria-label="Wishlist"
+            >
+              <HiOutlineHeart size={20} />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#8B7355] text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Mobile Cart */}
+            <Link
+              to="/cart"
+              className={`relative p-2 rounded-xl transition-all ${
+                location.pathname === '/cart'
+                  ? 'bg-[#8B7355] text-white shadow-xs'
+                  : 'bg-[#F5EFE3]/70 text-[#1A1A1A] hover:bg-[#8B7355] hover:text-white'
+              }`}
+              aria-label="Cart"
+            >
+              <HiOutlineShoppingBag size={20} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#8B7355] text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Mobile Header Menu Toggle Button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className={`p-2.5 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs ${
+              className={`p-2 sm:px-3 sm:py-2 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs ${
                 mobileOpen
                   ? 'bg-[#8B7355] text-white shadow-md'
                   : 'bg-[#F5EFE3] hover:bg-[#8B7355] hover:text-white text-[#1A1A1A]'
               }`}
               aria-label="Toggle Navigation Menu"
             >
-              <span>{mobileOpen ? 'Close' : 'Menu'}</span>
+              <span className="hidden sm:inline">{mobileOpen ? 'Close' : 'Menu'}</span>
               {mobileOpen ? <HiOutlineXMark size={20} /> : <HiOutlineBars3 size={20} />}
             </button>
           </div>

@@ -1,14 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import bannerService from '../../services/bannerService';
+
+const DEFAULT_BANNER = {
+  image: '/lower_banner.png',
+  alt: 'Vision Eye Care Special Bangladesh Offer',
+  link: '/shop?sort=popular',
+};
 
 const LowerPromoBanner = () => {
+  const [banner, setBanner] = useState(DEFAULT_BANNER);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function load() {
+      try {
+        const data = await bannerService.getBanners();
+        if (data?.lowerPromoBanner && isMounted) {
+          setBanner(data.lowerPromoBanner);
+        }
+      } catch (err) {}
+    }
+    load();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.lowerPromoBanner) {
+        setBanner(e.detail.lowerPromoBanner);
+      }
+    };
+    window.addEventListener('banners-updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('banners-updated', handleUpdate);
+    };
+  }, []);
+
   return (
     <section className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-        <Link to="/shop?sort=popular" className="block relative group overflow-hidden">
+        <Link to={banner.link || '/shop'} className="block relative group overflow-hidden">
           <img
-            src="/lower_banner.png"
-            alt="Vision Eye Care Special Bangladesh Offer"
+            src={banner.image}
+            alt={banner.alt || 'Exclusive Offer Banner'}
             className="w-full h-auto max-h-[360px] object-cover object-center group-hover:scale-[1.02] transition-transform duration-500"
             onError={(e) => {
               e.target.onerror = null;

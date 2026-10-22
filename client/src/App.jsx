@@ -2,98 +2,179 @@ import { useState, useCallback } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
+import { SettingsProvider } from './context/SettingsContext';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
+import AdminLayout from './admin/AdminLayout';
+
+// Route Guards
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 
 // Splash Screen
 import SplashScreen from './components/SplashScreen/SplashScreen';
 
-// Pages
+// Public & Customer Pages
 import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
-import PlaceholderPage from './pages/PlaceholderPage/PlaceholderPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ShopPage from './pages/Shop/ShopPage';
 import ProductDetailsPage from './pages/ProductDetails/ProductDetailsPage';
 import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import AccountPage from './pages/AccountPage';
+import OrderDetailPage from './pages/OrderDetailPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import FaqPage from './pages/FaqPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
+
+// Admin Pages
+import AdminDashboardPage from './admin/AdminDashboardPage';
+import AdminProductsPage from './admin/AdminProductsPage';
+import AdminProductFormPage from './admin/AdminProductFormPage';
+import AdminOrdersPage from './admin/AdminOrdersPage';
+import AdminUsersPage from './admin/AdminUsersPage';
+import AdminCategoriesPage from './admin/AdminCategoriesPage';
+import AdminCouponsPage from './admin/AdminCouponsPage';
+import AdminReviewsPage from './admin/AdminReviewsPage';
+import AdminTickerPage from './admin/AdminTickerPage';
+import AdminSettingsPage from './admin/AdminSettingsPage';
+import AdminBannersPage from './admin/AdminBannersPage';
+import AdminInquiriesPage from './admin/AdminInquiriesPage';
+import AdminSubscribersPage from './admin/AdminSubscribersPage';
+import FacebookPixelTracker from './components/Tracking/FacebookPixelTracker';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const handleSplashFinish = useCallback(() => setShowSplash(false), []);
+
   return (
     <AuthProvider>
-      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
-      <BrowserRouter>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: '#171717',
-              color: '#FFFFFF',
-              border: '1px solid #292929',
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-            },
-            success: {
-              iconTheme: {
-                primary: '#8B7355',
-                secondary: '#FFFFFF',
-              },
-            },
-            error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#FFFFFF',
-              },
-            },
-          }}
-        />
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            {/* Public Routes */}
-            <Route index element={<Home />} />
-            <Route path="shop" element={<ShopPage />} />
-            <Route path="product/:id" element={<ProductDetailsPage />} />
-            <Route path="about" element={<PlaceholderPage title="About Us" phase={10} />} />
-            <Route path="contact" element={<PlaceholderPage title="Contact Us" phase={10} />} />
-            <Route path="faq" element={<PlaceholderPage title="FAQ" phase={10} />} />
-            <Route path="privacy" element={<PlaceholderPage title="Privacy Policy" phase={10} />} />
-            <Route path="terms" element={<PlaceholderPage title="Terms & Conditions" phase={10} />} />
+      <SettingsProvider>
+        <WishlistProvider>
+          <CartProvider>
+          {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+          <BrowserRouter>
+            <FacebookPixelTracker />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  background: '#1A1A1A',
+                  color: '#FFFFFF',
+                  border: '1px solid #2D2D2D',
+                  borderRadius: '12px',
+                  fontSize: '0.8125rem',
+                  fontFamily: 'inherit',
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#8B7355',
+                    secondary: '#FFFFFF',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#FFFFFF',
+                  },
+                },
+              }}
+            />
 
-            {/* Auth Routes (Phase 3) */}
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
+            <Routes>
+              {/* Storefront Layout */}
+              <Route path="/" element={<MainLayout />}>
+                {/* Public Pages */}
+                <Route index element={<Home />} />
+                <Route path="shop" element={<ShopPage />} />
+                <Route path="product/:id" element={<ProductDetailsPage />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="contact" element={<ContactPage />} />
+                <Route path="faq" element={<FaqPage />} />
+                <Route path="privacy" element={<PrivacyPage />} />
+                <Route path="terms" element={<TermsPage />} />
 
-            {/* Customer Routes (Phase 5–7) */}
-            <Route path="cart" element={<CartPage />} />
-            <Route path="wishlist" element={<WishlistPage />} />
-            <Route path="checkout" element={<PlaceholderPage title="Checkout" phase={6} />} />
-            <Route path="order-success/:id" element={<PlaceholderPage title="Order Confirmation" phase={6} />} />
-            <Route path="account" element={<PlaceholderPage title="My Account" phase={7} />} />
-            <Route path="account/orders" element={<PlaceholderPage title="Order History" phase={7} />} />
-            <Route path="account/orders/:id" element={<PlaceholderPage title="Order Details" phase={7} />} />
+                {/* Auth */}
+                <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<RegisterPage />} />
 
-            {/* Admin Routes (Phase 8–9) */}
-            <Route path="admin" element={<PlaceholderPage title="Admin Dashboard" phase={8} />} />
-            <Route path="admin/products" element={<PlaceholderPage title="Manage Products" phase={9} />} />
-            <Route path="admin/products/new" element={<PlaceholderPage title="Add Product" phase={9} />} />
-            <Route path="admin/products/:id" element={<PlaceholderPage title="Edit Product" phase={9} />} />
-            <Route path="admin/users" element={<PlaceholderPage title="Manage Users" phase={9} />} />
-            <Route path="admin/orders" element={<PlaceholderPage title="Manage Orders" phase={9} />} />
-            <Route path="admin/orders/:id" element={<PlaceholderPage title="Order Details" phase={9} />} />
-            <Route path="admin/categories" element={<PlaceholderPage title="Manage Categories" phase={9} />} />
-            <Route path="admin/coupons" element={<PlaceholderPage title="Manage Coupons" phase={9} />} />
-            <Route path="admin/reviews" element={<PlaceholderPage title="Manage Reviews" phase={9} />} />
+                {/* Cart & Wishlist */}
+                <Route path="cart" element={<CartPage />} />
+                <Route path="wishlist" element={<WishlistPage />} />
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  );
+                {/* Checkout & Order Success */}
+                <Route path="checkout" element={<CheckoutPage />} />
+                <Route path="order-success/:id" element={<OrderSuccessPage />} />
+
+                {/* Protected Customer Account */}
+                <Route
+                  path="account"
+                  element={
+                    <ProtectedRoute>
+                      <AccountPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/orders"
+                  element={
+                    <ProtectedRoute>
+                      <AccountPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/orders/:id"
+                  element={
+                    <ProtectedRoute>
+                      <OrderDetailPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Route>
+
+              {/* Dedicated Admin Portal */}
+              <Route
+                path="admin"
+                element={
+                  <AdminRoute>
+                    <AdminLayout />
+                  </AdminRoute>
+                }
+              >
+                <Route index element={<AdminDashboardPage />} />
+                <Route path="products" element={<AdminProductsPage />} />
+                <Route path="products/new" element={<AdminProductFormPage />} />
+                <Route path="products/:id" element={<AdminProductFormPage />} />
+                <Route path="orders" element={<AdminOrdersPage />} />
+                <Route path="users" element={<AdminUsersPage />} />
+                <Route path="categories" element={<AdminCategoriesPage />} />
+                <Route path="coupons" element={<AdminCouponsPage />} />
+                <Route path="reviews" element={<AdminReviewsPage />} />
+                <Route path="ticker" element={<AdminTickerPage />} />
+                <Route path="settings" element={<AdminSettingsPage />} />
+                <Route path="banners" element={<AdminBannersPage />} />
+                <Route path="inquiries" element={<AdminInquiriesPage />} />
+                <Route path="subscribers" element={<AdminSubscribersPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
+      </WishlistProvider>
+    </SettingsProvider>
+  </AuthProvider>
+);
 }
