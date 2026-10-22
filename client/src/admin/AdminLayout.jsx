@@ -57,7 +57,7 @@ export default function AdminLayout() {
       {/* Mobile Top Header */}
       <div className="md:hidden bg-[#1A1A1A] text-white p-4 flex items-center justify-between border-b border-[#333]">
         <div className="flex items-center gap-2">
-          <span className="font-extrabold tracking-wider text-sm">DRISHTI ATELIER</span>
+          <span className="font-extrabold tracking-wider text-sm">VISION EYE CARE ATELIER</span>
           <span className="text-[9px] font-bold bg-[#8B7355] px-1.5 py-0.5 rounded uppercase">Admin</span>
         </div>
         <button
@@ -71,15 +71,14 @@ export default function AdminLayout() {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed md:sticky top-0 z-40 h-screen w-64 bg-[#1A1A1A] text-white flex flex-col justify-between p-5 transition-transform duration-300 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
+        className={`fixed md:sticky top-0 z-40 h-screen w-64 bg-[#1A1A1A] text-white flex flex-col justify-between p-5 transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          }`}
       >
         <div className="space-y-6">
           {/* Brand */}
           <div className="pb-5 border-b border-[#2D2D2D]">
             <Link to="/admin" className="block">
-              <span className="font-black text-lg tracking-wider text-white">DRISHTI</span>
+              <span className="font-black text-lg tracking-wider text-white">VISION EYE CARE</span>
               <span className="text-[10px] block font-bold text-[#8B7355] tracking-widest uppercase mt-0.5">
                 Management Console
               </span>
@@ -96,11 +95,10 @@ export default function AdminLayout() {
                   key={item.to}
                   to={item.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                    active
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${active
                       ? 'bg-[#8B7355] text-white shadow-sm'
                       : 'text-[#AAA] hover:bg-[#2D2D2D] hover:text-white'
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4 flex-shrink-0" />
                   <span>{item.label}</span>

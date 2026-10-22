@@ -15,7 +15,7 @@ export default function AboutPage() {
             Redefining Eyewear with Precision, Clarity & Architectural Elegance.
           </h1>
           <p className="text-sm text-[#666] leading-relaxed">
-            Founded with a vision to bring world-class optical engineering and contemporary frame design to Bangladesh, Drishti Atelier merges state-of-the-art Japanese CNC manufacturing with bespoke ocular customization.
+            Founded with a vision to bring world-class optical engineering and contemporary frame design to Bangladesh, VISION EYE CARE Atelier merges state-of-the-art Japanese CNC manufacturing with bespoke ocular customization.
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export default function AboutPage() {
           <div className="relative rounded-2xl overflow-hidden border border-[#E8DFD0] h-80 bg-[#1A1A1A]">
             <img
               src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=1000&auto=format&fit=crop&q=80"
-              alt="Drishti Eyewear Craft"
+              alt="VISION EYE CARE Eyewear Craft"
               className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500"
             />
           </div>
@@ -88,7 +88,7 @@ export default function AboutPage() {
 
         {/* CTA Banner */}
         <div className="bg-[#1A1A1A] text-white rounded-3xl p-8 sm:p-12 text-center space-y-4">
-          <h2 className="text-2xl sm:text-3xl font-extrabold">Experience Drishti Today</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold">Experience VISION EYE CARE Today</h2>
           <p className="text-xs text-[#AAA] max-w-md mx-auto">
             Discover our curated collection of luxury optical frames and designer sunglasses, crafted for discerning eyes.
           </p>

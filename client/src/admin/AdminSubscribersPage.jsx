@@ -63,7 +63,7 @@ export default function AdminSubscribersPage() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `drishti_subscribers_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `vision_subscribers_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

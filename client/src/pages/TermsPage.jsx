@@ -17,7 +17,7 @@ export default function TermsPage() {
           <section className="space-y-2">
             <h2 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">1. Agreement to Terms</h2>
             <p>
-              By accessing or using the Drishti Eye Care platform, you agree to be bound by these Terms and Conditions and our standard operating policies governing retail eyewear in Bangladesh.
+              By accessing or using the VISION EYE CARE Eye Care platform, you agree to be bound by these Terms and Conditions and our standard operating policies governing retail eyewear in Bangladesh.
             </p>
           </section>
 

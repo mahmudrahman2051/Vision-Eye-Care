@@ -6,7 +6,7 @@ import { trackAddToWishlist } from '../utils/facebookPixel';
 
 const WishlistContext = createContext(null);
 
-const GUEST_WISHLIST_KEY = 'drishti_guest_wishlist';
+const GUEST_WISHLIST_KEY = 'vision_guest_wishlist';
 
 export function WishlistProvider({ children }) {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -151,7 +151,7 @@ export function WishlistProvider({ children }) {
           product_id: productId,
           name: product.name,
           slug: product.slug,
-          brand: product.brand || 'Drishti',
+          brand: product.brand || 'VISION EYE CARE',
           price: parseFloat(product.price) || 0,
           compare_price: product.compare_price ? parseFloat(product.compare_price) : null,
           primary_image:

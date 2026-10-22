@@ -14,7 +14,7 @@ async function startServer() {
   }
 
   app.listen(PORT, () => {
-    console.log(`\n🚀 Drishti API Server`);
+    console.log(`\n🚀 VISION EYE CARE API Server`);
     console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`   Port: ${PORT}`);
     console.log(`   URL: http://localhost:${PORT}\n`);

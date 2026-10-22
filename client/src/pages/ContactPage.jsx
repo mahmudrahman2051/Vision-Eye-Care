@@ -60,7 +60,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Contact Details Card (Left 5 cols) */}
           <div className="lg:col-span-5 bg-[#1A1A1A] text-white rounded-3xl p-8 space-y-6 shadow-sm">
-            <h2 className="text-xl font-extrabold text-white">Drishti Eyewear Studio</h2>
+            <h2 className="text-xl font-extrabold text-white">VISION EYE CARE Eyewear Studio</h2>
             <p className="text-xs text-[#AAA] leading-relaxed">
               Visit our optical boutique in Banani, Dhaka, or reach us directly via phone, WhatsApp, or email.
             </p>
@@ -89,8 +89,8 @@ export default function ContactPage() {
 
               <div className="flex items-center gap-3">
                 <FiMail className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
-                <a href={`mailto:${settings?.supportEmail || 'care@drishti.com.bd'}`} className="text-[#CCC] hover:text-white transition-colors">
-                  {settings?.supportEmail || 'care@drishti.com.bd'}
+                <a href={`mailto:${settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}`} className="text-[#CCC] hover:text-white transition-colors">
+                  {settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}
                 </a>
               </div>
             </div>

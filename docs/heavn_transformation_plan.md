@@ -1,15 +1,15 @@
-# Drishti Atelier — HEAVN-Inspired Premium Experience
+# VISION EYE CARE Atelier — HEAVN-Inspired Premium Experience
 ## Comprehensive Frontend UX/UI Transformation & Implementation Plan
 
 > **Design Reference:** [HEAVN One](https://heavn-one.webflow.io/)  
-> **Brand Identity:** Drishti Atelier (Luxury Eyewear & Sunglasses)  
+> **Brand Identity:** VISION EYE CARE Atelier (Luxury Eyewear & Sunglasses)  
 > **Core Principle:** Apple Product Page + High-End Eyewear Campaign + HEAVN Scrolling Storytelling + Modern Fashion Editorial + Fully Functional E-Commerce.
 
 ---
 
 ## 1. Executive Summary & Strategic Vision
 
-The objective of this initiative is to elevate **Drishti Atelier** from a conventional e-commerce store layout into a **cinematic, editorial, product-first luxury experience**.
+The objective of this initiative is to elevate **VISION EYE CARE Atelier** from a conventional e-commerce store layout into a **cinematic, editorial, product-first luxury experience**.
 
 ### Core Tenets:
 1. **Continuous Narrative vs. Isolated Grids:** Replace standard disjointed grids (`Hero → Grid → Grid → Footer`) with a seamless, progressive scroll narrative (`Scroll → Discover → Understand → Desire → Shop`).
@@ -56,7 +56,7 @@ The `asstes/` directory contains exceptionally high-fidelity commercial photogra
 - **Muted Platinum (`--color-muted-gray`):** `#8E8E8E` (Subtitles, metadata, specs)
 - **Studio White (`--color-studio-white`):** `#FBFBFB` (High-key editorial sections)
 - **Pure White (`--color-white`):** `#FFFFFF` (Headings, primary CTA text)
-- **Drishti Neon Yellow (`--color-neon-yellow`):** `#DFFF00` (Used with surgical restraint: subtle pill badges, active category indicators, accent points)
+- **VISION EYE CARE Neon Yellow (`--color-neon-yellow`):** `#DFFF00` (Used with surgical restraint: subtle pill badges, active category indicators, accent points)
 
 ### 3.2 Editorial Typography Hierarchy
 Imported via Google Fonts in `index.html`: `Oswald`, `Google Sans`, `Titillium Web`.
@@ -106,7 +106,7 @@ Phase 9: Editorial Collections ──▶ Phase 10: Final CTA & Footer ──▶ 
   - **Initial State:** Floating transparent background overlaid directly on the cinematic hero.
   - **Scrolled State (`window.scrollY > 40`):** Seamless glassmorphism backdrop (`backdrop-filter: blur(24px)`, dark translucent background `rgba(5, 5, 5, 0.85)`, subtle hair-line bottom border).
   - **Desktop Layout:**
-    - Left: Minimalist `DRISHTI` wordmark with refined tracking (`0.3em`).
+    - Left: Minimalist `VISION EYE CARE` wordmark with refined tracking (`0.3em`).
     - Center: Editorial categories: `NEW`, `SUNGLASSES`, `OPTICAL`, `COLLECTIONS`, `THE CRAFT`.
     - Right: Action icons with micro-badge counter (`Search`, `Wishlist`, `Cart`, `Account`).
   - **Fullscreen Mobile Drawer:** Architectural fullscreen overlay with oversized typography (`2.5rem`), staggered entrance animations, and customer service details.
@@ -145,7 +145,7 @@ Phase 9: Editorial Collections ──▶ Phase 10: Final CTA & Footer ──▶ 
 ---
 
 ### Phase 5: "The Frame" Product Anatomy Breakdown
-- **Objective:** Reveal the engineering and design precision of Drishti glasses through a 5-step scrolling breakdown inspired by HEAVN’s product deep-dive.
+- **Objective:** Reveal the engineering and design precision of VISION EYE CARE glasses through a 5-step scrolling breakdown inspired by HEAVN’s product deep-dive.
 - **Files to Create:**
   - `client/src/components/ProductAnatomy/ProductAnatomy.jsx`
   - `client/src/components/ProductAnatomy/ProductAnatomy.css`

@@ -1,6 +1,6 @@
-# Drishti — Implementation Plan
+# VISION EYE CARE — Implementation Plan
 
-> **Generated from**: [DEVELOPMENT_PHASES.md](file:///f:/Drishti_Eye_Care/docs/DEVELOPMENT_PHASES.md) + [BUILD_GUIDE.md](file:///f:/Drishti_Eye_Care/docs/BUILD_GUIDE.md)
+> **Generated from**: [DEVELOPMENT_PHASES.md](file:///f:/vision_Eye_Care/docs/DEVELOPMENT_PHASES.md) + [BUILD_GUIDE.md](file:///f:/vision_Eye_Care/docs/BUILD_GUIDE.md)
 > **Date**: September 27, 2026
 
 ---
@@ -9,7 +9,7 @@
 
 | Attribute | Details |
 |---|---|
-| **Project** | Drishti — Full-Stack E-commerce |
+| **Project** | VISION EYE CARE — Full-Stack E-commerce |
 | **Business** | Eyewear / Glasses online store |
 | **Theme** | Neon Yellow (`#DFFF00`) + Black (`#050505`) |
 | **Frontend** | React + Vite + Tailwind CSS |
@@ -25,7 +25,7 @@
 
 ```mermaid
 gantt
-    title Drishti — Development Timeline
+    title VISION EYE CARE — Development Timeline
     dateFormat  YYYY-MM-DD
     axisFormat  %b %d
 
@@ -61,7 +61,7 @@ gantt
 ## Target Project Structure
 
 ```text
-f:\Drishti_Eye_Care\
+f:\vision_Eye_Care\
 │
 ├── client/                         # React + Vite frontend
 │   ├── src/
@@ -123,7 +123,7 @@ f:\Drishti_Eye_Care\
 | 1.5 | Connect Neon PostgreSQL | Backend | `pg.Pool` with `DATABASE_URL` from env |
 | 1.6 | Create `.env.example` | Both | All required env vars documented |
 | 1.7 | Create folder structures | Both | Per the project structure above |
-| 1.8 | Build base layout | Frontend | `MainLayout` with Navbar + Footer, Drishti branding |
+| 1.8 | Build base layout | Frontend | `MainLayout` with Navbar + Footer, VISION EYE CARE branding |
 | 1.9 | Setup routing shell | Frontend | React Router with placeholder routes |
 | 1.10 | Vite proxy config | Frontend | Proxy `/api` to backend `localhost:5000` |
 

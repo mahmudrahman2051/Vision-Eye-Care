@@ -54,7 +54,7 @@ export default function Footer() {
         <div className="pb-10 mb-10 border-b border-[#2D2D2D] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="text-white text-base font-bold tracking-tight">
-              Subscribe to Drishti Privileges
+              Subscribe to VISION EYE CARE Privileges
             </h3>
             <p className="text-xs text-[#888]">
               Receive private previews of limited-run titanium frames and seasonal promotions.
@@ -133,8 +133,8 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5">
                 <HiOutlineEnvelope className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href={`mailto:${settings?.supportEmail || 'care@drishti.com.bd'}`} className="text-sm text-[#888] hover:text-white transition-colors">
-                  {settings?.supportEmail || 'care@drishti.com.bd'}
+                <a href={`mailto:${settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}`} className="text-sm text-[#888] hover:text-white transition-colors">
+                  {settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}
                 </a>
               </div>
             </div>

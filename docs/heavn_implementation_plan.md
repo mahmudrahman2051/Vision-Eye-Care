@@ -1,8 +1,8 @@
-# Drishti Atelier — HEAVN-Inspired Luxury Experience
+# VISION EYE CARE Atelier — HEAVN-Inspired Luxury Experience
 ## Architectural Analysis & Implementation Plan (Strict Color System: Black, White, Gray & #F97D01)
 
 > **Reference Paradigm:** [HEAVN One](https://heavn-one.webflow.io/)  
-> **Brand Identity:** Drishti Atelier (Architectural & High-End Eyewear)  
+> **Brand Identity:** VISION EYE CARE Atelier (Architectural & High-End Eyewear)  
 > **Color Constraint:** **ONLY Black, White, Gray, and #F97D01** (No neon yellow, no blue, no green, no purple)  
 > **Core Aesthetic:** Apple Product Launch + Haute Eyewear Campaign + Continuous Scroll Storytelling + Ultra-Refined E-Commerce
 
@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary & Specification Analysis
 
-The task is to transform the Drishti Glasses e-commerce platform from a standard retail store into a **cinematic, editorial, product-first luxury experience** modeled on the high-end spatial storytelling of **HEAVN One**.
+The task is to transform the VISION EYE CARE Glasses e-commerce platform from a standard retail store into a **cinematic, editorial, product-first luxury experience** modeled on the high-end spatial storytelling of **HEAVN One**.
 
 ### 1.1 Core Tenets from the Prompt Document
 1. **Continuous Narrative (Not Disjointed Grids):**
