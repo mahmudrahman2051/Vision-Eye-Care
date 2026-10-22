@@ -2,56 +2,17 @@ import api from './api';
 
 const STORAGE_KEY = 'vec_coupons_catalog';
 
-export const DEFAULT_COUPONS = [
-  {
-    id: '1',
-    code: 'VISION20',
-    description: 'Get 20% OFF on all handcrafted frames & polarized sunglasses',
-    discount_type: 'percentage',
-    discount_value: '20',
-    min_order_amount: '1000',
-    max_discount: '1000',
-    usage_limit: 500,
-    used_count: 42,
-    is_active: true,
-  },
-  {
-    id: '2',
-    code: 'WELCOME10',
-    description: '10% Welcome Discount on your first eyewear order',
-    discount_type: 'percentage',
-    discount_value: '10',
-    min_order_amount: '500',
-    max_discount: '500',
-    usage_limit: 1000,
-    used_count: 128,
-    is_active: true,
-  },
-  {
-    id: '3',
-    code: 'EID1000',
-    description: 'Flat ৳1,000 OFF on orders above ৳5,000 with free home delivery',
-    discount_type: 'fixed',
-    discount_value: '1000',
-    min_order_amount: '5000',
-    max_discount: '1000',
-    usage_limit: 200,
-    used_count: 15,
-    is_active: true,
-  },
-  {
-    id: '4',
-    code: 'FREETRIAL',
-    description: 'Flat ৳200 OFF + Complimentary 3-frame Home Trial across Dhaka',
-    discount_type: 'fixed',
-    discount_value: '200',
-    min_order_amount: '1500',
-    max_discount: '200',
-    usage_limit: 500,
-    used_count: 67,
-    is_active: true,
-  },
-];
+export const DEFAULT_COUPONS = [];
+
+const MOCK_CODES = new Set(['VISION20', 'WELCOME10', 'EID1000', 'FREETRIAL']);
+
+function sanitizeCoupons(list) {
+  if (!Array.isArray(list)) return [];
+  return list.filter((c) => {
+    const code = (c.code || '').trim().toUpperCase();
+    return !MOCK_CODES.has(code);
+  });
+}
 
 export const couponService = {
   /**
@@ -61,10 +22,11 @@ export const couponService = {
     try {
       const response = await api.get('/admin/coupons');
       if (response.data?.status === 'success' && Array.isArray(response.data.data)) {
+        const sanitized = sanitizeCoupons(response.data.data);
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(response.data.data));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
         } catch {}
-        return { status: 'success', data: response.data.data };
+        return { status: 'success', data: sanitized };
       }
     } catch {
       // Backend offline or 405 (static Vercel hosting)
@@ -74,17 +36,22 @@ export const couponService = {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return { status: 'success', data: parsed };
+        if (Array.isArray(parsed)) {
+          const sanitized = sanitizeCoupons(parsed);
+          // If mock items were stripped out, sync the clean array back to storage immediately
+          if (sanitized.length !== parsed.length) {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+              window.dispatchEvent(new CustomEvent('coupons-updated', { detail: sanitized }));
+            } catch {}
+          }
+          return { status: 'success', data: sanitized };
         }
       }
     } catch {}
 
-    // Initialize with defaults if empty
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_COUPONS));
-    } catch {}
-    return { status: 'success', data: DEFAULT_COUPONS };
+    // Default to clean empty list (never auto-seed mock coupons)
+    return { status: 'success', data: [] };
   },
 
   /**

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FiPlus, FiTag, FiTrash2 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiPlus, FiTag, FiTrash2, FiSliders } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import adminService from '../services/adminService';
 
@@ -106,12 +107,20 @@ export default function AdminCouponsPage() {
           </h1>
         </div>
 
-        <button
-          onClick={() => setShowModal(!showModal)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#1A1A1A] hover:bg-[#8B7355] text-white text-xs font-bold rounded-xl uppercase tracking-wider transition-colors shadow-sm"
-        >
-          <FiPlus className="w-4 h-4" /> Create Coupon
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/admin/ticker?tab=coupon"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-[#FAF7F2] text-[#1A1A1A] border border-[#E8DFD0] text-xs font-bold rounded-xl uppercase tracking-wider transition-colors shadow-xs"
+          >
+            <FiSliders className="w-4 h-4 text-[#8B7355]" /> Customize Ticker
+          </Link>
+          <button
+            onClick={() => setShowModal(!showModal)}
+            className="flex items-center gap-2 px-4 py-2.5 bg-[#1A1A1A] hover:bg-[#8B7355] text-white text-xs font-bold rounded-xl uppercase tracking-wider transition-colors shadow-sm"
+          >
+            <FiPlus className="w-4 h-4" /> Create Coupon
+          </button>
+        </div>
       </div>
 
       {/* Add Modal */}
@@ -191,6 +200,19 @@ export default function AdminCouponsPage() {
                 className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-[#555] mb-1">
+              Offer Description (Displayed in ticker and cart offers)
+            </label>
+            <input
+              type="text"
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              placeholder="e.g. Flat 10% off on all prescription frames & designer sunglasses"
+              className="w-full text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
+            />
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
