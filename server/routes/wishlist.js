@@ -7,6 +7,7 @@ router.use(authenticateToken);
 
 router.get('/', wishlistController.getWishlist);
 router.post('/', wishlistController.addToWishlist);
+router.post('/merge', wishlistController.mergeWishlist);
 router.delete('/:id', wishlistController.removeFromWishlist);
 
 module.exports = router;

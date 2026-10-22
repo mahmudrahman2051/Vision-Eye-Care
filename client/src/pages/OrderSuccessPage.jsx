@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiCheckCircle, FiPackage, FiShoppingBag, FiTruck, FiMapPin, FiArrowRight } from 'react-icons/fi';
 import orderService from '../services/orderService';
+import { trackPurchase } from '../utils/facebookPixel';
 
 export default function OrderSuccessPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function OrderSuccessPage() {
         .then((res) => {
           if (res.status === 'success') {
             setOrder(res.data);
+            trackPurchase(res.data);
           }
         })
         .catch((err) => {

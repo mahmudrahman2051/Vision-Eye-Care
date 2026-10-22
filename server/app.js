@@ -3,8 +3,12 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+// Trust reverse proxy for accurate IP determination in production (Nginx/Cloudflare/Render)
+app.set('trust proxy', 1);
 
 // ------------------------------------
 // Security & Middleware
@@ -20,9 +24,38 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-app.use(morgan('dev'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// ------------------------------------
+// Rate Limiting (Production Defense)
+// ------------------------------------
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 1000, // 1000 requests per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 'fail',
+    message: 'Too many requests from this IP, please try again after 15 minutes.',
+  },
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 30, // 30 login / register attempts per IP to prevent brute-force
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 'fail',
+    message: 'Too many authentication attempts. Please try again after 15 minutes.',
+  },
+});
+
+app.use('/api', apiLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
 
 // ------------------------------------
 // Static Files (for uploads if needed)

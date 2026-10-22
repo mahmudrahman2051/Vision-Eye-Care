@@ -24,6 +24,14 @@ export const wishlistService = {
     const response = await api.delete(`/wishlist/${id}`);
     return response.data;
   },
+
+  /**
+   * Merge guest wishlist items into user's DB wishlist upon login
+   */
+  async mergeWishlist(items) {
+    const response = await api.post('/wishlist/merge', { items });
+    return response.data;
+  },
 };
 
 export default wishlistService;

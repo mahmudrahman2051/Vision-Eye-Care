@@ -10,6 +10,7 @@ import {
   FiRotateCcw,
   FiDollarSign,
   FiClock,
+  FiTarget,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import settingsService from '../services/settingsService';
@@ -27,6 +28,10 @@ const DEFAULT_SETTINGS = {
   freeShippingThreshold: 5000,
   currency: 'BDT',
   currencySymbol: '৳',
+  facebookPixelId: '',
+  pixelEnabled: true,
+  metaDomainVerification: '',
+  googleAnalyticsId: '',
   socialLinks: {
     facebook: 'https://facebook.com/drishtieyecare',
     instagram: 'https://instagram.com/drishtieyecare',
@@ -321,6 +326,92 @@ export default function AdminSettingsPage() {
                 placeholder="https://tiktok.com/@..."
                 className="w-full bg-[#FAF7F2] text-[#1A1A1A] text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Section 5: Marketing, Meta Ads & Facebook Pixel */}
+        <div className="bg-white rounded-2xl border border-[#E8DFD0] p-6 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#F5EFE3] pb-3">
+            <div>
+              <h2 className="text-sm font-black text-[#1A1A1A] flex items-center gap-2">
+                <FiTarget className="w-4 h-4 text-[#8B7355]" />
+                Meta Ads, Facebook Pixel & Domain Verification
+              </h2>
+              <p className="text-[11px] text-[#777] mt-0.5">
+                Connect your Facebook Ads Manager to run conversion campaigns, dynamic retargeting, and track ROAS.
+              </p>
+            </div>
+            <label className="flex items-center gap-2 text-xs font-bold text-[#1A1A1A] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.pixelEnabled !== false}
+                onChange={(e) => handleChange('pixelEnabled', e.target.checked)}
+                className="w-4 h-4 accent-[#8B7355] rounded"
+              />
+              Enable Meta Pixel
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div>
+              <label className="text-xs font-bold text-[#444] block mb-1">
+                Facebook Pixel ID
+              </label>
+              <input
+                type="text"
+                value={settings.facebookPixelId || ''}
+                onChange={(e) => handleChange('facebookPixelId', e.target.value.trim())}
+                placeholder="e.g. 123456789012345"
+                className="w-full bg-[#FAF7F2] text-[#1A1A1A] font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+              />
+              <span className="text-[10px] text-[#888] mt-1 block">
+                Found in Meta Events Manager &gt; Data Sources &gt; Pixel ID
+              </span>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-[#444] block mb-1">
+                Meta Domain Verification Code
+              </label>
+              <input
+                type="text"
+                value={settings.metaDomainVerification || ''}
+                onChange={(e) => handleChange('metaDomainVerification', e.target.value.trim())}
+                placeholder="e.g. abcdef1234567890xyz"
+                className="w-full bg-[#FAF7F2] text-[#1A1A1A] font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+              />
+              <span className="text-[10px] text-[#888] mt-1 block">
+                For Meta Business Suite domain verification tag
+              </span>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="text-xs font-bold text-[#444] block mb-1">
+                Google Analytics 4 Measurement ID (Optional)
+              </label>
+              <input
+                type="text"
+                value={settings.googleAnalyticsId || ''}
+                onChange={(e) => handleChange('googleAnalyticsId', e.target.value.trim())}
+                placeholder="e.g. G-XXXXXXXXXX"
+                className="w-full bg-[#FAF7F2] text-[#1A1A1A] font-mono text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+              />
+            </div>
+          </div>
+
+          {/* Pixel Event Helper Info Box */}
+          <div className="bg-[#FAF7F2] rounded-xl p-3.5 border border-[#E8DFD0] text-xs space-y-1.5 text-[#555]">
+            <p className="font-bold text-[#1A1A1A] flex items-center gap-1.5 text-[11px] uppercase tracking-wide">
+              ⚡ Standard Conversion Events Automatically Tracked:
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px]">
+              <span className="flex items-center gap-1">✅ <strong>PageView</strong> (All pages)</span>
+              <span className="flex items-center gap-1">✅ <strong>ViewContent</strong> (Frames)</span>
+              <span className="flex items-center gap-1">✅ <strong>AddToCart</strong> (Bag)</span>
+              <span className="flex items-center gap-1">✅ <strong>AddToWishlist</strong> (Favorites)</span>
+              <span className="flex items-center gap-1">✅ <strong>InitiateCheckout</strong> (Checkout)</span>
+              <span className="flex items-center gap-1">✅ <strong>Purchase</strong> (Confirmed orders)</span>
             </div>
           </div>
         </div>

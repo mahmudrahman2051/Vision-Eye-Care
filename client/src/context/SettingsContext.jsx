@@ -14,6 +14,10 @@ const DEFAULT_SETTINGS = {
   freeShippingThreshold: 5000,
   currency: 'BDT',
   currencySymbol: '৳',
+  facebookPixelId: '',
+  pixelEnabled: true,
+  metaDomainVerification: '',
+  googleAnalyticsId: '',
   socialLinks: {
     facebook: 'https://facebook.com/drishtieyecare',
     instagram: 'https://instagram.com/drishtieyecare',

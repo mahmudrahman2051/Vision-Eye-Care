@@ -4,6 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import contactService from '../services/contactService';
 import { useSettings } from '../context/SettingsContext';
+import { trackContact } from '../utils/facebookPixel';
 
 export default function ContactPage() {
   const { settings } = useSettings();
@@ -28,6 +29,7 @@ export default function ContactPage() {
     try {
       const res = await contactService.submitContact(formData);
       if (res.status === 'success') {
+        trackContact(formData.subject || 'General Inquiry');
         toast.success('Your message has been delivered to our team!');
         setSentSuccess(true);
         setFormData({ name: '', email: '', phone: '', subject: '', message: '' });

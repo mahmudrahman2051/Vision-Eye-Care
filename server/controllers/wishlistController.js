@@ -40,10 +40,11 @@ async function getWishlist(req, res, next) {
 async function addToWishlist(req, res, next) {
   try {
     const userId = req.user.id;
-    const { product_id } = req.body;
+    const rawId = req.body.product_id || req.body.id;
+    const product_id = parseInt(String(rawId).replace(/\D/g, ''), 10);
 
-    if (!product_id) {
-      return res.status(400).json({ status: 'fail', message: 'Product ID is required.' });
+    if (!product_id || isNaN(product_id)) {
+      return res.status(400).json({ status: 'fail', message: 'Valid product ID is required.' });
     }
 
     // Verify product exists
@@ -71,19 +72,62 @@ async function addToWishlist(req, res, next) {
 }
 
 /**
- * DELETE /api/wishlist/:productIdOrId
+ * DELETE /api/wishlist/:id
  * Remove product from wishlist
  */
 async function removeFromWishlist(req, res, next) {
   try {
     const userId = req.user.id;
-    const { id } = req.params;
+    const rawId = req.params.id;
+    const targetId = parseInt(String(rawId).replace(/\D/g, ''), 10);
 
-    // Check if passed parameter is wishlist_item id or product_id
-    await query(
-      'DELETE FROM wishlist_items WHERE (id = $1 OR product_id = $1) AND user_id = $2',
-      [id, userId]
-    );
+    if (targetId && !isNaN(targetId)) {
+      await query(
+        'DELETE FROM wishlist_items WHERE (id = $1 OR product_id = $1) AND user_id = $2',
+        [targetId, userId]
+      );
+    }
+
+    return getWishlist(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * POST /api/wishlist/merge
+ * Merge guest wishlist items into user's DB wishlist upon login
+ */
+async function mergeWishlist(req, res, next) {
+  try {
+    const userId = req.user.id;
+    const { items = [] } = req.body;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return getWishlist(req, res, next);
+    }
+
+    for (const item of items) {
+      const rawProductId = item.product_id || item.id;
+      const productId = parseInt(String(rawProductId).replace(/\D/g, ''), 10);
+
+      if (!productId || isNaN(productId)) continue;
+
+      // Verify product exists
+      const prodRes = await query(
+        'SELECT id FROM products WHERE id = $1',
+        [productId]
+      );
+
+      if (prodRes.rows.length === 0) continue;
+
+      await query(
+        `INSERT INTO wishlist_items (user_id, product_id)
+         VALUES ($1, $2)
+         ON CONFLICT (user_id, product_id) DO NOTHING`,
+        [userId, productId]
+      );
+    }
 
     return getWishlist(req, res, next);
   } catch (error) {
@@ -95,4 +139,5 @@ module.exports = {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
+  mergeWishlist,
 };

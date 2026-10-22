@@ -17,6 +17,7 @@ import productService from '../../services/productService';
 import ProductCard from '../../components/Product/ProductCard';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { trackViewContent } from '../../utils/facebookPixel';
 
 const defaultImage = `https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=80`;
 
@@ -47,6 +48,7 @@ const ProductDetailsPage = () => {
         const res = await productService.getProductByIdOrSlug(id);
         if (res.status === 'success') {
           setProduct(res.data);
+          trackViewContent(res.data);
           const primary = res.data.images?.find((img) => img.is_primary)?.image_url || res.data.images?.[0]?.image_url || defaultImage;
           setSelectedImage(primary);
 

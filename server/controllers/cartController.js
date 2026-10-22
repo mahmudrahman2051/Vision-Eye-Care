@@ -63,10 +63,12 @@ async function getCart(req, res, next) {
 async function addToCart(req, res, next) {
   try {
     const userId = req.user.id;
-    const { product_id, quantity = 1 } = req.body;
+    const rawId = req.body.product_id || req.body.id;
+    const product_id = parseInt(String(rawId).replace(/\D/g, ''), 10);
+    const quantity = req.body.quantity || 1;
 
-    if (!product_id) {
-      return res.status(400).json({ status: 'fail', message: 'Product ID is required.' });
+    if (!product_id || isNaN(product_id)) {
+      return res.status(400).json({ status: 'fail', message: 'Valid product ID is required.' });
     }
 
     const qty = Math.max(1, parseInt(quantity, 10) || 1);
@@ -135,7 +137,8 @@ async function addToCart(req, res, next) {
 async function updateCartItem(req, res, next) {
   try {
     const userId = req.user.id;
-    const cartItemId = req.params.id;
+    const rawId = req.params.id;
+    const cartItemId = parseInt(String(rawId).replace(/\D/g, ''), 10);
     const { quantity } = req.body;
 
     const qty = parseInt(quantity, 10);
@@ -143,12 +146,16 @@ async function updateCartItem(req, res, next) {
       return res.status(400).json({ status: 'fail', message: 'Quantity must be at least 1.' });
     }
 
-    // Find item and check stock
+    if (!cartItemId || isNaN(cartItemId)) {
+      return res.status(400).json({ status: 'fail', message: 'Valid cart item ID is required.' });
+    }
+
+    // Find item and check stock (match by cart item id or product_id)
     const itemRes = await query(
       `SELECT c.id, c.quantity, p.stock, p.name 
        FROM cart_items c 
        JOIN products p ON c.product_id = p.id 
-       WHERE c.id = $1 AND c.user_id = $2`,
+       WHERE (c.id = $1 OR c.product_id = $1) AND c.user_id = $2`,
       [cartItemId, userId]
     );
 
@@ -167,7 +174,7 @@ async function updateCartItem(req, res, next) {
 
     await query(
       'UPDATE cart_items SET quantity = $1, updated_at = NOW() WHERE id = $2',
-      [qty, cartItemId]
+      [qty, item.id]
     );
 
     return getCart(req, res, next);
@@ -183,12 +190,15 @@ async function updateCartItem(req, res, next) {
 async function removeCartItem(req, res, next) {
   try {
     const userId = req.user.id;
-    const cartItemId = req.params.id;
+    const rawId = req.params.id;
+    const targetId = parseInt(String(rawId).replace(/\D/g, ''), 10);
 
-    await query(
-      'DELETE FROM cart_items WHERE id = $1 AND user_id = $2',
-      [cartItemId, userId]
-    );
+    if (targetId && !isNaN(targetId)) {
+      await query(
+        'DELETE FROM cart_items WHERE (id = $1 OR product_id = $1) AND user_id = $2',
+        [targetId, userId]
+      );
+    }
 
     return getCart(req, res, next);
   } catch (error) {
@@ -236,10 +246,11 @@ async function mergeCart(req, res, next) {
     }
 
     for (const item of items) {
-      const productId = item.product_id || item.id;
+      const rawProductId = item.product_id || item.id;
+      const productId = parseInt(String(rawProductId).replace(/\D/g, ''), 10);
       const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
 
-      if (!productId) continue;
+      if (!productId || isNaN(productId)) continue;
 
       const prodRes = await query(
         'SELECT id, stock, status FROM products WHERE id = $1',

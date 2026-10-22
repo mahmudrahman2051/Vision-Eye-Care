@@ -8,6 +8,7 @@ import { useSettings } from '../context/SettingsContext';
 import orderService from '../services/orderService';
 import couponService from '../services/couponService';
 import userService from '../services/userService';
+import { trackInitiateCheckout } from '../utils/facebookPixel';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -63,6 +64,13 @@ export default function CheckoutPage() {
         .catch(() => {});
     }
   }, [user]);
+
+  // Track InitiateCheckout on checkout mount
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      trackInitiateCheckout(cartItems, subtotal);
+    }
+  }, []);
 
   const applyAddress = (addr) => {
     setFormData((prev) => ({
