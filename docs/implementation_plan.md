@@ -652,3 +652,25 @@ Admin Login → Dashboard → Product CRUD → Image Upload
 - **Storefront Component**: [`MarqueeTicker.jsx`](file:///d:/Vision-Eye-Care/client/src/components/MarqueeTicker/MarqueeTicker.jsx) with continuous CSS animation, pause-on-hover, custom badge and separator support.
 - **Admin Management**: [`AdminTickerPage.jsx`](file:///d:/Vision-Eye-Care/client/src/admin/AdminTickerPage.jsx) reachable via `/admin/ticker` with real-time interactive preview, speed/direction controls, curated luxury color themes, custom color pickers, and message CRUD.
 - **API Support**: `GET /api/ticker` (public) and `PUT /api/admin/ticker` (admin authenticated) with dual-tier PostgreSQL + local JSON file fallback persistence.
+
+---
+
+## Addendum — Full Admin Customizability Suite (100% Coverage)
+
+- **Store Settings & Shipping Rules** ([`AdminSettingsPage.jsx`](file:///d:/Vision-Eye-Care/client/src/admin/AdminSettingsPage.jsx)):
+  - Brand identity (name, tagline).
+  - Customer contact details (hotline phone, WhatsApp, support email, showroom address, business hours).
+  - Dynamic shipping rates (Inside Dhaka fee, Outside Dhaka fee, free delivery minimum order threshold).
+  - Social media links (Facebook, Instagram, WhatsApp, YouTube, TikTok).
+  - Dual-tier persistence via `site_settings` table (key `'store_settings'`) and fallback JSON file.
+- **Homepage Banners & Marketing Blocks** ([`AdminBannersPage.jsx`](file:///d:/Vision-Eye-Care/client/src/admin/AdminBannersPage.jsx)):
+  - Hero slider manager (add/remove slides, transition intervals, images, headlines, sub-headlines, CTA buttons and links).
+  - Promotional banners (Category promo banner and Lower promo banner images & links).
+  - Featured Collections 6-Card Grid (customizable titles, taglines, badges, badge dot colors, redirect links, and images).
+- **Customer Inquiries Console** ([`AdminInquiriesPage.jsx`](file:///d:/Vision-Eye-Care/client/src/admin/AdminInquiriesPage.jsx)):
+  - Filter inquiries by status (All, Unread, Resolved).
+  - Inquiry detail inspection with one-click "Reply via Email" (`mailto:`) and "Message on WhatsApp".
+  - Status toggle (`is_read`) and inquiry deletion.
+- **Newsletter Subscribers Manager** ([`AdminSubscribersPage.jsx`](file:///d:/Vision-Eye-Care/client/src/admin/AdminSubscribersPage.jsx)):
+  - Subscriber directory with search and delete capabilities.
+  - One-click "Export to CSV" for marketing campaigns.

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import bannerService from '../../services/bannerService';
 
-const collections = [
+const DEFAULT_COLLECTIONS = [
   {
     id: 'computer-glasses',
     title: 'Computer Glasses',
@@ -59,6 +60,32 @@ const collections = [
 ];
 
 const FeaturedCollectionsGrid = () => {
+  const [collections, setCollections] = useState(DEFAULT_COLLECTIONS);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function load() {
+      try {
+        const data = await bannerService.getBanners();
+        if (data?.featuredCollections && Array.isArray(data.featuredCollections) && isMounted) {
+          setCollections(data.featuredCollections);
+        }
+      } catch (err) {}
+    }
+    load();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.featuredCollections && Array.isArray(e.detail.featuredCollections)) {
+        setCollections(e.detail.featuredCollections);
+      }
+    };
+    window.addEventListener('banners-updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('banners-updated', handleUpdate);
+    };
+  }, []);
+
   return (
     <section className="py-10 sm:py-14 px-3 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-[#F5EFE3]/20 to-white">
       <div className="max-w-7xl mx-auto">

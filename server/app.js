@@ -55,6 +55,8 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/ticker', require('./routes/ticker'));
+app.use('/api/settings', require('./routes/settings'));
+app.use('/api/banners', require('./routes/banners'));
 app.use('/api', require('./routes/contact'));
 
 // ------------------------------------

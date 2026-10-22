@@ -4,14 +4,16 @@ import { FiCheckCircle, FiTruck, FiShield, FiTag, FiShoppingBag, FiArrowLeft } f
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 import orderService from '../services/orderService';
 import couponService from '../services/couponService';
 import userService from '../services/userService';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const { cartItems, subtotal, deliveryFee, total, clearCart } = useCart();
+  const { cartItems, subtotal, clearCart } = useCart();
   const { user, isAuthenticated } = useAuth();
+  const { settings } = useSettings();
 
   // Shipping Form State
   const [formData, setFormData] = useState({
@@ -115,6 +117,14 @@ export default function CheckoutPage() {
     setCouponCode('');
     toast.success('Coupon removed.');
   };
+
+  // Compute dynamic delivery fee based on store settings
+  const isDhaka = (formData.shipping_city || '').toLowerCase().includes('dhaka');
+  const baseDeliveryFee = isDhaka
+    ? (settings?.insideDhakaFee ?? 60)
+    : (settings?.outsideDhakaFee ?? 120);
+  const isFreeDelivery = subtotal >= (settings?.freeShippingThreshold ?? 5000);
+  const deliveryFee = cartItems.length > 0 ? (isFreeDelivery ? 0 : baseDeliveryFee) : 0;
 
   // Compute final amounts
   const discountAmount = appliedCoupon ? appliedCoupon.discount_amount : 0;
@@ -503,7 +513,7 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 <div className="flex justify-between text-[#666]">
-                  <span>Delivery (Inside BD)</span>
+                  <span>Delivery ({isDhaka ? 'Inside Dhaka' : 'Outside Dhaka'})</span>
                   <span className="font-bold text-[#1A1A1A]">
                     {deliveryFee === 0 ? 'FREE' : `৳${deliveryFee}`}
                   </span>

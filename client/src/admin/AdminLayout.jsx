@@ -9,6 +9,10 @@ import {
   FiTag,
   FiStar,
   FiSliders,
+  FiImage,
+  FiMail,
+  FiSend,
+  FiSettings,
   FiLogOut,
   FiArrowLeft,
   FiMenu,
@@ -21,11 +25,15 @@ const NAV_ITEMS = [
   { to: '/admin', label: 'Dashboard', icon: FiGrid, exact: true },
   { to: '/admin/products', label: 'Products', icon: FiShoppingBag },
   { to: '/admin/orders', label: 'Orders', icon: FiPackage },
-  { to: '/admin/users', label: 'Users', icon: FiUsers },
   { to: '/admin/categories', label: 'Categories', icon: FiFolder },
   { to: '/admin/coupons', label: 'Coupons', icon: FiTag },
   { to: '/admin/reviews', label: 'Reviews', icon: FiStar },
   { to: '/admin/ticker', label: 'Marquee Ticker', icon: FiSliders },
+  { to: '/admin/banners', label: 'Homepage Banners', icon: FiImage },
+  { to: '/admin/inquiries', label: 'Customer Inquiries', icon: FiMail },
+  { to: '/admin/subscribers', label: 'Subscribers', icon: FiSend },
+  { to: '/admin/settings', label: 'Store Settings', icon: FiSettings },
+  { to: '/admin/users', label: 'Users', icon: FiUsers },
 ];
 
 export default function AdminLayout() {

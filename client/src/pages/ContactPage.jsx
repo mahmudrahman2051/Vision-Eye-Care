@@ -3,8 +3,10 @@ import { FiMapPin, FiPhone, FiMail, FiMessageSquare, FiSend, FiCheckCircle } fro
 import { FaWhatsapp } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import contactService from '../services/contactService';
+import { useSettings } from '../context/SettingsContext';
 
 export default function ContactPage() {
+  const { settings } = useSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -64,29 +66,29 @@ export default function ContactPage() {
             <div className="space-y-4 pt-4 border-t border-[#333] text-xs">
               <div className="flex items-start gap-3">
                 <FiMapPin className="w-5 h-5 text-[#8B7355] flex-shrink-0 mt-0.5" />
-                <span className="text-[#CCC]">
-                  House 45, Road 11, Block D,<br />Banani, Dhaka-1213, Bangladesh
+                <span className="text-[#CCC] whitespace-pre-line">
+                  {settings?.showroomAddress || 'House 45, Road 11, Block D,\nBanani, Dhaka-1213, Bangladesh'}
                 </span>
               </div>
 
               <div className="flex items-center gap-3">
                 <FiPhone className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
-                <a href="tel:+8809612888999" className="text-[#CCC] hover:text-white transition-colors">
-                  +880 9612-888999 (Toll-Free)
+                <a href={`tel:${settings?.hotlinePhone || '+8809612888999'}`} className="text-[#CCC] hover:text-white transition-colors">
+                  {settings?.hotlinePhone || '+880 9612-888999'}
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <FaWhatsapp className="w-5 h-5 text-green-500 flex-shrink-0" />
-                <a href="https://wa.me/8801711000000" target="_blank" rel="noreferrer" className="text-[#CCC] hover:text-white transition-colors">
-                  +880 1711-000000 (WhatsApp)
+                <a href={settings?.socialLinks?.whatsapp || 'https://wa.me/8801711000000'} target="_blank" rel="noreferrer" className="text-[#CCC] hover:text-white transition-colors">
+                  {settings?.whatsappNumber || '+880 1711-000000'} (WhatsApp)
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <FiMail className="w-5 h-5 text-[#8B7355] flex-shrink-0" />
-                <a href="mailto:support@visioneyecare.com.bd" className="text-[#CCC] hover:text-white transition-colors">
-                  support@visioneyecare.com.bd
+                <a href={`mailto:${settings?.supportEmail || 'care@drishti.com.bd'}`} className="text-[#CCC] hover:text-white transition-colors">
+                  {settings?.supportEmail || 'care@drishti.com.bd'}
                 </a>
               </div>
             </div>
@@ -95,8 +97,9 @@ export default function ContactPage() {
               <span className="text-[10px] uppercase font-bold text-[#888] tracking-wider block mb-1">
                 Studio Hours
               </span>
-              <p className="text-xs text-[#CCC]">Saturday – Thursday: 10:00 AM – 8:30 PM</p>
-              <p className="text-xs text-[#777]">Friday: 3:00 PM – 9:00 PM</p>
+              <p className="text-xs text-[#CCC] whitespace-pre-line">
+                {settings?.businessHours || 'Saturday – Thursday: 10:00 AM – 8:30 PM\nFriday: 3:00 PM – 9:00 PM'}
+              </p>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { useAuth } from './AuthContext';
+import { useSettings } from './SettingsContext';
 import cartService from '../services/cartService';
 
 const CartContext = createContext(null);
@@ -9,6 +10,7 @@ const GUEST_CART_KEY = 'drishti_guest_cart';
 
 export function CartProvider({ children }) {
   const { isAuthenticated } = useAuth();
+  const { settings } = useSettings();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -226,7 +228,9 @@ export function CartProvider({ children }) {
     (sum, item) => sum + (parseFloat(item.price) || 0) * (item.quantity || 1),
     0
   );
-  const deliveryFee = cartItems.length > 0 ? (subtotal >= 5000 ? 0 : 100) : 0;
+  const threshold = settings?.freeShippingThreshold ?? 5000;
+  const standardFee = settings?.insideDhakaFee ?? 60;
+  const deliveryFee = cartItems.length > 0 ? (subtotal >= threshold ? 0 : standardFee) : 0;
   const total = subtotal + deliveryFee;
   const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 

@@ -4,6 +4,7 @@ import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/
 import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok } from 'react-icons/fa6';
 import toast from 'react-hot-toast';
 import contactService from '../../services/contactService';
+import { useSettings } from '../../context/SettingsContext';
 
 const quickLinks = [
   { to: '/', label: 'Home' },
@@ -25,6 +26,7 @@ const customerCareLinks = [
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { settings } = useSettings();
   const [email, setEmail] = useState('');
   const [subscribing, setSubscribing] = useState(false);
 
@@ -113,26 +115,26 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-start gap-2.5">
                 <HiOutlineMapPin className="w-4 h-4 text-[#8B7355] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-[#888]">
-                  House 45, Road 11, Block D,<br />Banani, Dhaka-1213, Bangladesh
+                <span className="text-sm text-[#888] whitespace-pre-line">
+                  {settings?.showroomAddress || 'House 45, Road 11, Block D,\nBanani, Dhaka-1213, Bangladesh'}
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
                 <HiOutlinePhone className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href="tel:+8809612888999" className="text-sm text-[#888] hover:text-white transition-colors">
-                  +880 9612-888999
+                <a href={`tel:${settings?.hotlinePhone || '+8809612888999'}`} className="text-sm text-[#888] hover:text-white transition-colors">
+                  {settings?.hotlinePhone || '+880 9612-888999'}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <FaWhatsapp className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href="https://wa.me/8801711000000" className="text-sm text-[#888] hover:text-white transition-colors">
-                  +880 1711-000000
+                <a href={settings?.socialLinks?.whatsapp || 'https://wa.me/8801711000000'} target="_blank" rel="noreferrer" className="text-sm text-[#888] hover:text-white transition-colors">
+                  {settings?.whatsappNumber || '+880 1711-000000'}
                 </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <HiOutlineEnvelope className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href="mailto:support@visioneyecare.com.bd" className="text-sm text-[#888] hover:text-white transition-colors">
-                  support@visioneyecare.com.bd
+                <a href={`mailto:${settings?.supportEmail || 'care@drishti.com.bd'}`} className="text-sm text-[#888] hover:text-white transition-colors">
+                  {settings?.supportEmail || 'care@drishti.com.bd'}
                 </a>
               </div>
             </div>
@@ -142,21 +144,31 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-white mb-4">Follow Us</h4>
             <div className="flex items-center gap-2.5 mb-6">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Facebook">
-                <FaFacebookF size={14} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Instagram">
-                <FaInstagram size={14} />
-              </a>
-              <a href="https://whatsapp.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="WhatsApp">
-                <FaWhatsapp size={14} />
-              </a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="YouTube">
-                <FaYoutube size={14} />
-              </a>
-              <a href="https://tiktok.com" target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="TikTok">
-                <FaTiktok size={14} />
-              </a>
+              {settings?.socialLinks?.facebook && (
+                <a href={settings.socialLinks.facebook} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Facebook">
+                  <FaFacebookF size={14} />
+                </a>
+              )}
+              {settings?.socialLinks?.instagram && (
+                <a href={settings.socialLinks.instagram} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Instagram">
+                  <FaInstagram size={14} />
+                </a>
+              )}
+              {settings?.socialLinks?.whatsapp && (
+                <a href={settings.socialLinks.whatsapp} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="WhatsApp">
+                  <FaWhatsapp size={14} />
+                </a>
+              )}
+              {settings?.socialLinks?.youtube && (
+                <a href={settings.socialLinks.youtube} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="YouTube">
+                  <FaYoutube size={14} />
+                </a>
+              )}
+              {settings?.socialLinks?.tiktok && (
+                <a href={settings.socialLinks.tiktok} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="TikTok">
+                  <FaTiktok size={14} />
+                </a>
+              )}
             </div>
 
             {/* Payment Methods */}

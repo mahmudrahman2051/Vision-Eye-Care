@@ -37,9 +37,29 @@ router.put('/reviews/:id/visibility', adminController.toggleReviewVisibility);
 router.delete('/reviews/:id', adminController.deleteReview);
 
 const tickerController = require('../controllers/tickerController');
+const settingsController = require('../controllers/settingsController');
+const bannerController = require('../controllers/bannerController');
+const contactController = require('../controllers/contactController');
 
 // Marquee Ticker
 router.get('/ticker', tickerController.getTickerSettings);
 router.put('/ticker', tickerController.updateTickerSettings);
+
+// Store Settings
+router.get('/settings', settingsController.getSettings);
+router.put('/settings', settingsController.updateSettings);
+
+// Homepage Banners & Blocks
+router.get('/banners', bannerController.getBanners);
+router.put('/banners', bannerController.updateBanners);
+
+// Inquiries / Contact Messages
+router.get('/inquiries', contactController.getContactMessages);
+router.put('/inquiries/:id/status', contactController.updateMessageStatus);
+router.delete('/inquiries/:id', contactController.deleteContactMessage);
+
+// Newsletter Subscribers
+router.get('/subscribers', contactController.getSubscribers);
+router.delete('/subscribers/:id', contactController.deleteSubscriber);
 
 module.exports = router;

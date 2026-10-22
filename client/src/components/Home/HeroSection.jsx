@@ -1,26 +1,62 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
+import bannerService from '../../services/bannerService';
 
-const banners = [
-  { id: 1, src: '/hero_banner_1.png', alt: 'Premium Eyewear Collection' },
-  { id: 2, src: '/hero_banner_2.png', alt: 'Designer Sunglasses' },
-  { id: 3, src: '/hero_banner_3.png', alt: 'Fashionable Frames' },
+const DEFAULT_BANNERS = [
+  { id: 1, src: '/hero_banner_1.png', alt: 'Premium Eyewear Collection', ctaLink: '/shop' },
+  { id: 2, src: '/hero_banner_2.png', alt: 'Designer Sunglasses', ctaLink: '/shop?category=sunglasses' },
+  { id: 3, src: '/hero_banner_3.png', alt: 'Fashionable Frames', ctaLink: '/contact' },
 ];
 
 const HeroSection = () => {
+  const [banners, setBanners] = useState(DEFAULT_BANNERS);
+  const [intervalMs, setIntervalMs] = useState(5000);
   const [current, setCurrent] = useState(0);
 
-  const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % banners.length);
+  useEffect(() => {
+    let isMounted = true;
+    async function load() {
+      try {
+        const data = await bannerService.getBanners();
+        if (data && isMounted) {
+          if (Array.isArray(data.heroBanners) && data.heroBanners.length > 0) {
+            setBanners(data.heroBanners);
+          }
+          if (data.heroInterval) {
+            setIntervalMs(data.heroInterval);
+          }
+        }
+      } catch (err) {}
+    }
+    load();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.heroBanners && Array.isArray(e.detail.heroBanners)) {
+        setBanners(e.detail.heroBanners);
+      }
+      if (e.detail?.heroInterval) {
+        setIntervalMs(e.detail.heroInterval);
+      }
+    };
+    window.addEventListener('banners-updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('banners-updated', handleUpdate);
+    };
   }, []);
+
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % (banners.length || 1));
+  }, [banners.length]);
 
   const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
-  }, []);
+    setCurrent((prev) => (prev - 1 + banners.length) % (banners.length || 1));
+  }, [banners.length]);
 
   useEffect(() => {
-    const timer = setInterval(next, 5000);
+    const timer = setInterval(next, intervalMs || 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, intervalMs]);
 
   return (
     <section className="relative w-full overflow-hidden bg-[#F5EFE3]" id="hero-section">
@@ -28,17 +64,28 @@ const HeroSection = () => {
       <div className="relative w-full aspect-[21/9] sm:aspect-[21/8] md:aspect-[21/7]">
         {banners.map((banner, idx) => (
           <div
-            key={banner.id}
+            key={banner.id || idx}
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
               idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
           >
-            <img
-              src={banner.src}
-              alt={banner.alt}
-              className="w-full h-full object-cover object-center"
-              draggable={false}
-            />
+            {banner.ctaLink ? (
+              <Link to={banner.ctaLink} className="block w-full h-full">
+                <img
+                  src={banner.src}
+                  alt={banner.alt || 'Banner'}
+                  className="w-full h-full object-cover object-center"
+                  draggable={false}
+                />
+              </Link>
+            ) : (
+              <img
+                src={banner.src}
+                alt={banner.alt || 'Banner'}
+                className="w-full h-full object-cover object-center"
+                draggable={false}
+              />
+            )}
           </div>
         ))}
       </div>

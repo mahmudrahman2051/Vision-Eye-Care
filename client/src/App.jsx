@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { SettingsProvider } from './context/SettingsContext';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
@@ -45,6 +46,10 @@ import AdminCategoriesPage from './admin/AdminCategoriesPage';
 import AdminCouponsPage from './admin/AdminCouponsPage';
 import AdminReviewsPage from './admin/AdminReviewsPage';
 import AdminTickerPage from './admin/AdminTickerPage';
+import AdminSettingsPage from './admin/AdminSettingsPage';
+import AdminBannersPage from './admin/AdminBannersPage';
+import AdminInquiriesPage from './admin/AdminInquiriesPage';
+import AdminSubscribersPage from './admin/AdminSubscribersPage';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -52,8 +57,9 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <WishlistProvider>
-        <CartProvider>
+      <SettingsProvider>
+        <WishlistProvider>
+          <CartProvider>
           {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
           <BrowserRouter>
             <Toaster
@@ -157,11 +163,16 @@ export default function App() {
                 <Route path="coupons" element={<AdminCouponsPage />} />
                 <Route path="reviews" element={<AdminReviewsPage />} />
                 <Route path="ticker" element={<AdminTickerPage />} />
+                <Route path="settings" element={<AdminSettingsPage />} />
+                <Route path="banners" element={<AdminBannersPage />} />
+                <Route path="inquiries" element={<AdminInquiriesPage />} />
+                <Route path="subscribers" element={<AdminSubscribersPage />} />
               </Route>
             </Routes>
           </BrowserRouter>
         </CartProvider>
       </WishlistProvider>
-    </AuthProvider>
-  );
+    </SettingsProvider>
+  </AuthProvider>
+);
 }
