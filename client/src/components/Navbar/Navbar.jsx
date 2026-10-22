@@ -152,6 +152,25 @@ export default function Navbar() {
             </div>
           </Link>
 
+          {/* Desktop Category Navigation Links (Single Row Center) */}
+          <nav className="hidden lg:flex items-center justify-center gap-1 xl:gap-2 mx-4 flex-1">
+            {navCategories.map((cat) => (
+              <NavLink
+                key={cat.label}
+                to={cat.to}
+                className={({ isActive }) =>
+                  `text-xs xl:text-sm font-bold py-1.5 px-3 rounded-full transition-all whitespace-nowrap ${
+                    isActive || location.search.includes(encodeURIComponent(cat.label))
+                      ? 'bg-[#F5EFE3] text-[#8B7355]'
+                      : 'text-[#444] hover:text-[#8B7355] hover:bg-[#F5EFE3]/60'
+                  }`
+                }
+              >
+                {cat.label}
+              </NavLink>
+            ))}
+          </nav>
+
           {/* Desktop Action Icons */}
           <div className="hidden lg:flex items-center gap-2 text-[#1A1A1A] flex-shrink-0">
             {/* Desktop Search Toggle Button */}
@@ -416,29 +435,6 @@ export default function Navbar() {
                 </button>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Desktop Category Bar */}
-        <div className="hidden lg:block border-t border-[#F5EFE3]/60">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center justify-center gap-8 py-2.5">
-              {navCategories.map((cat) => (
-                <NavLink
-                  key={cat.label}
-                  to={cat.to}
-                  className={({ isActive }) =>
-                    `text-sm font-bold py-1 px-3 rounded-full transition-all relative group ${
-                      isActive || location.search.includes(encodeURIComponent(cat.label))
-                        ? 'bg-[#F5EFE3] text-[#8B7355]'
-                        : 'text-[#555] hover:text-[#8B7355] hover:bg-[#F5EFE3]/50'
-                    }`
-                  }
-                >
-                  {cat.label}
-                </NavLink>
-              ))}
-            </nav>
           </div>
         </div>
 
