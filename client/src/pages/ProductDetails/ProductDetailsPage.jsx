@@ -87,7 +87,6 @@ const ProductDetailsPage = () => {
 
     if (id) {
       fetchProduct();
-      window.scrollTo(0, 0);
     }
   }, [id]);
 

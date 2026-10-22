@@ -51,6 +51,7 @@ import AdminBannersPage from './admin/AdminBannersPage';
 import AdminInquiriesPage from './admin/AdminInquiriesPage';
 import AdminSubscribersPage from './admin/AdminSubscribersPage';
 import FacebookPixelTracker from './components/Tracking/FacebookPixelTracker';
+import ScrollRestoration from './components/Common/ScrollRestoration';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -63,6 +64,7 @@ export default function App() {
           <CartProvider>
           {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
           <BrowserRouter>
+            <ScrollRestoration />
             <FacebookPixelTracker />
             <Toaster
               position="top-right"
