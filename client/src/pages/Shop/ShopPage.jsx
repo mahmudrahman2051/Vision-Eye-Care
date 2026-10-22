@@ -268,7 +268,7 @@ const ShopPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Desktop Filter Sidebar */}
           <div className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-36 sm:top-40">
               <ProductFilters
                 categories={categories}
                 filters={currentFilters}
