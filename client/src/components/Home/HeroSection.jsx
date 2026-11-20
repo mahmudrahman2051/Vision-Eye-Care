@@ -59,7 +59,7 @@ const HeroSection = () => {
   }, [next, intervalMs]);
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#F5EFE3]" id="hero-section">
+    <section className="relative w-full overflow-hidden bg-neutral-900" id="hero-section">
       {/* Banner Container */}
       <div className="relative w-full aspect-[21/9] sm:aspect-[21/8] md:aspect-[21/7]">
         {banners.map((banner, idx) => (
@@ -93,33 +93,33 @@ const HeroSection = () => {
       {/* Navigation Arrows */}
       <button
         onClick={prev}
-        className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all shadow-md backdrop-blur-sm"
+        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs"
         aria-label="Previous slide"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
       <button
         onClick={next}
-        className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 bg-white/80 hover:bg-white rounded-full flex items-center justify-center text-slate-700 hover:text-slate-900 transition-all shadow-md backdrop-blur-sm"
+        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all cursor-pointer backdrop-blur-xs"
         aria-label="Next slide"
       >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </button>
 
-      {/* Dot Indicators */}
+      {/* Dot / Dash Indicators */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
         {banners.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`rounded-full transition-all duration-300 ${
+            className={`transition-all duration-300 cursor-pointer ${
               idx === current
-                ? 'w-7 h-2.5 bg-[#1A1A1A]'
-                : 'w-2.5 h-2.5 bg-white/70 hover:bg-white'
+                ? 'w-6 h-1 bg-white'
+                : 'w-2 h-1 bg-white/40 hover:bg-white/70'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />

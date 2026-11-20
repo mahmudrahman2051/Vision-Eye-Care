@@ -14,7 +14,6 @@ const ProductCard = ({ product }) => {
   } = product || {};
 
   const displayCode = product_code || sku || '';
-
   const isWishlisted = isInWishlist(product?.product_id || id);
 
   const numericPrice = parseFloat(price) || 0;
@@ -36,48 +35,57 @@ const ProductCard = ({ product }) => {
     addToCart(product, 1);
   };
 
+  // Badge text matching reference website: "NEW", "-10%", "BESTSELLER"
+  let badgeLabel = null;
+  if (hasDiscount) {
+    badgeLabel = `-${discountPercent}%`;
+  } else if (new_arrival) {
+    badgeLabel = 'NEW';
+  } else if (bestseller) {
+    badgeLabel = 'HOT';
+  }
+
   return (
-    <div className="group relative bg-white border border-[#E8DFD0] hover:border-[#8B7355]/40 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-md flex flex-col justify-between h-full min-h-[290px] sm:min-h-[340px]">
-      {/* Discount Badge */}
-      {hasDiscount && (
-        <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold bg-[#1A1A1A] text-white rounded">
-          -{discountPercent}%
+    <div className="group relative bg-white border border-neutral-200/80 hover:border-black rounded-none transition-all duration-300 flex flex-col justify-between h-full min-h-[300px] sm:min-h-[350px]">
+      {/* Editorial Badge (Black sharp rectangle top-left) */}
+      {badgeLabel && (
+        <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold bg-black text-white rounded-none tracking-widest uppercase">
+          {badgeLabel}
         </span>
       )}
 
-      {/* Wishlist */}
+      {/* Wishlist Button */}
       <button
         onClick={handleToggleWishlist}
-        className={`absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 p-1.5 rounded-full transition-all cursor-pointer ${
+        className={`absolute top-2.5 right-2.5 z-10 p-1.5 rounded-full transition-all cursor-pointer ${
           isWishlisted
             ? 'bg-red-50 text-red-500'
-            : 'bg-white/90 text-[#999] hover:text-red-500'
+            : 'bg-white/90 text-neutral-400 hover:text-black hover:bg-neutral-100 shadow-xs'
         }`}
         aria-label="Wishlist"
       >
         <FiHeart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} />
       </button>
 
-      {/* Image or Optical Placeholder */}
+      {/* Product Image Container */}
       <Link
         to={`/product/${slug || id}`}
-        className="relative h-32 sm:h-44 w-full bg-[#FAF7F2] border-b border-[#F5EFE3] overflow-hidden block flex-shrink-0 flex items-center justify-center group-hover:bg-[#F5EFE3]/50 transition-colors"
+        className="relative h-40 sm:h-52 w-full bg-[#FAFAFA] border-b border-neutral-100 overflow-hidden block flex-shrink-0 flex items-center justify-center p-3 group-hover:bg-[#F4F4F5] transition-colors"
       >
         {primary_image ? (
           <img
             src={primary_image}
             alt={name}
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="flex flex-col items-center justify-center p-4 text-center select-none">
-            {/* Elegant Glasses Icon Frame */}
             <svg
-              className="w-12 h-12 sm:w-16 sm:h-16 text-[#8B7355]/40 group-hover:text-[#8B7355]/70 transition-colors group-hover:scale-110 duration-300"
+              className="w-12 h-12 sm:w-16 sm:h-16 text-neutral-400 group-hover:text-black transition-colors group-hover:scale-105 duration-300"
               viewBox="0 0 64 64"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -87,28 +95,28 @@ const ProductCard = ({ product }) => {
               <path d="M6 31l4-1" />
               <path d="M58 31l-4-1" />
             </svg>
-            <span className="mt-1 text-[9px] font-mono font-bold tracking-wider text-[#8B7355] uppercase">
+            <span className="mt-1 text-[9px] font-mono font-bold tracking-widest text-neutral-500 uppercase">
               {displayCode || 'Optical Frame'}
             </span>
           </div>
         )}
       </Link>
 
-      {/* Info */}
-      <div className="p-2.5 sm:p-3.5 flex flex-col justify-between flex-grow">
+      {/* Info Section */}
+      <div className="p-3 sm:p-4 flex flex-col justify-between flex-grow">
         <div>
           <div className="flex items-center justify-between gap-1 mb-1">
-            <p className="text-[10px] sm:text-[11px] font-bold text-[#8B7355] uppercase tracking-wide truncate">
+            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest truncate">
               {brand || 'Vision Eye Care'}
             </p>
             {displayCode && (
-              <span className="text-[9px] font-mono font-bold text-[#444] bg-[#F5EFE3] px-1.5 py-0.5 rounded border border-[#E8DFD0] flex-shrink-0">
+              <span className="text-[9px] font-mono font-bold text-neutral-700 bg-neutral-100 px-1.5 py-0.5 rounded-none border border-neutral-200 flex-shrink-0">
                 {displayCode}
               </span>
             )}
           </div>
           <Link to={`/product/${slug || id}`}>
-            <h3 className="text-xs sm:text-sm font-bold text-[#1A1A1A] group-hover:text-[#8B7355] transition-colors line-clamp-1 leading-snug">
+            <h3 className="text-xs sm:text-sm font-semibold text-neutral-900 group-hover:text-black transition-colors line-clamp-1 leading-snug tracking-tight">
               {name}
             </h3>
           </Link>
@@ -116,31 +124,31 @@ const ProductCard = ({ product }) => {
           {/* Rating */}
           <div className="flex items-center gap-1 mt-1 sm:mt-1.5">
             <FiStar className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span className="text-[11px] sm:text-xs font-semibold text-[#333]">
+            <span className="text-[11px] sm:text-xs font-semibold text-neutral-800">
               {parseFloat(average_rating || 4.8).toFixed(1)}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-[#999]">
+            <span className="text-[10px] sm:text-[11px] text-neutral-400">
               ({review_count || 12})
             </span>
           </div>
         </div>
 
-        {/* Price + Cart */}
-        <div className="flex items-center justify-between mt-2 sm:mt-3 pt-2 sm:pt-2.5 border-t border-[#F5EFE3]">
-          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-1">
-            <span className="text-sm sm:text-base font-extrabold text-[#1A1A1A]">
-              ৳{Math.round(numericPrice).toLocaleString()}
+        {/* Price + Action Button */}
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-neutral-100">
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-1.5">
+            <span className="text-sm sm:text-base font-bold text-black tracking-tight">
+              Tk {Math.round(numericPrice).toLocaleString()}.00
             </span>
             {hasDiscount && (
-              <span className="text-[10px] sm:text-xs text-[#999] line-through">
-                ৳{Math.round(numericComparePrice).toLocaleString()}
+              <span className="text-[10px] sm:text-xs text-neutral-400 line-through">
+                Tk {Math.round(numericComparePrice).toLocaleString()}
               </span>
             )}
           </div>
           <button
             onClick={handleAddToCart}
             disabled={stock <= 0}
-            className="p-1.5 sm:p-2 bg-[#1A1A1A] hover:bg-[#8B7355] text-white rounded-lg transition-colors disabled:opacity-30 cursor-pointer"
+            className="p-2 sm:px-3 sm:py-2 bg-black hover:bg-neutral-800 text-white rounded-none transition-colors disabled:opacity-30 cursor-pointer flex items-center justify-center"
             title="Add to Cart"
           >
             <FiShoppingBag className="w-3.5 h-3.5" />

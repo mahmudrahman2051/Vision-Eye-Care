@@ -9,40 +9,35 @@ import LowerPromoBanner from '../../components/Home/LowerPromoBanner';
 export default function Home() {
   return (
     <div className="home-page bg-white min-h-screen">
-      {/* 1. Hero Banner (Image Only) */}
+      {/* 1. Hero Banner */}
       <HeroSection />
 
-      {/* 2. Product Categories (1 Row) */}
-      <TopCategorySection />
-
-      {/* 3. Featured Square Collections Grid (2 cols mobile / 6 cols desktop) */}
-      <FeaturedCollectionsGrid />
-
-      {/* 4. Secondary Promo Banner */}
-      <CategoryPromoBanner />
-
-      {/* 5. Featured Products (10 items) */}
+      {/* 2. New Arrivals Carousel (Matches Reference Site Header) */}
       <ProductCarousel
-        title="Featured Products"
-        fetchParams={{ featured: 'true' }}
-        viewAllLink="/shop?sort=featured"
+        title="New Arrivals"
+        fetchParams={{ new_arrival: 'true' }}
+        viewAllLink="/shop?sort=new"
         productCount={10}
       />
 
-      {/* Subtle divider */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <hr className="border-slate-100" />
-      </div>
+      {/* 3. Product Categories Editorial Lifestyle Grid */}
+      <TopCategorySection />
 
-      {/* 6. Hot Selling Products (10 items) */}
+      {/* 4. Best Sellers Carousel */}
       <ProductCarousel
-        title="Hot Selling Products"
+        title="Best Sellers"
         fetchParams={{ bestseller: 'true' }}
         viewAllLink="/shop?sort=popular"
         productCount={10}
       />
 
-      {/* 7. Lower Promo Banner (Under Hot Selling Products) */}
+      {/* 5. Featured Square Collections Grid */}
+      <FeaturedCollectionsGrid />
+
+      {/* 6. Secondary Promo Banner */}
+      <CategoryPromoBanner />
+
+      {/* 7. Lower Promo Banner */}
       <LowerPromoBanner />
     </div>
   );

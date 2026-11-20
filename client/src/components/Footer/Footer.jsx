@@ -6,28 +6,28 @@ import toast from 'react-hot-toast';
 import contactService from '../../services/contactService';
 import { useSettings } from '../../context/SettingsContext';
 
-const quickLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/shop', label: 'Shop' },
+const informationLinks = [
+  { to: '/shop', label: 'All Eyewear' },
+  { to: '/account/orders', label: 'Track Your Order' },
   { to: '/about', label: 'About Us' },
-  { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact Us' },
-  { to: '/privacy', label: 'Privacy Policy' },
-  { to: '/terms', label: 'Terms & Conditions' },
+  { to: '/faq', label: 'Lens Guide & FAQ' },
 ];
 
-const customerCareLinks = [
-  { to: '/account/orders', label: 'Track Your Order' },
-  { to: '/terms', label: 'Return & Refund Policy' },
-  { to: '/faq', label: 'Shipping Information' },
-  { to: '/contact', label: 'Help & Support' },
-  { to: '/faq', label: 'Lens Guide' },
+const policyLinks = [
+  { to: '/privacy', label: 'Privacy Policy' },
+  { to: '/terms', label: 'Refund Policy' },
+  { to: '/terms', label: 'Terms & Conditions' },
+  { to: '/faq', label: 'Shipping Policy' },
+  { to: '/terms', label: 'Warranty & Guarantee' },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { settings } = useSettings();
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [comment, setComment] = useState('');
   const [subscribing, setSubscribing] = useState(false);
 
   const handleSubscribe = async (e) => {
@@ -39,6 +39,8 @@ export default function Footer() {
       if (res.status === 'success') {
         toast.success(res.message || 'Subscribed successfully!');
         setEmail('');
+        setName('');
+        setComment('');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Subscription failed.');
@@ -48,46 +50,74 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#1A1A1A] text-[#AAAAAA] pt-14 pb-8" id="main-footer">
+    <footer className="bg-white text-neutral-900 border-t border-neutral-200 pt-14 pb-10" id="main-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Newsletter Subscription Row */}
-        <div className="pb-10 mb-10 border-b border-[#2D2D2D] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <h3 className="text-white text-base font-bold tracking-tight">
-              Subscribe to VISION EYE CARE Privileges
-            </h3>
-            <p className="text-xs text-[#888]">
-              Receive private previews of limited-run titanium frames and seasonal promotions.
+
+        {/* Minimalist Brand Bar & Editorial Inquiry Form (Matching Reference) */}
+        <div className="pb-12 mb-12 border-b border-neutral-200">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+            <div>
+              <h3 className="font-extrabold text-lg sm:text-2xl text-black tracking-tighter uppercase font-logo">
+                VISION EYE CARE
+              </h3>
+              <p className="text-[11px] text-neutral-500 uppercase tracking-widest mt-1">
+                BEYOND THE FRAME • BANGLADESH
+              </p>
+            </div>
+            <p className="text-xs text-neutral-600 max-w-md leading-relaxed">
+              Stay informed with our latest handcrafted acetate & titanium releases, private preview invitations, and seasonal drops.
             </p>
           </div>
 
-          <form onSubmit={handleSubscribe} className="flex gap-2 w-full md:w-auto max-w-md">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address..."
-              className="flex-1 md:w-72 bg-[#2D2D2D] border border-[#3A3A3A] text-white text-xs px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#8B7355]"
-            />
-            <button
-              type="submit"
-              disabled={subscribing}
-              className="px-5 py-2.5 bg-[#8B7355] hover:bg-[#7A6348] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors disabled:opacity-50"
-            >
-              {subscribing ? '...' : 'Subscribe'}
-            </button>
+          {/* Clean Editorial Form */}
+          <form onSubmit={handleSubscribe} className="space-y-3 max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+                className="w-full bg-transparent border border-neutral-300 focus:border-black text-xs text-black px-3.5 py-2.5 rounded-none outline-none placeholder:text-neutral-400 transition-colors"
+              />
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email *"
+                className="w-full bg-transparent border border-neutral-300 focus:border-black text-xs text-black px-3.5 py-2.5 rounded-none outline-none placeholder:text-neutral-400 transition-colors"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <input
+                type="text"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Phone number or note (optional)"
+                className="flex-1 w-full bg-transparent border border-neutral-300 focus:border-black text-xs text-black px-3.5 py-2.5 rounded-none outline-none placeholder:text-neutral-400 transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={subscribing}
+                className="w-full sm:w-auto px-8 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors disabled:opacity-50 cursor-pointer flex-shrink-0"
+              >
+                {subscribing ? 'Sending...' : 'Send'}
+              </button>
+            </div>
           </form>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-[#2D2D2D]">
-          {/* Quick Links */}
+        {/* 3 Column Layout matching reference: INFORMATION | POLICIES | CONTACT */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-neutral-200">
+          {/* Column 1: INFORMATION */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Quick Links</h4>
+            <h4 className="text-xs font-extrabold text-black uppercase tracking-widest mb-4">
+              INFORMATION
+            </h4>
             <ul className="space-y-2.5">
-              {quickLinks.map((link) => (
+              {informationLinks.map((link) => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-sm text-[#888] hover:text-white transition-colors">
+                  <Link to={link.to} className="text-xs text-neutral-600 hover:text-black transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -95,13 +125,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Customer Care */}
+          {/* Column 2: POLICIES */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Customer Care</h4>
+            <h4 className="text-xs font-extrabold text-black uppercase tracking-widest mb-4">
+              POLICIES
+            </h4>
             <ul className="space-y-2.5">
-              {customerCareLinks.map((link) => (
+              {policyLinks.map((link) => (
                 <li key={link.label}>
-                  <Link to={link.to} className="text-sm text-[#888] hover:text-white transition-colors">
+                  <Link to={link.to} className="text-xs text-neutral-600 hover:text-black transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -109,95 +141,90 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Us */}
+          {/* Column 3: CONTACT */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Contact Us</h4>
-            <div className="space-y-3">
-              <div className="flex items-start gap-2.5">
-                <HiOutlineMapPin className="w-4 h-4 text-[#8B7355] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-[#888] whitespace-pre-line">
-                  {settings?.showroomAddress || 'House 45, Road 11, Block D,\nBanani, Dhaka-1213, Bangladesh'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <HiOutlinePhone className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href={`tel:${settings?.hotlinePhone || '+8809612888999'}`} className="text-sm text-[#888] hover:text-white transition-colors">
+            <h4 className="text-xs font-extrabold text-black uppercase tracking-widest mb-4">
+              CONTACT
+            </h4>
+            <div className="space-y-2.5 text-xs text-neutral-600">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-black">Phone:</span>
+                <a href={`tel:${settings?.hotlinePhone || '+8809612888999'}`} className="hover:text-black transition-colors">
                   {settings?.hotlinePhone || '+880 9612-888999'}
                 </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <FaWhatsapp className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href={settings?.socialLinks?.whatsapp || 'https://wa.me/8801711000000'} target="_blank" rel="noreferrer" className="text-sm text-[#888] hover:text-white transition-colors">
-                  {settings?.whatsappNumber || '+880 1711-000000'}
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-black">Email:</span>
+                <a href={`mailto:${settings?.supportEmail || 'care@visioneyecare.com.bd'}`} className="hover:text-black transition-colors">
+                  {settings?.supportEmail || 'care@visioneyecare.com.bd'}
                 </a>
               </div>
-              <div className="flex items-center gap-2.5">
-                <HiOutlineEnvelope className="w-4 h-4 text-[#8B7355] flex-shrink-0" />
-                <a href={`mailto:${settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}`} className="text-sm text-[#888] hover:text-white transition-colors">
-                  {settings?.supportEmail || 'care@VISION EYE CARE.com.bd'}
-                </a>
+              <div className="flex items-start gap-2">
+                <span className="font-semibold text-black flex-shrink-0">Address:</span>
+                <span className="whitespace-pre-line">
+                  {settings?.showroomAddress || 'House 45, Road 11, Block D, Banani, Dhaka-1213, Bangladesh'}
+                </span>
               </div>
-            </div>
-          </div>
 
-          {/* Social Media + Payment + Delivery */}
-          <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Follow Us</h4>
-            <div className="flex items-center gap-2.5 mb-6">
-              {settings?.socialLinks?.facebook && (
-                <a href={settings.socialLinks.facebook} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Facebook">
-                  <FaFacebookF size={14} />
-                </a>
-              )}
-              {settings?.socialLinks?.instagram && (
-                <a href={settings.socialLinks.instagram} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="Instagram">
-                  <FaInstagram size={14} />
-                </a>
-              )}
-              {settings?.socialLinks?.whatsapp && (
-                <a href={settings.socialLinks.whatsapp} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="WhatsApp">
-                  <FaWhatsapp size={14} />
-                </a>
-              )}
-              {settings?.socialLinks?.youtube && (
-                <a href={settings.socialLinks.youtube} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="YouTube">
-                  <FaYoutube size={14} />
-                </a>
-              )}
-              {settings?.socialLinks?.tiktok && (
-                <a href={settings.socialLinks.tiktok} target="_blank" rel="noreferrer" className="w-9 h-9 bg-[#2D2D2D] hover:bg-[#8B7355] rounded-lg flex items-center justify-center text-[#888] hover:text-white transition-all" aria-label="TikTok">
-                  <FaTiktok size={14} />
-                </a>
-              )}
-            </div>
-
-            {/* Payment Methods */}
-            <h4 className="text-sm font-semibold text-white mb-3">Payment Methods</h4>
-            <div className="flex flex-wrap gap-2 mb-5">
-              {['bKash', 'Nagad', 'Rocket', 'Visa', 'Mastercard', 'COD'].map(m => (
-                <span key={m} className="px-2.5 py-1 bg-[#2D2D2D] text-[#AAA] text-xs font-medium rounded border border-[#3A3A3A]">
-                  {m}
-                </span>
-              ))}
-            </div>
-
-            {/* Delivery Partners */}
-            <h4 className="text-sm font-semibold text-white mb-3">Delivery Partners</h4>
-            <div className="flex flex-wrap gap-2">
-              {['Pathao', 'Steadfast', 'RedX', 'Sundarban'].map(d => (
-                <span key={d} className="px-2.5 py-1 bg-[#2D2D2D] text-[#AAA] text-xs font-medium rounded border border-[#3A3A3A]">
-                  {d}
-                </span>
-              ))}
+              {/* Social Media Links */}
+              <div className="pt-3">
+                <span className="font-semibold text-black block mb-2">Connect:</span>
+                <div className="flex items-center gap-2">
+                  {settings?.socialLinks?.facebook && (
+                    <a href={settings.socialLinks.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 border border-neutral-300 hover:border-black hover:bg-black hover:text-white rounded-none flex items-center justify-center text-neutral-700 transition-colors" aria-label="Facebook">
+                      <FaFacebookF size={12} />
+                    </a>
+                  )}
+                  {settings?.socialLinks?.instagram && (
+                    <a href={settings.socialLinks.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 border border-neutral-300 hover:border-black hover:bg-black hover:text-white rounded-none flex items-center justify-center text-neutral-700 transition-colors" aria-label="Instagram">
+                      <FaInstagram size={12} />
+                    </a>
+                  )}
+                  {settings?.socialLinks?.whatsapp && (
+                    <a href={settings.socialLinks.whatsapp} target="_blank" rel="noreferrer" className="w-8 h-8 border border-neutral-300 hover:border-black hover:bg-black hover:text-white rounded-none flex items-center justify-center text-neutral-700 transition-colors" aria-label="WhatsApp">
+                      <FaWhatsapp size={12} />
+                    </a>
+                  )}
+                  {settings?.socialLinks?.youtube && (
+                    <a href={settings.socialLinks.youtube} target="_blank" rel="noreferrer" className="w-8 h-8 border border-neutral-300 hover:border-black hover:bg-black hover:text-white rounded-none flex items-center justify-center text-neutral-700 transition-colors" aria-label="YouTube">
+                      <FaYoutube size={12} />
+                    </a>
+                  )}
+                  {settings?.socialLinks?.tiktok && (
+                    <a href={settings.socialLinks.tiktok} target="_blank" rel="noreferrer" className="w-8 h-8 border border-neutral-300 hover:border-black hover:bg-black hover:text-white rounded-none flex items-center justify-center text-neutral-700 transition-colors" aria-label="TikTok">
+                      <FaTiktok size={12} />
+                    </a>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-6 text-center">
-          <p className="text-sm text-[#666]">
-            © {currentYear} Vision Eye Care Bangladesh. All rights reserved.
-          </p>
+        {/* Payment & Partners Monochrome Badges */}
+        <div className="py-6 border-b border-neutral-200 flex flex-wrap items-center justify-between gap-4 text-xs text-neutral-500">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold text-black uppercase tracking-wider text-[10px]">Payment:</span>
+            {['bKash', 'Nagad', 'Rocket', 'Visa', 'Mastercard', 'COD'].map((m) => (
+              <span key={m} className="px-2 py-0.5 border border-neutral-300 text-neutral-700 font-medium text-[10px]">
+                {m}
+              </span>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold text-black uppercase tracking-wider text-[10px]">Delivery:</span>
+            {['Pathao', 'Steadfast', 'RedX', 'Sundarban'].map((d) => (
+              <span key={d} className="px-2 py-0.5 border border-neutral-300 text-neutral-700 font-medium text-[10px]">
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Minimalist Bottom Copyright */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-400 gap-2">
+          <p>© {currentYear} Vision Eye Care. All rights reserved.</p>
+          <p className="text-[11px] uppercase tracking-widest text-neutral-400">Powered by Vision Eye Care Bangladesh</p>
         </div>
       </div>
     </footer>

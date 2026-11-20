@@ -6,15 +6,15 @@
 }
 
 @theme extend {
-  --color-brand-cream: #F5EFE3;
-  --color-brand-cream-dark: #E8DFD0;
-  --color-brand-cream-light: #FAF7F2;
-  --color-brand-dark: #1A1A1A;
-  --color-brand-dark-soft: #2D2D2D;
-  --color-brand-text: #333333;
-  --color-brand-text-light: #666666;
-  --color-brand-accent: #8B7355;
-  --color-brand-accent-hover: #7A6348;
+  --color-brand-cream: #F4F4F5;
+  --color-brand-cream-dark: #E4E4E7;
+  --color-brand-cream-light: #FAFAFA;
+  --color-brand-dark: #000000;
+  --color-brand-dark-soft: #18181B;
+  --color-brand-text: #18181B;
+  --color-brand-text-light: #71717A;
+  --color-brand-accent: #000000;
+  --color-brand-accent-hover: #27272A;
 
   --font-sans: 'Questrial', sans-serif;
 }
@@ -62,21 +62,21 @@ button {
    ============================================ */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F5EFE3;
+  background: #FAFAFA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D4C9B8;
-  border-radius: 3px;
+  background: #D4D4D8;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8B7355;
+  background: #000000;
 }
 
 /* ============================================

@@ -123,17 +123,17 @@ export default function CouponMarqueeTicker() {
               >
                 {/* Discount Badge */}
                 <span
-                  className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider text-white shadow-xs group-hover:scale-105 transition-transform"
+                  className="px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-widest shadow-xs"
                   style={{
-                    backgroundColor: settings.accentColor,
-                    color: '#FFFFFF',
+                    backgroundColor: settings.accentColor === '#FFFFFF' ? '#FFFFFF' : settings.accentColor,
+                    color: settings.accentColor === '#FFFFFF' ? '#000000' : '#FFFFFF',
                   }}
                 >
                   {badgeLabel}
                 </span>
 
                 {/* Code Pill */}
-                <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-black px-2 py-0.5 rounded bg-white/10 border border-white/20 text-current group-hover:bg-white/20 transition-colors">
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-black px-2 py-0.5 rounded-none bg-white/10 border border-white/20 text-current group-hover:bg-white/20 transition-colors">
                   <span>CODE: {coupon.code}</span>
                   {isCopied ? (
                     <FiCheck className="w-3 h-3 text-emerald-400" />

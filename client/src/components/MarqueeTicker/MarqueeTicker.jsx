@@ -6,9 +6,9 @@ const DEFAULT_TICKER = {
   enabled: true,
   speed: 28,
   direction: 'left',
-  backgroundColor: '#1A1A1A',
-  textColor: '#FAF7F2',
-  accentColor: '#8B7355',
+  backgroundColor: '#000000',
+  textColor: '#FFFFFF',
+  accentColor: '#FFFFFF',
   pauseOnHover: true,
   separator: '✦',
   messages: [
@@ -121,10 +121,10 @@ export default function MarqueeTicker() {
               <span className="inline-flex items-center gap-2.5 px-6 whitespace-nowrap group cursor-pointer transition-opacity hover:opacity-90">
                 {item.badge && (
                   <span
-                    className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-sm transition-transform group-hover:scale-105"
+                    className="px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-widest"
                     style={{
-                      backgroundColor: accentColor,
-                      color: '#FFFFFF',
+                      backgroundColor: accentColor === '#FFFFFF' ? '#FFFFFF' : accentColor,
+                      color: accentColor === '#FFFFFF' ? '#000000' : '#FFFFFF',
                     }}
                   >
                     {item.badge}
@@ -185,10 +185,10 @@ export default function MarqueeTicker() {
               <span className="inline-flex items-center gap-2.5 px-6 whitespace-nowrap group cursor-pointer transition-opacity hover:opacity-90">
                 {item.badge && (
                   <span
-                    className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-sm transition-transform group-hover:scale-105"
+                    className="px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-widest"
                     style={{
-                      backgroundColor: accentColor,
-                      color: '#FFFFFF',
+                      backgroundColor: accentColor === '#FFFFFF' ? '#FFFFFF' : accentColor,
+                      color: accentColor === '#FFFFFF' ? '#000000' : '#FFFFFF',
                     }}
                   >
                     {item.badge}

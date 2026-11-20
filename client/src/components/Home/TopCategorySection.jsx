@@ -4,69 +4,76 @@ import { Link } from 'react-router-dom';
 const categories = [
   {
     id: 'glasses',
-    name: 'Glasses',
+    name: "Men's Eyeglasses",
     link: '/shop?category=eyeglasses',
-    image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=400&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'sunglasses',
-    name: 'Sunglasses',
+    name: "Men's Sunglasses",
     link: '/shop?category=sunglasses',
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'womens-glasses',
+    name: "Women's Eyeglasses",
+    link: '/shop?gender=women',
+    image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'womens-sunglasses',
+    name: "Women's Sunglasses",
+    link: '/shop?category=sunglasses&gender=women',
+    image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 'contact-lenses',
     name: 'Contact Lenses',
     link: '/shop?search=Contact+Lenses',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'eyeglass-cases',
-    name: 'Eyeglass Cases',
-    link: '/shop?search=Eyeglass+Cases',
-    image: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=400&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'lens-cleaning',
-    name: 'Lens Cleaning Solutions',
-    link: '/shop?search=Lens+Cleaning',
-    image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80',
   },
 ];
 
 const TopCategorySection = () => {
   return (
-    <section className="py-8 sm:py-12 px-2 sm:px-6 lg:px-8 bg-[#F5EFE3]/30">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-10 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white border-b border-neutral-100">
+      <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-2xl font-bold text-[#1A1A1A] tracking-tight">
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-xl sm:text-3xl font-extrabold text-black tracking-tight uppercase">
             Shop By Category
           </h2>
-          <div className="w-12 h-0.5 bg-[#8B7355] mx-auto mt-2" />
+          <p className="text-[10px] sm:text-xs text-neutral-400 font-medium tracking-widest uppercase mt-1.5">
+            FIND YOUR PERFECT FRAME
+          </p>
         </div>
 
-        {/* Category Row (1 Row with 5 Columns) */}
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-6 lg:gap-8">
+        {/* Category Lifestyle Cards Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
           {categories.map((cat) => (
             <Link
               key={cat.id}
               to={cat.link}
-              className="group flex flex-col items-center text-center px-1"
+              className="group flex flex-col items-center text-center"
             >
-              {/* Circular Image */}
-              <div className="w-14 h-14 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-[#F5EFE3] shadow-sm group-hover:border-[#8B7355] group-hover:shadow-md transition-all duration-300 mb-2 sm:mb-3 flex-shrink-0">
+              {/* Lifestyle Photo Card */}
+              <div className="w-full aspect-[4/5] bg-neutral-100 overflow-hidden relative border border-neutral-200 group-hover:border-black transition-colors duration-300">
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
               </div>
 
-              {/* Category Name */}
-              <h3 className="text-[10px] sm:text-xs md:text-sm font-semibold text-[#333] group-hover:text-[#1A1A1A] transition-colors leading-tight line-clamp-2">
-                {cat.name}
-              </h3>
+              {/* Minimalist Editorial Label with Arrow */}
+              <div className="mt-3.5 flex items-center justify-center gap-1.5">
+                <span className="text-[11px] sm:text-xs font-bold text-black uppercase tracking-wider group-hover:underline">
+                  {cat.name}
+                </span>
+                <span className="text-xs text-black group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </div>
             </Link>
           ))}
         </div>
