@@ -9,10 +9,13 @@ export const config = {
   },
 };
 
-const DEFAULT_DB_URL =
-  'postgresql://neondb_owner:npg_1Z2MeHfPBYLQ@ep-winter-smoke-b44w9lae-pooler.c-6.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
-const DATABASE_URL = process.env.DATABASE_URL || DEFAULT_DB_URL;
-const sql = neon(DATABASE_URL);
+const DATABASE_URL =
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_PRISMA_URL ||
+  process.env.NEON_DATABASE_URL;
+
+const sql = DATABASE_URL ? neon(DATABASE_URL) : null;
 
 // Dynamic password verification helper (Zero top-level dependencies)
 async function verifyPassword(password, hash) {
@@ -133,6 +136,14 @@ export default async function handler(req, res) {
   const route0 = segments[0] || '';
   const route1 = segments[1] || '';
   const route2 = segments[2] || '';
+
+  if (!sql) {
+    return sendJson(res, 500, {
+      status: 'error',
+      message:
+        'DATABASE_URL environment variable is not configured. Please set DATABASE_URL in Vercel project environment variables.',
+    });
+  }
 
   try {
     // ------------------------------------------------------------------------
