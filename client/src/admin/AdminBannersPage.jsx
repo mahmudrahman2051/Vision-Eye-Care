@@ -7,8 +7,6 @@ import {
   FiRotateCcw,
   FiArrowUp,
   FiArrowDown,
-  FiExternalLink,
-  FiLayers,
   FiClock,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -45,15 +43,37 @@ const DEFAULT_BLOCKS = {
     },
   ],
   heroInterval: 5000,
+  promoBanners: [
+    {
+      id: 'category-promo',
+      title: 'Category Promo Banner',
+      placement: 'category',
+      image: '/promo_banner.png',
+      alt: 'Special Eyewear Offer',
+      link: '/shop?sort=featured',
+      enabled: true,
+    },
+    {
+      id: 'lower-promo',
+      title: 'Lower Promo Banner',
+      placement: 'lower',
+      image: '/promo_banner.png',
+      alt: 'Exclusive Seasonal Drop',
+      link: '/shop?sort=popular',
+      enabled: true,
+    },
+  ],
   categoryPromoBanner: {
     image: '/promo_banner.png',
     alt: 'Special Eyewear Offer',
     link: '/shop?sort=featured',
+    enabled: true,
   },
   lowerPromoBanner: {
     image: '/promo_banner.png',
     alt: 'Exclusive Seasonal Drop',
     link: '/shop?sort=popular',
+    enabled: true,
   },
   featuredCollections: [
     {
@@ -124,7 +144,7 @@ const DOT_COLORS = [
 
 export default function AdminBannersPage() {
   const [data, setData] = useState(DEFAULT_BLOCKS);
-  const [activeTab, setActiveTab] = useState('hero');
+  const [activeTab, setActiveTab] = useState('promos');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -133,7 +153,37 @@ export default function AdminBannersPage() {
       try {
         setLoading(true);
         const res = await bannerService.getBanners();
-        if (res) setData({ ...DEFAULT_BLOCKS, ...res });
+        if (res) {
+          // Normalize promoBanners list
+          const promoList = Array.isArray(res.promoBanners)
+            ? res.promoBanners
+            : [
+                {
+                  id: 'category-promo',
+                  title: 'Category Promo Banner',
+                  placement: 'category',
+                  image: res?.categoryPromoBanner?.image || '/promo_banner.png',
+                  alt: res?.categoryPromoBanner?.alt || 'Special Eyewear Offer',
+                  link: res?.categoryPromoBanner?.link || '/shop?sort=featured',
+                  enabled: res?.categoryPromoBanner?.enabled !== false,
+                },
+                {
+                  id: 'lower-promo',
+                  title: 'Lower Promo Banner',
+                  placement: 'lower',
+                  image: res?.lowerPromoBanner?.image || '/promo_banner.png',
+                  alt: res?.lowerPromoBanner?.alt || 'Exclusive Seasonal Drop',
+                  link: res?.lowerPromoBanner?.link || '/shop?sort=popular',
+                  enabled: res?.lowerPromoBanner?.enabled !== false,
+                },
+              ];
+
+          setData({
+            ...DEFAULT_BLOCKS,
+            ...res,
+            promoBanners: promoList,
+          });
+        }
       } catch (err) {
         toast.error('Failed loading banner settings, displaying defaults');
       } finally {
@@ -164,7 +214,74 @@ export default function AdminBannersPage() {
     }
   };
 
+  // Helper to sync promo banners array with legacy fields
+  const syncPromoBanners = (prev, list) => {
+    const activeBanners = list.filter((b) => b.enabled !== false && b.image);
+    return {
+      ...prev,
+      promoBanners: list,
+      categoryPromoBanner: activeBanners[0] || { image: '', alt: '', link: '', enabled: false },
+      lowerPromoBanner: activeBanners[1] || { image: '', alt: '', link: '', enabled: false },
+    };
+  };
+
+  // ==========================================
+  // Promotional Banner Handlers (Add, Remove, Toggle, Reorder, Update)
+  // ==========================================
+  const handleAddPromoBanner = () => {
+    const currentList = data.promoBanners || [];
+    const newBanner = {
+      id: Date.now(),
+      title: `Promotional Banner #${currentList.length + 1}`,
+      placement: currentList.length === 0 ? 'category' : (currentList.length === 1 ? 'lower' : 'custom'),
+      image: '/promo_banner.png',
+      alt: 'Special Eyewear Promotion',
+      link: '/shop',
+      enabled: true,
+    };
+    const updatedList = [...currentList, newBanner];
+    setData((prev) => syncPromoBanners(prev, updatedList));
+    toast.success('New promotional banner added. Remember to Save Changes.');
+  };
+
+  const handleRemovePromoBanner = (index) => {
+    const currentList = data.promoBanners || [];
+    const removedTitle = currentList[index]?.title || `Banner #${index + 1}`;
+    const updatedList = currentList.filter((_, i) => i !== index);
+    setData((prev) => syncPromoBanners(prev, updatedList));
+    toast.success(`Removed "${removedTitle}". Remember to Save Changes.`);
+  };
+
+  const handleTogglePromoBanner = (index) => {
+    const currentList = data.promoBanners || [];
+    const updatedList = currentList.map((banner, i) =>
+      i === index ? { ...banner, enabled: banner.enabled === false ? true : false } : banner
+    );
+    setData((prev) => syncPromoBanners(prev, updatedList));
+  };
+
+  const handleUpdatePromoBanner = (index, field, value) => {
+    const currentList = data.promoBanners || [];
+    const updatedList = currentList.map((banner, i) =>
+      i === index ? { ...banner, [field]: value } : banner
+    );
+    setData((prev) => syncPromoBanners(prev, updatedList));
+  };
+
+  const handleMovePromoBanner = (index, direction) => {
+    const currentList = data.promoBanners || [];
+    const target = index + direction;
+    if (target < 0 || target >= currentList.length) return;
+    const updatedList = [...currentList];
+    const temp = updatedList[index];
+    updatedList[index] = updatedList[target];
+    updatedList[target] = temp;
+    setData((prev) => syncPromoBanners(prev, updatedList));
+  };
+
+  // ==========================================
   // Hero slide handlers
+  // ==========================================
   const handleAddHeroSlide = () => {
     const newSlide = {
       id: Date.now(),
@@ -212,7 +329,9 @@ export default function AdminBannersPage() {
     });
   };
 
+  // ==========================================
   // Featured Collection Card handlers
+  // ==========================================
   const handleUpdateCollection = (index, field, value) => {
     setData((prev) => {
       const colls = [...prev.featuredCollections];
@@ -223,22 +342,24 @@ export default function AdminBannersPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-24 text-[#8B7355]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8B7355]" />
+      <div className="flex items-center justify-center py-24 text-black">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black" />
         <span className="ml-3 font-bold text-sm">Loading banner settings...</span>
       </div>
     );
   }
 
+  const promoBannerCount = (data.promoBanners || []).length;
+
   return (
-    <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn pb-16">
+    <div className="max-w-6xl mx-auto space-y-8 animate-fadeIn pb-16 font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E8DFD0]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-200">
         <div>
-          <h1 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
+          <h1 className="text-2xl font-black text-black tracking-tight uppercase">
             Homepage Banners & Marketing Blocks
           </h1>
-          <p className="text-xs text-[#777] mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Customize the Hero Slider, Promotional Campaign Banners, and 6-Card Featured Collections Grid.
           </p>
         </div>
@@ -247,7 +368,7 @@ export default function AdminBannersPage() {
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-[#666] hover:text-[#1A1A1A] hover:bg-[#E8DFD0]/50 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-none text-xs font-bold uppercase tracking-wider text-neutral-600 hover:text-black hover:bg-neutral-100 transition-colors cursor-pointer border border-neutral-200"
           >
             <FiRotateCcw className="w-3.5 h-3.5" /> Reset
           </button>
@@ -255,7 +376,7 @@ export default function AdminBannersPage() {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8B7355] hover:bg-[#6B5840] text-white text-xs font-bold transition-all shadow-md shadow-[#8B7355]/20 disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-none bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 cursor-pointer shadow-sm"
           >
             <FiSave className="w-4 h-4" />
             <span>{saving ? 'Saving...' : 'Save Changes'}</span>
@@ -264,14 +385,14 @@ export default function AdminBannersPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#E8DFD0] pb-2">
+      <div className="flex items-center gap-2 border-b border-neutral-200 pb-2 flex-wrap">
         <button
           type="button"
           onClick={() => setActiveTab('hero')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
             activeTab === 'hero'
-              ? 'bg-[#1A1A1A] text-white shadow-sm'
-              : 'text-[#666] hover:bg-[#FAF7F2] hover:text-[#1A1A1A]'
+              ? 'bg-black text-white shadow-sm'
+              : 'text-neutral-600 hover:bg-neutral-100 hover:text-black'
           }`}
         >
           Hero Banner Slider ({data.heroBanners.length})
@@ -279,21 +400,21 @@ export default function AdminBannersPage() {
         <button
           type="button"
           onClick={() => setActiveTab('promos')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
             activeTab === 'promos'
-              ? 'bg-[#1A1A1A] text-white shadow-sm'
-              : 'text-[#666] hover:bg-[#FAF7F2] hover:text-[#1A1A1A]'
+              ? 'bg-black text-white shadow-sm'
+              : 'text-neutral-600 hover:bg-neutral-100 hover:text-black'
           }`}
         >
-          Promotional Banners (2)
+          Promotional Banners ({promoBannerCount})
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('collections')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+          className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
             activeTab === 'collections'
-              ? 'bg-[#1A1A1A] text-white shadow-sm'
-              : 'text-[#666] hover:bg-[#FAF7F2] hover:text-[#1A1A1A]'
+              ? 'bg-black text-white shadow-sm'
+              : 'text-neutral-600 hover:bg-neutral-100 hover:text-black'
           }`}
         >
           Featured Collections Grid ({data.featuredCollections.length})
@@ -305,15 +426,15 @@ export default function AdminBannersPage() {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <label className="text-xs font-bold text-[#444] flex items-center gap-1.5">
-                <FiClock className="w-3.5 h-3.5 text-[#8B7355]" /> Slide Transition Interval:
+              <label className="text-xs font-bold text-neutral-700 flex items-center gap-1.5 uppercase tracking-wider">
+                <FiClock className="w-3.5 h-3.5 text-black" /> Slide Interval:
               </label>
               <select
                 value={data.heroInterval}
                 onChange={(e) =>
                   setData((prev) => ({ ...prev, heroInterval: Number(e.target.value) }))
                 }
-                className="bg-[#FAF7F2] text-xs font-bold px-3 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                className="bg-neutral-50 text-xs font-bold px-3 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
               >
                 <option value={3000}>3 Seconds</option>
                 <option value={5000}>5 Seconds (Recommended)</option>
@@ -325,7 +446,7 @@ export default function AdminBannersPage() {
             <button
               type="button"
               onClick={handleAddHeroSlide}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#8B7355] text-white text-xs font-bold hover:bg-[#6B5840] transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors cursor-pointer"
             >
               <FiPlus className="w-3.5 h-3.5" /> Add Slide
             </button>
@@ -335,14 +456,16 @@ export default function AdminBannersPage() {
             {data.heroBanners.map((slide, index) => (
               <div
                 key={slide.id || index}
-                className="bg-white rounded-2xl border border-[#E8DFD0] p-5 shadow-sm space-y-4"
+                className="bg-white rounded-none border border-neutral-200 p-5 shadow-xs space-y-4"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-[#1A1A1A] text-white text-xs font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 bg-black text-white text-xs font-bold flex items-center justify-center">
                       {index + 1}
                     </span>
-                    <span className="text-xs font-bold text-[#1A1A1A]">Slide #{index + 1}</span>
+                    <span className="text-xs font-bold text-black uppercase tracking-wider">
+                      Slide #{index + 1}
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-1">
@@ -350,7 +473,8 @@ export default function AdminBannersPage() {
                       type="button"
                       onClick={() => handleMoveHeroSlide(index, -1)}
                       disabled={index === 0}
-                      className="p-1 text-[#888] hover:text-[#1A1A1A] disabled:opacity-30"
+                      className="p-1.5 text-neutral-400 hover:text-black disabled:opacity-20 cursor-pointer"
+                      title="Move Up"
                     >
                       <FiArrowUp className="w-4 h-4" />
                     </button>
@@ -358,14 +482,16 @@ export default function AdminBannersPage() {
                       type="button"
                       onClick={() => handleMoveHeroSlide(index, 1)}
                       disabled={index === data.heroBanners.length - 1}
-                      className="p-1 text-[#888] hover:text-[#1A1A1A] disabled:opacity-30"
+                      className="p-1.5 text-neutral-400 hover:text-black disabled:opacity-20 cursor-pointer"
+                      title="Move Down"
                     >
                       <FiArrowDown className="w-4 h-4" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleRemoveHeroSlide(index)}
-                      className="p-1 text-red-500 hover:text-red-700 ml-2"
+                      className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2 cursor-pointer"
+                      title="Remove Slide"
                     >
                       <FiTrash2 className="w-4 h-4" />
                     </button>
@@ -374,7 +500,7 @@ export default function AdminBannersPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Preview Thumbnail */}
-                  <div className="relative aspect-[21/9] rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#E8DFD0]">
+                  <div className="relative aspect-[21/9] rounded-none overflow-hidden bg-neutral-100 border border-neutral-200">
                     <img
                       src={slide.src}
                       alt={slide.alt || 'Slide image'}
@@ -390,7 +516,7 @@ export default function AdminBannersPage() {
                   <div className="md:col-span-2 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           Banner Image URL / Path *
                         </label>
                         <input
@@ -398,25 +524,25 @@ export default function AdminBannersPage() {
                           value={slide.src}
                           onChange={(e) => handleUpdateHeroSlide(index, 'src', e.target.value)}
                           placeholder="/hero_banner_1.png or https://..."
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           Image Alt Text
                         </label>
                         <input
                           type="text"
                           value={slide.alt}
                           onChange={(e) => handleUpdateHeroSlide(index, 'alt', e.target.value)}
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           Slide Headline
                         </label>
                         <input
@@ -424,11 +550,11 @@ export default function AdminBannersPage() {
                           value={slide.title || ''}
                           onChange={(e) => handleUpdateHeroSlide(index, 'title', e.target.value)}
                           placeholder="e.g. Bespoke Titanium & Japanese Acetate"
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           Sub-headline / Description
                         </label>
                         <input
@@ -436,14 +562,14 @@ export default function AdminBannersPage() {
                           value={slide.subtitle || ''}
                           onChange={(e) => handleUpdateHeroSlide(index, 'subtitle', e.target.value)}
                           placeholder="e.g. Engineered for uncompromising visual clarity"
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           CTA Button Text
                         </label>
                         <input
@@ -451,11 +577,11 @@ export default function AdminBannersPage() {
                           value={slide.ctaText || ''}
                           onChange={(e) => handleUpdateHeroSlide(index, 'ctaText', e.target.value)}
                           placeholder="e.g. Explore Collection"
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-[#666] block mb-1">
+                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                           CTA Link / Destination
                         </label>
                         <input
@@ -463,7 +589,7 @@ export default function AdminBannersPage() {
                           value={slide.ctaLink || ''}
                           onChange={(e) => handleUpdateHeroSlide(index, 'ctaLink', e.target.value)}
                           placeholder="e.g. /shop, /shop?category=sunglasses"
-                          className="w-full bg-[#FAF7F2] text-xs px-3 py-2 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
                         />
                       </div>
                     </div>
@@ -475,127 +601,189 @@ export default function AdminBannersPage() {
         </div>
       )}
 
-      {/* TAB 2: Promotional Banners */}
+      {/* TAB 2: Promotional Banners (With Full Add & Remove Capabilities) */}
       {activeTab === 'promos' && (
         <div className="space-y-6">
-          {/* Category Promo Banner */}
-          <div className="bg-white rounded-2xl border border-[#E8DFD0] p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-[#8B7355]/10 text-[#8B7355]">
-                <FiImage className="w-5 h-5" />
-              </span>
-              <div>
-                <h3 className="text-sm font-black text-[#1A1A1A]">Category Promo Banner</h3>
-                <p className="text-[11px] text-[#777]">
-                  Appears between Top Categories and Featured Collections grid on the homepage.
-                </p>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
+            <div>
+              <h2 className="text-sm font-black text-black uppercase tracking-wider">
+                Storefront Promotional Banners
+              </h2>
+              <p className="text-xs text-neutral-500 mt-0.5">
+                Add, reorder, remove, or toggle promotional campaign banners shown across the storefront.
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#E8DFD0] max-h-36">
-                <img
-                  src={data.categoryPromoBanner.image}
-                  alt={data.categoryPromoBanner.alt}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="sm:col-span-2 space-y-3">
-                <div>
-                  <label className="text-xs font-bold text-[#444] block mb-1">Banner Image URL</label>
-                  <input
-                    type="text"
-                    value={data.categoryPromoBanner.image}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        categoryPromoBanner: { ...prev.categoryPromoBanner, image: e.target.value },
-                      }))
-                    }
-                    className="w-full bg-[#FAF7F2] text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-bold text-[#444] block mb-1">Redirect Destination URL</label>
-                  <input
-                    type="text"
-                    value={data.categoryPromoBanner.link}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        categoryPromoBanner: { ...prev.categoryPromoBanner, link: e.target.value },
-                      }))
-                    }
-                    className="w-full bg-[#FAF7F2] text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
-                  />
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={handleAddPromoBanner}
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-black hover:bg-neutral-800 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shadow-sm self-start sm:self-auto"
+            >
+              <FiPlus className="w-4 h-4" /> Add Promotional Banner
+            </button>
           </div>
 
-          {/* Lower Promo Banner */}
-          <div className="bg-white rounded-2xl border border-[#E8DFD0] p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-[#8B7355]/10 text-[#8B7355]">
-                <FiImage className="w-5 h-5" />
-              </span>
-              <div>
-                <h3 className="text-sm font-black text-[#1A1A1A]">Lower Promo Banner</h3>
-                <p className="text-[11px] text-[#777]">
-                  Appears under the Hot Selling Products carousel before the footer.
-                </p>
-              </div>
+          {promoBannerCount === 0 ? (
+            <div className="bg-white border border-neutral-200 p-12 text-center rounded-none space-y-3">
+              <FiImage className="w-10 h-10 text-neutral-300 mx-auto" />
+              <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wider">
+                No Promotional Banners Configured
+              </h3>
+              <p className="text-xs text-neutral-500 max-w-sm mx-auto">
+                All promotional banners have been removed. Click the button below to add a promotional banner to the storefront.
+              </p>
+              <button
+                type="button"
+                onClick={handleAddPromoBanner}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer mt-2"
+              >
+                <FiPlus className="w-3.5 h-3.5" /> Add First Promotional Banner
+              </button>
             </div>
+          ) : (
+            <div className="space-y-4">
+              {data.promoBanners.map((banner, index) => (
+                <div
+                  key={banner.id || index}
+                  className={`bg-white border transition-all rounded-none p-5 shadow-xs space-y-4 ${
+                    banner.enabled !== false
+                      ? 'border-neutral-200 hover:border-black'
+                      : 'border-neutral-200 opacity-60 bg-neutral-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-6 h-6 bg-black text-white text-xs font-bold flex items-center justify-center">
+                        {index + 1}
+                      </span>
+                      <span className="text-xs font-bold text-black uppercase tracking-wider">
+                        {banner.title || `Banner #${index + 1}`}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePromoBanner(index)}
+                        className={`text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider cursor-pointer border transition-colors ${
+                          banner.enabled !== false
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100'
+                            : 'bg-neutral-200 text-neutral-600 border-neutral-300 hover:bg-neutral-300'
+                        }`}
+                        title={banner.enabled !== false ? 'Click to hide banner' : 'Click to display banner'}
+                      >
+                        {banner.enabled !== false ? '● Active' : '○ Hidden'}
+                      </button>
+                    </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-xl overflow-hidden bg-[#FAF7F2] border border-[#E8DFD0] max-h-36">
-                <img
-                  src={data.lowerPromoBanner.image}
-                  alt={data.lowerPromoBanner.alt}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleMovePromoBanner(index, -1)}
+                        disabled={index === 0}
+                        className="p-1.5 text-neutral-400 hover:text-black disabled:opacity-20 cursor-pointer"
+                        title="Move Up"
+                      >
+                        <FiArrowUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMovePromoBanner(index, 1)}
+                        disabled={index === data.promoBanners.length - 1}
+                        className="p-1.5 text-neutral-400 hover:text-black disabled:opacity-20 cursor-pointer"
+                        title="Move Down"
+                      >
+                        <FiArrowDown className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemovePromoBanner(index)}
+                        className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-none ml-2 transition-colors cursor-pointer"
+                        title="Delete this banner"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
 
-              <div className="sm:col-span-2 space-y-3">
-                <div>
-                  <label className="text-xs font-bold text-[#444] block mb-1">Banner Image URL</label>
-                  <input
-                    type="text"
-                    value={data.lowerPromoBanner.image}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        lowerPromoBanner: { ...prev.lowerPromoBanner, image: e.target.value },
-                      }))
-                    }
-                    className="w-full bg-[#FAF7F2] text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Preview Thumbnail */}
+                    <div className="aspect-[21/9] sm:aspect-video rounded-none overflow-hidden bg-neutral-100 border border-neutral-200 relative flex items-center justify-center">
+                      <img
+                        src={banner.image}
+                        alt={banner.alt || 'Promotional Banner'}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = '/promo_banner.png';
+                        }}
+                      />
+                    </div>
+
+                    {/* Inputs */}
+                    <div className="md:col-span-2 space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
+                            Banner Label / Title
+                          </label>
+                          <input
+                            type="text"
+                            value={banner.title || ''}
+                            onChange={(e) => handleUpdatePromoBanner(index, 'title', e.target.value)}
+                            placeholder="e.g. Category Promo Banner"
+                            className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
+                            Image Alt Text
+                          </label>
+                          <input
+                            type="text"
+                            value={banner.alt || ''}
+                            onChange={(e) => handleUpdatePromoBanner(index, 'alt', e.target.value)}
+                            placeholder="e.g. Special Eyewear Offer"
+                            className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
+                            Banner Image URL *
+                          </label>
+                          <input
+                            type="text"
+                            value={banner.image || ''}
+                            onChange={(e) => handleUpdatePromoBanner(index, 'image', e.target.value)}
+                            placeholder="/promo_banner.png or https://..."
+                            className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none font-mono text-[11px]"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
+                            Redirect Destination URL
+                          </label>
+                          <input
+                            type="text"
+                            value={banner.link || ''}
+                            onChange={(e) => handleUpdatePromoBanner(index, 'link', e.target.value)}
+                            placeholder="/shop?sort=featured"
+                            className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none font-mono text-[11px]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-xs font-bold text-[#444] block mb-1">Redirect Destination URL</label>
-                  <input
-                    type="text"
-                    value={data.lowerPromoBanner.link}
-                    onChange={(e) =>
-                      setData((prev) => ({
-                        ...prev,
-                        lowerPromoBanner: { ...prev.lowerPromoBanner, link: e.target.value },
-                      }))
-                    }
-                    className="w-full bg-[#FAF7F2] text-xs px-3.5 py-2.5 rounded-xl border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
-                  />
-                </div>
-              </div>
+              ))}
             </div>
-          </div>
+          )}
         </div>
       )}
 
       {/* TAB 3: Featured Collections 6-Card Grid */}
       {activeTab === 'collections' && (
         <div className="space-y-4">
-          <p className="text-xs text-[#777]">
+          <p className="text-xs text-neutral-500">
             Customize the 6 prominent square discovery cards displayed directly under categories on the homepage.
           </p>
 
@@ -603,51 +791,51 @@ export default function AdminBannersPage() {
             {data.featuredCollections.map((card, index) => (
               <div
                 key={card.id || index}
-                className="bg-white rounded-2xl border border-[#E8DFD0] p-5 shadow-sm space-y-3"
+                className="bg-white rounded-none border border-neutral-200 p-5 shadow-xs space-y-3"
               >
-                <div className="flex items-center justify-between pb-2 border-b border-[#E8DFD0]">
-                  <span className="text-xs font-black text-[#8B7355] uppercase tracking-wider">
+                <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
+                  <span className="text-xs font-black text-black uppercase tracking-wider">
                     Card #{index + 1}: {card.title}
                   </span>
-                  <div className="w-8 h-8 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+                  <div className="w-8 h-8 rounded-none overflow-hidden bg-neutral-100 flex-shrink-0 border border-neutral-200">
                     <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Title *</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Title *</label>
                     <input
                       type="text"
                       value={card.title}
                       onChange={(e) => handleUpdateCollection(index, 'title', e.target.value)}
-                      className="w-full bg-[#FAF7F2] text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs font-semibold px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Tagline</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Tagline</label>
                     <input
                       type="text"
                       value={card.tagline}
                       onChange={(e) => handleUpdateCollection(index, 'tagline', e.target.value)}
-                      className="w-full bg-[#FAF7F2] text-xs px-2.5 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Badge Text</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Badge Text</label>
                     <input
                       type="text"
                       value={card.badge}
                       onChange={(e) => handleUpdateCollection(index, 'badge', e.target.value.toUpperCase())}
-                      className="w-full bg-[#FAF7F2] text-xs font-bold px-2.5 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs font-bold px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black uppercase tracking-wider"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Badge Color</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Badge Color</label>
                     <select
                       value={card.dotColor}
                       onChange={(e) => handleUpdateCollection(index, 'dotColor', e.target.value)}
-                      className="w-full bg-[#FAF7F2] text-xs font-bold px-2 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs font-bold px-2 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
                     >
                       {DOT_COLORS.map((col) => (
                         <option key={col.value} value={col.value}>
@@ -660,21 +848,21 @@ export default function AdminBannersPage() {
 
                 <div className="grid grid-cols-2 gap-2.5">
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Redirect Link</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Redirect Link</label>
                     <input
                       type="text"
                       value={card.link}
                       onChange={(e) => handleUpdateCollection(index, 'link', e.target.value)}
-                      className="w-full bg-[#FAF7F2] text-xs px-2.5 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-[#666] block mb-1">Image URL</label>
+                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Image URL</label>
                     <input
                       type="text"
                       value={card.image}
                       onChange={(e) => handleUpdateCollection(index, 'image', e.target.value)}
-                      className="w-full bg-[#FAF7F2] text-xs px-2.5 py-1.5 rounded-lg border border-[#E8DFD0] focus:outline-none focus:border-[#8B7355]"
+                      className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
                     />
                   </div>
                 </div>
@@ -685,12 +873,12 @@ export default function AdminBannersPage() {
       )}
 
       {/* Save Button Bar */}
-      <div className="flex justify-end pt-4 border-t border-[#E8DFD0]">
+      <div className="flex justify-end pt-4 border-t border-neutral-200">
         <button
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl bg-[#8B7355] hover:bg-[#6B5840] text-white text-xs font-bold transition-all shadow-md shadow-[#8B7355]/20 disabled:opacity-50"
+          className="flex items-center gap-2 px-8 py-3 rounded-none bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-widest transition-all shadow-sm disabled:opacity-50 cursor-pointer"
         >
           <FiSave className="w-4 h-4" />
           <span>{saving ? 'Saving...' : 'Save & Publish Marketing Blocks'}</span>

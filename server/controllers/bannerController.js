@@ -35,15 +35,37 @@ const DEFAULT_BLOCKS = {
     },
   ],
   heroInterval: 5000,
+  promoBanners: [
+    {
+      id: 'category-promo',
+      title: 'Category Promo Banner',
+      placement: 'category',
+      image: '/promo_banner.png',
+      alt: 'Special Eyewear Offer',
+      link: '/shop?sort=featured',
+      enabled: true,
+    },
+    {
+      id: 'lower-promo',
+      title: 'Lower Promo Banner',
+      placement: 'lower',
+      image: '/promo_banner.png',
+      alt: 'Exclusive Seasonal Drop',
+      link: '/shop?sort=popular',
+      enabled: true,
+    },
+  ],
   categoryPromoBanner: {
     image: '/promo_banner.png',
     alt: 'Special Eyewear Offer',
     link: '/shop?sort=featured',
+    enabled: true,
   },
   lowerPromoBanner: {
     image: '/promo_banner.png',
     alt: 'Exclusive Seasonal Drop',
     link: '/shop?sort=popular',
+    enabled: true,
   },
   featuredCollections: [
     {
@@ -184,9 +206,10 @@ async function updateBanners(req, res, next) {
       ...current,
       ...payload,
       heroBanners: Array.isArray(payload.heroBanners) ? payload.heroBanners : current.heroBanners,
+      promoBanners: Array.isArray(payload.promoBanners) ? payload.promoBanners : (current.promoBanners || []),
       featuredCollections: Array.isArray(payload.featuredCollections) ? payload.featuredCollections : current.featuredCollections,
-      categoryPromoBanner: payload.categoryPromoBanner || current.categoryPromoBanner,
-      lowerPromoBanner: payload.lowerPromoBanner || current.lowerPromoBanner,
+      categoryPromoBanner: payload.categoryPromoBanner !== undefined ? payload.categoryPromoBanner : current.categoryPromoBanner,
+      lowerPromoBanner: payload.lowerPromoBanner !== undefined ? payload.lowerPromoBanner : current.lowerPromoBanner,
       heroInterval: Number(payload.heroInterval) >= 2000 ? Number(payload.heroInterval) : current.heroInterval,
     };
 

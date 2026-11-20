@@ -29,6 +29,26 @@
     }
   ],
   "heroInterval": 5000,
+  "promoBanners": [
+    {
+      "id": "category-promo",
+      "title": "Category Promo Banner",
+      "placement": "category",
+      "image": "/promo_banner.png",
+      "alt": "Special Eyewear Offer",
+      "link": "/shop?sort=featured",
+      "enabled": true
+    },
+    {
+      "id": "lower-promo",
+      "title": "Lower Promo Banner",
+      "placement": "lower",
+      "image": "/promo_banner.png",
+      "alt": "Exclusive Seasonal Drop",
+      "link": "/shop?sort=popular",
+      "enabled": true
+    }
+  ],
   "categoryPromoBanner": {
     "image": "/promo_banner.png",
     "alt": "Special Eyewear Offer",

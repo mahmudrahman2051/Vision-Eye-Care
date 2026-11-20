@@ -6,6 +6,7 @@ const DEFAULT_BANNER = {
   image: '/promo_banner.png',
   alt: 'Vision Eye Care Special Eyewear Offer',
   link: '/shop?sort=featured',
+  enabled: true,
 };
 
 const CategoryPromoBanner = () => {
@@ -16,16 +17,26 @@ const CategoryPromoBanner = () => {
     async function load() {
       try {
         const data = await bannerService.getBanners();
-        if (data?.categoryPromoBanner && isMounted) {
-          setBanner(data.categoryPromoBanner);
+        if (isMounted && data) {
+          if (Array.isArray(data.promoBanners)) {
+            const active = data.promoBanners.filter((b) => b.enabled !== false && b.image);
+            setBanner(active.length > 0 ? active[0] : null);
+          } else if (data.categoryPromoBanner) {
+            setBanner(data.categoryPromoBanner.enabled !== false && data.categoryPromoBanner.image ? data.categoryPromoBanner : null);
+          }
         }
       } catch (err) {}
     }
     load();
 
     const handleUpdate = (e) => {
-      if (e.detail?.categoryPromoBanner) {
-        setBanner(e.detail.categoryPromoBanner);
+      if (e.detail) {
+        if (Array.isArray(e.detail.promoBanners)) {
+          const active = e.detail.promoBanners.filter((b) => b.enabled !== false && b.image);
+          setBanner(active.length > 0 ? active[0] : null);
+        } else if (e.detail.categoryPromoBanner) {
+          setBanner(e.detail.categoryPromoBanner.enabled !== false && e.detail.categoryPromoBanner.image ? e.detail.categoryPromoBanner : null);
+        }
       }
     };
     window.addEventListener('banners-updated', handleUpdate);
@@ -35,8 +46,12 @@ const CategoryPromoBanner = () => {
     };
   }, []);
 
+  if (!banner || banner.enabled === false || !banner.image) {
+    return null;
+  }
+
   return (
-    <section className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-6 sm:py-10 px-4 sm:px-6 lg:px-8 bg-white" id="category-promo-section">
       <div className="max-w-7xl mx-auto overflow-hidden border border-neutral-200 hover:border-black transition-colors duration-300">
         <Link to={banner.link || '/shop'} className="block relative group overflow-hidden">
           <img
