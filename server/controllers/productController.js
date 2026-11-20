@@ -484,8 +484,20 @@ async function updateProduct(req, res, next) {
       ]
     );
 
-    // If an image URL is supplied via admin panel, set as primary image
-    if (body.image_url && body.image_url.trim()) {
+    // If multiple images or single image URL are supplied via admin panel, update product_images
+    const allImages = Array.isArray(body.images) && body.images.length > 0
+      ? body.images.map((img) => (typeof img === 'string' ? img : (img.url || img.image_url || img.src))).filter(Boolean)
+      : (Array.isArray(body.image_urls) && body.image_urls.length > 0 ? body.image_urls : []);
+
+    if (allImages.length > 0) {
+      await query('DELETE FROM product_images WHERE product_id = $1', [id]);
+      for (let i = 0; i < allImages.length; i++) {
+        await query(
+          'INSERT INTO product_images (product_id, image_url, is_primary, sort_order) VALUES ($1, $2, $3, $4)',
+          [id, allImages[i].trim(), i === 0, i]
+        );
+      }
+    } else if (body.image_url && body.image_url.trim()) {
       const primaryRes = await query(
         'SELECT id FROM product_images WHERE product_id = $1 AND is_primary = true',
         [id]

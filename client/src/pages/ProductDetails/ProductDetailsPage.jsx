@@ -50,7 +50,16 @@ const ProductDetailsPage = () => {
         if (res.status === 'success' && res.data) {
           setProduct(res.data);
           trackViewContent(res.data);
-          const primary = res.data.images?.find((img) => img.is_primary)?.image_url || res.data.images?.[0]?.image_url || res.data.primary_image || null;
+          const rawImages = (Array.isArray(res.data.images) && res.data.images.length > 0)
+            ? res.data.images
+            : (res.data.primary_image ? [{ id: 'primary', image_url: res.data.primary_image, is_primary: true }] : []);
+
+          const primary =
+            res.data.images?.find((img) => img.is_primary)?.image_url ||
+            rawImages[0]?.image_url ||
+            (typeof rawImages[0] === 'string' ? rawImages[0] : null) ||
+            res.data.primary_image ||
+            null;
           setSelectedImage(primary);
 
           if (res.data.category_id) {
@@ -76,7 +85,10 @@ const ProductDetailsPage = () => {
         );
         if (match) {
           setProduct(match);
-          setSelectedImage(match.primary_image || null);
+          const primary = (Array.isArray(match.images) && match.images.length > 0)
+            ? (typeof match.images[0] === 'string' ? match.images[0] : (match.images[0].image_url || match.images[0].url))
+            : (match.primary_image || null);
+          setSelectedImage(primary);
           const rel = realProducts.filter((p) => p.category_id === match.category_id && p.id !== match.id).slice(0, 4);
           setRelatedProducts(rel);
         }
@@ -139,6 +151,20 @@ const ProductDetailsPage = () => {
   const basePrice = parseFloat(product.price) || 0;
   const totalPrice = (basePrice + selectedLens.price) * quantity;
 
+  // Extract all gallery images cleanly from product
+  const galleryImages = (Array.isArray(product?.images) && product.images.length > 0)
+    ? product.images.map((img, idx) => {
+        const url = typeof img === 'string' ? img : (img.image_url || img.url || img.src);
+        return {
+          id: img.id || `gallery-thumb-${idx}`,
+          url,
+          alt: img.alt_text || `${product.name} angle ${idx + 1}`,
+        };
+      }).filter((item) => Boolean(item.url))
+    : (product?.primary_image ? [{ id: 'primary', url: product.primary_image, alt: product.name }] : []);
+
+  const activeIndex = Math.max(0, galleryImages.findIndex((g) => g.url === selectedImage));
+
   return (
     <div className="bg-white min-h-screen py-10 px-4 sm:px-6 lg:px-8 text-gray-900">
       <div className="max-w-7xl mx-auto">
@@ -181,23 +207,72 @@ const ProductDetailsPage = () => {
 
         {/* Product Details Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Left Column: Gallery */}
+          {/* Left Column: Multi-Image Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square bg-[#FAF7F2] border border-[#E8DFD0] rounded-2xl overflow-hidden group shadow-sm p-4 flex items-center justify-center">
+            {/* Main Active Image Display */}
+            <div className="relative aspect-square bg-[#FAFAFA] border border-neutral-200 overflow-hidden group shadow-xs p-4 flex items-center justify-center">
+              {/* Badge for Current Image Position if multiple images exist */}
+              {galleryImages.length > 1 && (
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-2 py-0.5 bg-black text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                    {activeIndex + 1} / {galleryImages.length}
+                  </span>
+                </div>
+              )}
+
+              {/* Wishlist Button */}
+              <button
+                onClick={toggleWishlist}
+                className="absolute top-3 right-3 z-10 p-2 bg-white/90 hover:bg-black hover:text-white rounded-full shadow-xs transition-colors cursor-pointer text-neutral-600"
+                aria-label="Wishlist"
+              >
+                <FiHeart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} />
+              </button>
+
+              {/* Prev / Next navigation arrows if multiple images exist */}
+              {galleryImages.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const prevIdx = (activeIndex - 1 + galleryImages.length) % galleryImages.length;
+                      setSelectedImage(galleryImages[prevIdx].url);
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 hover:bg-black hover:text-white text-neutral-800 shadow-md flex items-center justify-center transition-all cursor-pointer font-bold text-lg select-none"
+                    aria-label="Previous image"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextIdx = (activeIndex + 1) % galleryImages.length;
+                      setSelectedImage(galleryImages[nextIdx].url);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/90 hover:bg-black hover:text-white text-neutral-800 shadow-md flex items-center justify-center transition-all cursor-pointer font-bold text-lg select-none"
+                    aria-label="Next image"
+                  >
+                    ›
+                  </button>
+                </>
+              )}
+
               {selectedImage ? (
                 <img
                   src={selectedImage}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 rounded-xl"
+                  loading="eager"
+                  decoding="async"
+                  className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
                 <div className="flex flex-col items-center justify-center p-8 text-center select-none">
                   <svg
-                    className="w-24 h-24 text-[#8B7355]/40 mb-3"
+                    className="w-24 h-24 text-neutral-300 mb-3"
                     viewBox="0 0 64 64"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2.5"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
@@ -207,27 +282,40 @@ const ProductDetailsPage = () => {
                     <path d="M6 31l4-1" />
                     <path d="M58 31l-4-1" />
                   </svg>
-                  <span className="text-sm font-mono font-bold text-[#8B7355] tracking-wider uppercase">
+                  <span className="text-sm font-mono font-bold text-neutral-500 tracking-wider uppercase">
                     {product.product_code || 'Optical Frame'}
                   </span>
-                  <span className="text-xs text-[#888] mt-1">Image can be added from Admin Panel</span>
+                  <span className="text-xs text-neutral-400 mt-1">Image can be added from Admin Panel</span>
                 </div>
               )}
             </div>
 
-            {product.images && product.images.length > 1 && (
-              <div className="flex items-center gap-3 overflow-x-auto pb-2">
-                {product.images.map((img) => (
+            {/* Multiple Image Thumbnails Gallery */}
+            {galleryImages.length > 1 && (
+              <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
+                {galleryImages.map((img, idx) => (
                   <button
                     key={img.id}
-                    onClick={() => setSelectedImage(img.image_url)}
-                    className={`w-20 h-20 rounded-xl bg-white border-2 overflow-hidden flex-shrink-0 transition-all ${
-                      selectedImage === img.image_url
-                        ? 'border-[#8B7355] shadow'
-                        : 'border-[#E8DFD0] opacity-70 hover:opacity-100'
+                    type="button"
+                    onClick={() => setSelectedImage(img.url)}
+                    className={`relative w-20 h-20 bg-white border-2 overflow-hidden flex-shrink-0 transition-all cursor-pointer ${
+                      selectedImage === img.url
+                        ? 'border-black ring-2 ring-black/10 scale-100 shadow-sm'
+                        : 'border-neutral-200 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img.image_url} alt={img.alt_text || product.name} className="w-full h-full object-cover" />
+                    <img
+                      src={img.url}
+                      alt={img.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-contain p-1"
+                    />
+                    {idx === 0 && (
+                      <span className="absolute bottom-0 right-0 px-1 text-[8px] bg-black text-white font-bold uppercase tracking-tighter">
+                        Cover
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>

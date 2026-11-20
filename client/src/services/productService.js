@@ -15,7 +15,33 @@ function getLocalProductOverrides() {
 function saveLocalProductOverride(id, productData) {
   try {
     const map = getLocalProductOverrides();
-    map[String(id)] = { ...map[String(id)], ...productData };
+    const primary =
+      productData.image_url ||
+      (Array.isArray(productData.images)
+        ? productData.images[0]?.url || productData.images[0]?.image_url || productData.images[0]
+        : null) ||
+      productData.primary_image ||
+      '';
+
+    const normalizedImages = Array.isArray(productData.images) && productData.images.length > 0
+      ? productData.images.map((img, idx) => {
+          const url = typeof img === 'string' ? img : (img.url || img.image_url || img.src);
+          return {
+            id: img.id || `img-${idx}`,
+            image_url: url,
+            url,
+            is_primary: idx === 0,
+          };
+        }).filter((i) => Boolean(i.image_url))
+      : (primary ? [{ id: 'primary', image_url: primary, url: primary, is_primary: true }] : []);
+
+    map[String(id)] = {
+      ...map[String(id)],
+      ...productData,
+      primary_image: primary,
+      image_url: primary,
+      images: normalizedImages,
+    };
     localStorage.setItem(CUSTOM_PRODUCTS_KEY, JSON.stringify(map));
   } catch {}
 }
@@ -25,10 +51,33 @@ function getMergedProducts() {
   return realProducts.map((p) => {
     const override = overrides[String(p.id)] || overrides[p.product_code];
     if (override) {
+      const primary =
+        override.image_url ||
+        override.primary_image ||
+        (override.images?.[0]?.image_url || override.images?.[0]?.url || override.images?.[0]) ||
+        p.primary_image;
+
+      const rawImages = (Array.isArray(override.images) && override.images.length > 0)
+        ? override.images
+        : (Array.isArray(p.images) && p.images.length > 0)
+        ? p.images
+        : (primary ? [{ id: 'primary', image_url: primary, url: primary, is_primary: true }] : []);
+
+      const normalizedImages = rawImages.map((img, idx) => {
+        const url = typeof img === 'string' ? img : (img.image_url || img.url || img.src);
+        return {
+          id: img.id || `img-${idx}`,
+          image_url: url,
+          url,
+          is_primary: idx === 0,
+        };
+      }).filter((i) => Boolean(i.image_url));
+
       return {
         ...p,
         ...override,
-        primary_image: override.image_url || override.primary_image || p.primary_image,
+        primary_image: primary,
+        images: normalizedImages,
       };
     }
     return p;

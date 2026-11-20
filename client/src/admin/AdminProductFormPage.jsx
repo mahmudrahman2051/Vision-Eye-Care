@@ -4,7 +4,7 @@ import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import productService from '../services/productService';
 import { realProducts } from '../data/realProducts';
-import ImageUploadBox from '../components/Common/ImageUploadBox';
+import MultiImageUploadBox from '../components/Common/MultiImageUploadBox';
 
 export default function AdminProductFormPage() {
   const { id } = useParams();
@@ -38,6 +38,7 @@ export default function AdminProductFormPage() {
     short_description: '',
     description: '',
     image_url: '',
+    images: [],
   });
 
   useEffect(() => {
@@ -60,6 +61,14 @@ export default function AdminProductFormPage() {
           if (res.status === 'success' && res.data) {
             const p = res.data;
             const primaryImg = p.images?.find((img) => img.is_primary)?.image_url || p.images?.[0]?.image_url || p.primary_image || '';
+            const initialImages = (Array.isArray(p.images) && p.images.length > 0)
+              ? p.images.map((img, idx) => ({
+                  id: img.id || `img-${idx}`,
+                  url: typeof img === 'string' ? img : (img.image_url || img.url),
+                  is_primary: idx === 0,
+                })).filter(i => Boolean(i.url))
+              : (primaryImg ? [{ id: 'primary', url: primaryImg, is_primary: true }] : []);
+
             setForm({
               name: p.name || '',
               brand: p.brand || '',
@@ -83,6 +92,7 @@ export default function AdminProductFormPage() {
               short_description: p.short_description || '',
               description: p.description || '',
               image_url: primaryImg,
+              images: initialImages,
             });
           } else {
             throw new Error('Not found');
@@ -94,6 +104,15 @@ export default function AdminProductFormPage() {
             (p) => String(p.id) === String(id) || p.slug === id || (p.product_code && p.product_code.toLowerCase() === id.toLowerCase())
           );
           if (local) {
+            const localPrimary = local.primary_image || '';
+            const localImages = (Array.isArray(local.images) && local.images.length > 0)
+              ? local.images.map((img, idx) => ({
+                  id: `local-img-${idx}`,
+                  url: typeof img === 'string' ? img : (img.image_url || img.url),
+                  is_primary: idx === 0,
+                })).filter(i => Boolean(i.url))
+              : (localPrimary ? [{ id: 'primary', url: localPrimary, is_primary: true }] : []);
+
             setForm({
               name: local.name || '',
               brand: local.brand || '',
@@ -116,7 +135,8 @@ export default function AdminProductFormPage() {
               new_arrival: Boolean(local.new_arrival),
               short_description: local.short_description || '',
               description: local.description || '',
-              image_url: local.primary_image || '',
+              image_url: localPrimary,
+              images: localImages,
             });
           } else {
             toast.error('Could not load product details.');
@@ -143,8 +163,13 @@ export default function AdminProductFormPage() {
 
     setSubmitting(true);
     try {
+      const primaryUrl = form.images?.[0]?.url || form.images?.[0]?.image_url || form.image_url || '';
       const payload = {
         ...form,
+        image_url: primaryUrl,
+        primary_image: primaryUrl,
+        images: form.images,
+        image_urls: form.images.map((img) => img.url || img.image_url || img).filter(Boolean),
         price: parseFloat(form.price),
         compare_price: form.compare_price ? parseFloat(form.compare_price) : null,
         stock: parseInt(form.stock, 10) || 0,
@@ -423,15 +448,20 @@ export default function AdminProductFormPage() {
         {/* Media & Copy */}
         <div className="bg-white border border-[#E8DFD0] rounded-2xl p-6 shadow-sm space-y-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A] pb-2 border-b border-[#F5EFE3]">
-            3. Image & Description
+            3. Product Image Gallery & Description
           </h2>
 
-          <ImageUploadBox
-            value={form.image_url}
-            onChange={(url) => setForm((prev) => ({ ...prev, image_url: url }))}
-            label="Primary Frame Image"
-            helpText="Upload a product photo directly or paste an external image URL. Uploaded images are automatically optimized to modern WebP format with high-resolution downsampling for instantaneous storefront loading."
-            aspectRatio="square"
+          <MultiImageUploadBox
+            images={form.images}
+            onChange={(newImages) => {
+              const primaryUrl = newImages[0]?.url || newImages[0]?.image_url || '';
+              setForm((prev) => ({
+                ...prev,
+                images: newImages,
+                image_url: primaryUrl,
+              }));
+            }}
+            maxImages={8}
             maxWidth={1200}
             maxHeight={1200}
           />
