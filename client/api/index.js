@@ -1,5 +1,4 @@
 import { neon } from '@neondatabase/serverless';
-import bcrypt from 'bcryptjs';
 
 export const config = {
   api: {
@@ -14,6 +13,21 @@ const DEFAULT_DB_URL =
   'postgresql://neondb_owner:npg_1Z2MeHfPBYLQ@ep-winter-smoke-b44w9lae-pooler.c-6.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
 const DATABASE_URL = process.env.DATABASE_URL || DEFAULT_DB_URL;
 const sql = neon(DATABASE_URL);
+
+// Dynamic password verification helper (Zero top-level dependencies)
+async function verifyPassword(password, hash) {
+  if (!password || !hash) return false;
+  try {
+    const bcryptModule = await import('bcryptjs');
+    const bcrypt = bcryptModule.default?.default || bcryptModule.default || bcryptModule;
+    if (typeof bcrypt.compare === 'function') {
+      return await bcrypt.compare(password, hash);
+    }
+  } catch (err) {
+    console.error('Password verification error:', err);
+  }
+  return false;
+}
 
 // Default Ticker Settings (Factory Fallback)
 const DEFAULT_MAIN_TICKER = {
@@ -502,6 +516,59 @@ export default async function handler(req, res) {
           },
         });
       }
+
+      // ADMIN STORE SETTINGS: GET & PUT /api/admin/settings
+      if (route1 === 'settings') {
+        if (req.method === 'GET') {
+          const rows = await sql.query('SELECT key, value FROM site_settings');
+          const settingsMap = {};
+          for (const row of rows) {
+            try {
+              settingsMap[row.key] = JSON.parse(row.value);
+            } catch {
+              settingsMap[row.key] = row.value;
+            }
+          }
+          return sendJson(res, 200, { status: 'success', data: settingsMap });
+        }
+        if (req.method === 'PUT' || req.method === 'POST') {
+          const body = await getBody(req);
+          if (typeof body === 'object' && body !== null) {
+            for (const [key, val] of Object.entries(body)) {
+              const valStr = typeof val === 'object' ? JSON.stringify(val) : String(val);
+              await sql.query(
+                `INSERT INTO site_settings (key, value, category, label, updated_at)
+                 VALUES ($1, $2, 'store', $1, NOW())
+                 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+                [key, valStr]
+              );
+            }
+          }
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Store settings saved successfully in database!',
+            data: body,
+          });
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // SETTINGS (Public Store Settings: GET /api/settings)
+    // ------------------------------------------------------------------------
+    if (route0 === 'settings') {
+      if (req.method === 'GET') {
+        const rows = await sql.query('SELECT key, value FROM site_settings');
+        const settingsMap = {};
+        for (const row of rows) {
+          try {
+            settingsMap[row.key] = JSON.parse(row.value);
+          } catch {
+            settingsMap[row.key] = row.value;
+          }
+        }
+        return sendJson(res, 200, { status: 'success', data: settingsMap });
+      }
     }
 
     // ------------------------------------------------------------------------
@@ -578,9 +645,7 @@ export default async function handler(req, res) {
           });
         }
 
-        const isPasswordValid = user.password_hash
-          ? await bcrypt.compare(password, user.password_hash)
-          : false;
+        const isPasswordValid = await verifyPassword(password, user.password_hash);
 
         if (!isPasswordValid) {
           return sendJson(res, 401, {
