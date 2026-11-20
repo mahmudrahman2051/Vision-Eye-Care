@@ -63,6 +63,8 @@ const LowerPromoBanner = () => {
             <img
               src={banner.image}
               alt={banner.alt || 'Exclusive Offer Banner'}
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto max-h-[360px] object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
               onError={(e) => {
                 e.target.onerror = null;

@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import bannerService from '../services/bannerService';
+import ImageUploadBox from '../components/Common/ImageUploadBox';
 
 const DEFAULT_BLOCKS = {
   heroBanners: [
@@ -498,46 +499,29 @@ export default function AdminBannersPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Preview Thumbnail */}
-                  <div className="relative aspect-[21/9] rounded-none overflow-hidden bg-neutral-100 border border-neutral-200">
-                    <img
-                      src={slide.src}
-                      alt={slide.alt || 'Slide image'}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/hero_banner_1.png';
-                      }}
-                    />
-                  </div>
+                <div className="space-y-4">
+                  <ImageUploadBox
+                    value={slide.src}
+                    onChange={(url) => handleUpdateHeroSlide(index, 'src', url)}
+                    label="Hero Slide Banner Image"
+                    helpText="Upload a high-resolution hero banner or paste an image URL. Automatically downscaled to max 1920px and optimized with WebP compression."
+                    aspectRatio="banner"
+                    maxWidth={1920}
+                    maxHeight={900}
+                  />
 
                   {/* Form fields */}
-                  <div className="md:col-span-2 space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
-                          Banner Image URL / Path *
-                        </label>
-                        <input
-                          type="text"
-                          value={slide.src}
-                          onChange={(e) => handleUpdateHeroSlide(index, 'src', e.target.value)}
-                          placeholder="/hero_banner_1.png or https://..."
-                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
-                          Image Alt Text
-                        </label>
-                        <input
-                          type="text"
-                          value={slide.alt}
-                          onChange={(e) => handleUpdateHeroSlide(index, 'alt', e.target.value)}
-                          className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
-                        />
-                      </div>
+                  <div className="space-y-3 pt-2 border-t border-neutral-100">
+                    <div>
+                      <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
+                        Image Alt Text
+                      </label>
+                      <input
+                        type="text"
+                        value={slide.alt}
+                        onChange={(e) => handleUpdateHeroSlide(index, 'alt', e.target.value)}
+                        className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:outline-none focus:border-black"
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -702,23 +686,20 @@ export default function AdminBannersPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Preview Thumbnail */}
-                    <div className="aspect-[21/9] sm:aspect-video rounded-none overflow-hidden bg-neutral-100 border border-neutral-200 relative flex items-center justify-center">
-                      <img
-                        src={banner.image}
-                        alt={banner.alt || 'Promotional Banner'}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/promo_banner.png';
-                        }}
-                      />
-                    </div>
+                  <div className="space-y-4">
+                    <ImageUploadBox
+                      value={banner.image}
+                      onChange={(url) => handleUpdatePromoBanner(index, 'image', url)}
+                      label="Promotional Banner Image"
+                      helpText="Upload a promotional campaign graphic or enter an external image link. WebP compression applied automatically."
+                      aspectRatio="banner"
+                      maxWidth={1600}
+                      maxHeight={600}
+                    />
 
                     {/* Inputs */}
-                    <div className="md:col-span-2 space-y-3">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-3 pt-2 border-t border-neutral-100">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>
                           <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
                             Banner Label / Title
@@ -741,21 +722,6 @@ export default function AdminBannersPage() {
                             onChange={(e) => handleUpdatePromoBanner(index, 'alt', e.target.value)}
                             placeholder="e.g. Special Eyewear Offer"
                             className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">
-                            Banner Image URL *
-                          </label>
-                          <input
-                            type="text"
-                            value={banner.image || ''}
-                            onChange={(e) => handleUpdatePromoBanner(index, 'image', e.target.value)}
-                            placeholder="/promo_banner.png or https://..."
-                            className="w-full bg-white text-xs px-3 py-2 rounded-none border border-neutral-300 focus:border-black focus:outline-none font-mono text-[11px]"
                           />
                         </div>
                         <div>
@@ -846,25 +812,26 @@ export default function AdminBannersPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div>
-                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Redirect Link</label>
-                    <input
-                      type="text"
-                      value={card.link}
-                      onChange={(e) => handleUpdateCollection(index, 'link', e.target.value)}
-                      className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Image URL</label>
-                    <input
-                      type="text"
-                      value={card.image}
-                      onChange={(e) => handleUpdateCollection(index, 'image', e.target.value)}
-                      className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
-                    />
-                  </div>
+                <div className="pt-1">
+                  <label className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider block mb-1">Redirect Link</label>
+                  <input
+                    type="text"
+                    value={card.link}
+                    onChange={(e) => handleUpdateCollection(index, 'link', e.target.value)}
+                    className="w-full bg-white text-xs px-2.5 py-1.5 rounded-none border border-neutral-300 focus:outline-none focus:border-black font-mono text-[11px]"
+                  />
+                </div>
+
+                <div className="pt-2 border-t border-neutral-100">
+                  <ImageUploadBox
+                    value={card.image}
+                    onChange={(url) => handleUpdateCollection(index, 'image', url)}
+                    label="Card Image"
+                    helpText="Upload or paste image for this collection card."
+                    aspectRatio="square"
+                    maxWidth={800}
+                    maxHeight={800}
+                  />
                 </div>
               </div>
             ))}

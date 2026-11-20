@@ -74,6 +74,8 @@ const HeroSection = () => {
                 <img
                   src={banner.src}
                   alt={banner.alt || 'Banner'}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
                   className="w-full h-full object-cover object-center"
                   draggable={false}
                 />
@@ -82,6 +84,8 @@ const HeroSection = () => {
               <img
                 src={banner.src}
                 alt={banner.alt || 'Banner'}
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                decoding="async"
                 className="w-full h-full object-cover object-center"
                 draggable={false}
               />

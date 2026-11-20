@@ -4,6 +4,7 @@ import { FiArrowLeft, FiSave } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import productService from '../services/productService';
 import { realProducts } from '../data/realProducts';
+import ImageUploadBox from '../components/Common/ImageUploadBox';
 
 export default function AdminProductFormPage() {
   const { id } = useParams();
@@ -425,33 +426,15 @@ export default function AdminProductFormPage() {
             3. Image & Description
           </h2>
 
-          <div>
-            <label className="block text-xs font-bold text-[#555] mb-1">Primary Frame Image URL</label>
-            <div className="flex gap-3 items-center">
-              <input
-                type="url"
-                name="image_url"
-                value={form.image_url}
-                onChange={handleChange}
-                placeholder="https://images.unsplash.com/... or Cloudinary URL"
-                className="flex-1 text-xs p-3 rounded-xl border border-[#E8DFD0] bg-[#FAF7F2]"
-              />
-              {form.image_url ? (
-                <img
-                  src={form.image_url}
-                  alt="Preview"
-                  className="w-14 h-14 rounded-xl object-cover border border-[#E8DFD0] flex-shrink-0"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-xl bg-[#FAF7F2] border border-dashed border-[#E8DFD0] flex items-center justify-center text-[10px] text-[#999] text-center flex-shrink-0">
-                  No Image
-                </div>
-              )}
-            </div>
-            <p className="text-[10px] text-[#777] mt-1.5">
-              Add image link directly from Cloudinary or an image host. You can add or replace images anytime.
-            </p>
-          </div>
+          <ImageUploadBox
+            value={form.image_url}
+            onChange={(url) => setForm((prev) => ({ ...prev, image_url: url }))}
+            label="Primary Frame Image"
+            helpText="Upload a product photo directly or paste an external image URL. Uploaded images are automatically optimized to modern WebP format with high-resolution downsampling for instantaneous storefront loading."
+            aspectRatio="square"
+            maxWidth={1200}
+            maxHeight={1200}
+          />
 
           <div>
             <label className="block text-xs font-bold text-[#555] mb-1">Short Summary</label>
