@@ -17,6 +17,17 @@ const DATABASE_URL =
 
 const sql = DATABASE_URL ? neon(DATABASE_URL) : null;
 
+// Safe SQL query helper that never crashes cold-start reads
+async function safeQuery(queryString, params = []) {
+  if (!sql) return [];
+  try {
+    return await sql.query(queryString, params);
+  } catch (err) {
+    console.error('SQL Query Error:', err.message);
+    return [];
+  }
+}
+
 // Dynamic password verification helper (Zero top-level dependencies)
 async function verifyPassword(password, hash) {
   if (!password || !hash) return false;
@@ -82,6 +93,14 @@ const DEFAULT_COUPON_TICKER = {
   promptText: '[Click to Copy]',
 };
 
+const DEFAULT_CATEGORIES = [
+  { id: 1, name: 'Eyeglasses', slug: 'eyeglasses' },
+  { id: 2, name: 'Sunglasses', slug: 'sunglasses' },
+  { id: 3, name: 'Contact Lenses', slug: 'contact-lenses' },
+  { id: 4, name: 'Eyeglass Cases', slug: 'eyeglass-cases' },
+  { id: 5, name: 'Cleaning Solutions', slug: 'cleaning-solutions' },
+];
+
 // Helper to send json
 function sendJson(res, statusCode, data) {
   res.statusCode = statusCode;
@@ -137,14 +156,6 @@ export default async function handler(req, res) {
   const route1 = segments[1] || '';
   const route2 = segments[2] || '';
 
-  if (!sql) {
-    return sendJson(res, 500, {
-      status: 'error',
-      message:
-        'DATABASE_URL environment variable is not configured. Please set DATABASE_URL in Vercel project environment variables.',
-    });
-  }
-
   try {
     // ------------------------------------------------------------------------
     // HEALTH CHECK
@@ -153,6 +164,7 @@ export default async function handler(req, res) {
       return sendJson(res, 200, {
         status: 'success',
         message: 'Vision Eye Care Neon Serverless API Online',
+        database_connected: Boolean(sql),
         timestamp: new Date().toISOString(),
       });
     }
@@ -164,8 +176,8 @@ export default async function handler(req, res) {
       // GET /api/ticker/coupon - Coupon Marquee Ticker Settings
       if (route1 === 'coupon') {
         if (req.method === 'GET') {
-          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
           let data = DEFAULT_COUPON_TICKER;
+          const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
           if (rows.length > 0 && rows[0].value) {
             try {
               data = JSON.parse(rows[0].value);
@@ -174,6 +186,7 @@ export default async function handler(req, res) {
           return sendJson(res, 200, { status: 'success', data });
         }
         if (req.method === 'PUT' || req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           await sql.query(
             `INSERT INTO site_settings (key, value, category, label, updated_at)
@@ -191,8 +204,8 @@ export default async function handler(req, res) {
 
       // GET /api/ticker - Main Announcement Marquee Ticker Settings
       if (!route1 && req.method === 'GET') {
-        const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
         let data = DEFAULT_MAIN_TICKER;
+        const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
         if (rows.length > 0 && rows[0].value) {
           try {
             data = JSON.parse(rows[0].value);
@@ -203,6 +216,7 @@ export default async function handler(req, res) {
 
       // PUT /api/ticker - Main Announcement Marquee Ticker Update
       if (!route1 && (req.method === 'PUT' || req.method === 'POST')) {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const body = await getBody(req);
         await sql.query(
           `INSERT INTO site_settings (key, value, category, label, updated_at)
@@ -228,7 +242,14 @@ export default async function handler(req, res) {
         const code = (body.code || '').trim().toUpperCase();
         const amount = parseFloat(body.amount || 0);
 
-        const rows = await sql.query('SELECT * FROM coupons WHERE UPPER(code) = $1 LIMIT 1', [code]);
+        if (!sql) {
+          return sendJson(res, 200, {
+            status: 'success',
+            data: { code, discount_amount: 0, description: 'Offline mode' },
+          });
+        }
+
+        const rows = await safeQuery('SELECT * FROM coupons WHERE UPPER(code) = $1 LIMIT 1', [code]);
         if (rows.length === 0) {
           return sendJson(res, 400, {
             status: 'fail',
@@ -279,7 +300,7 @@ export default async function handler(req, res) {
 
       // GET /api/coupons - List active coupons for public tickers and cart
       if (req.method === 'GET') {
-        const coupons = await sql.query('SELECT * FROM coupons WHERE is_active = true ORDER BY id ASC');
+        const coupons = await safeQuery('SELECT * FROM coupons WHERE is_active = true ORDER BY id ASC');
         return sendJson(res, 200, { status: 'success', data: coupons });
       }
     }
@@ -289,14 +310,14 @@ export default async function handler(req, res) {
     // ------------------------------------------------------------------------
     if (route0 === 'banners') {
       if (req.method === 'GET') {
-        const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
+        const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
         if (rows.length > 0 && rows[0].value) {
           try {
             return sendJson(res, 200, { status: 'success', data: JSON.parse(rows[0].value) });
           } catch {}
         }
         // Fallback to active banners from banners table
-        const bannerRows = await sql.query('SELECT * FROM banners WHERE is_active = true ORDER BY sort_order ASC');
+        const bannerRows = await safeQuery('SELECT * FROM banners WHERE is_active = true ORDER BY sort_order ASC');
         return sendJson(res, 200, {
           status: 'success',
           data: {
@@ -328,8 +349,8 @@ export default async function handler(req, res) {
       // ADMIN MAIN ANNOUNCEMENT TICKER: GET & PUT /api/admin/ticker
       if (route1 === 'ticker') {
         if (req.method === 'GET') {
-          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
           let data = DEFAULT_MAIN_TICKER;
+          const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
           if (rows.length > 0 && rows[0].value) {
             try {
               data = JSON.parse(rows[0].value);
@@ -338,6 +359,7 @@ export default async function handler(req, res) {
           return sendJson(res, 200, { status: 'success', data });
         }
         if (req.method === 'PUT' || req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           await sql.query(
             `INSERT INTO site_settings (key, value, category, label, updated_at)
@@ -356,8 +378,8 @@ export default async function handler(req, res) {
       // ADMIN COUPON TICKER: GET & PUT /api/admin/coupon-ticker
       if (route1 === 'coupon-ticker') {
         if (req.method === 'GET') {
-          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
           let data = DEFAULT_COUPON_TICKER;
+          const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
           if (rows.length > 0 && rows[0].value) {
             try {
               data = JSON.parse(rows[0].value);
@@ -366,6 +388,7 @@ export default async function handler(req, res) {
           return sendJson(res, 200, { status: 'success', data });
         }
         if (req.method === 'PUT' || req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           await sql.query(
             `INSERT INTO site_settings (key, value, category, label, updated_at)
@@ -384,7 +407,7 @@ export default async function handler(req, res) {
       // ADMIN HOMEPAGE BANNERS: GET & PUT /api/admin/banners
       if (route1 === 'banners') {
         if (req.method === 'GET') {
-          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
+          const rows = await safeQuery("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
           let data = null;
           if (rows.length > 0 && rows[0].value) {
             try {
@@ -394,6 +417,7 @@ export default async function handler(req, res) {
           return sendJson(res, 200, { status: 'success', data });
         }
         if (req.method === 'PUT' || req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           await sql.query(
             `INSERT INTO site_settings (key, value, category, label, updated_at)
@@ -413,12 +437,13 @@ export default async function handler(req, res) {
       if (route1 === 'coupons') {
         // GET /api/admin/coupons - List all coupons
         if (!route2 && req.method === 'GET') {
-          const coupons = await sql.query('SELECT * FROM coupons ORDER BY id ASC');
+          const coupons = await safeQuery('SELECT * FROM coupons ORDER BY id ASC');
           return sendJson(res, 200, { status: 'success', data: coupons });
         }
 
         // POST /api/admin/coupons - Create coupon
         if (!route2 && req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           const rows = await sql.query(
             `INSERT INTO coupons (
@@ -446,6 +471,7 @@ export default async function handler(req, res) {
 
         // PUT /api/admin/coupons/:id - Update coupon
         if (route2 && req.method === 'PUT') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const couponId = parseInt(route2, 10);
           const body = await getBody(req);
           const rows = await sql.query(
@@ -481,6 +507,7 @@ export default async function handler(req, res) {
 
         // DELETE /api/admin/coupons/:id - Delete coupon
         if (route2 && req.method === 'DELETE') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const couponId = parseInt(route2, 10);
           await sql.query('DELETE FROM coupons WHERE id = $1', [couponId]);
           return sendJson(res, 200, {
@@ -492,10 +519,10 @@ export default async function handler(req, res) {
 
       // ADMIN DASHBOARD: GET /api/admin/dashboard
       if (route1 === 'dashboard') {
-        const orderCountRes = await sql.query('SELECT COUNT(*) as count, COALESCE(SUM(total), 0) as revenue FROM orders');
-        const pendingCountRes = await sql.query("SELECT COUNT(*) as count FROM orders WHERE order_status = 'pending'");
-        const productCountRes = await sql.query('SELECT COUNT(*) as count FROM products');
-        const recentOrders = await sql.query('SELECT * FROM orders ORDER BY id DESC LIMIT 5');
+        const orderCountRes = await safeQuery('SELECT COUNT(*) as count, COALESCE(SUM(total), 0) as revenue FROM orders');
+        const pendingCountRes = await safeQuery("SELECT COUNT(*) as count FROM orders WHERE order_status = 'pending'");
+        const productCountRes = await safeQuery('SELECT COUNT(*) as count FROM products');
+        const recentOrders = await safeQuery('SELECT * FROM orders ORDER BY id DESC LIMIT 5');
 
         return sendJson(res, 200, {
           status: 'success',
@@ -513,7 +540,7 @@ export default async function handler(req, res) {
 
       // ADMIN ORDERS: GET /api/admin/orders
       if (route1 === 'orders') {
-        const orders = await sql.query('SELECT * FROM orders ORDER BY id DESC LIMIT 100');
+        const orders = await safeQuery('SELECT * FROM orders ORDER BY id DESC LIMIT 100');
         return sendJson(res, 200, {
           status: 'success',
           data: {
@@ -531,7 +558,7 @@ export default async function handler(req, res) {
       // ADMIN STORE SETTINGS: GET & PUT /api/admin/settings
       if (route1 === 'settings') {
         if (req.method === 'GET') {
-          const rows = await sql.query('SELECT key, value FROM site_settings');
+          const rows = await safeQuery('SELECT key, value FROM site_settings');
           const settingsMap = {};
           for (const row of rows) {
             try {
@@ -543,6 +570,7 @@ export default async function handler(req, res) {
           return sendJson(res, 200, { status: 'success', data: settingsMap });
         }
         if (req.method === 'PUT' || req.method === 'POST') {
+          if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
           const body = await getBody(req);
           if (typeof body === 'object' && body !== null) {
             for (const [key, val] of Object.entries(body)) {
@@ -569,7 +597,7 @@ export default async function handler(req, res) {
     // ------------------------------------------------------------------------
     if (route0 === 'settings') {
       if (req.method === 'GET') {
-        const rows = await sql.query('SELECT key, value FROM site_settings');
+        const rows = await safeQuery('SELECT key, value FROM site_settings');
         const settingsMap = {};
         for (const row of rows) {
           try {
@@ -586,8 +614,8 @@ export default async function handler(req, res) {
     // CATEGORIES
     // ------------------------------------------------------------------------
     if (route0 === 'categories') {
-      const categories = await sql.query('SELECT id, name, slug FROM categories ORDER BY id ASC');
-      return sendJson(res, 200, { status: 'success', data: categories });
+      const rows = await safeQuery('SELECT id, name, slug FROM categories ORDER BY id ASC');
+      return sendJson(res, 200, { status: 'success', data: rows.length > 0 ? rows : DEFAULT_CATEGORIES });
     }
 
     // ------------------------------------------------------------------------
@@ -606,7 +634,7 @@ export default async function handler(req, res) {
           const parts = token.split('_');
           const userId = parseInt(parts[2], 10);
           if (userId) {
-            const userRows = await sql.query(
+            const userRows = await safeQuery(
               'SELECT id, name, email, phone, role, is_active FROM users WHERE id = $1 LIMIT 1',
               [userId]
             );
@@ -635,7 +663,15 @@ export default async function handler(req, res) {
           });
         }
 
-        const userRows = await sql.query(
+        if (!sql) {
+          return sendJson(res, 503, {
+            status: 'fail',
+            message:
+              'Database connection is not yet configured. Please set the DATABASE_URL environment variable in your Vercel Project Settings.',
+          });
+        }
+
+        const userRows = await safeQuery(
           'SELECT id, name, email, phone, role, password_hash, is_active FROM users WHERE LOWER(email) = LOWER($1) LIMIT 1',
           [email]
         );
@@ -696,6 +732,7 @@ export default async function handler(req, res) {
     // ------------------------------------------------------------------------
     if (route0 === 'orders') {
       if (req.method === 'POST') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const body = await getBody(req);
         const orderNumber = 'VEC-' + Math.floor(100000 + Math.random() * 900000);
         const subtotal = parseFloat(body.subtotal || body.total_amount || 0);
@@ -759,7 +796,7 @@ export default async function handler(req, res) {
       }
 
       if (req.method === 'GET') {
-        const orders = await sql.query('SELECT * FROM orders ORDER BY id DESC LIMIT 50');
+        const orders = await safeQuery('SELECT * FROM orders ORDER BY id DESC LIMIT 50');
         return sendJson(res, 200, { status: 'success', data: { orders } });
       }
     }
@@ -770,7 +807,7 @@ export default async function handler(req, res) {
     if (route0 === 'products') {
       // FEATURED & BESTSELLERS
       if (route1 === 'featured') {
-        const featured = await sql.query(
+        const featured = await safeQuery(
           `SELECT p.*,
             (SELECT image_url FROM product_images pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) AS primary_image
            FROM products p
@@ -784,6 +821,7 @@ export default async function handler(req, res) {
 
       // CREATE PRODUCT: POST /api/products
       if (!route1 && req.method === 'POST') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const body = await getBody(req);
         const insertRes = await sql.query(
           `INSERT INTO products (
@@ -841,6 +879,7 @@ export default async function handler(req, res) {
 
       // UPDATE PRODUCT IMAGES: POST /api/products/:id/images
       if (route1 && route2 === 'images' && req.method === 'POST') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const productId = parseInt(route1, 10);
         const body = await getBody(req);
         const imageUrl = body.image_url || body.url || body.dataUrl || '';
@@ -860,6 +899,7 @@ export default async function handler(req, res) {
 
       // DELETE PRODUCT IMAGE: DELETE /api/products/:id/images/:imageId
       if (route1 && route2 === 'images' && segments[3] && req.method === 'DELETE') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const imageId = parseInt(segments[3], 10);
         await sql.query('DELETE FROM product_images WHERE id = $1', [imageId]);
         return sendJson(res, 200, { status: 'success', message: 'Image removed' });
@@ -867,11 +907,11 @@ export default async function handler(req, res) {
 
       // UPDATE PRODUCT: PUT /api/products/:id
       if (route1 && req.method === 'PUT') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const body = await getBody(req);
         const queryId = decodeURIComponent(route1).trim();
         const isNumeric = /^\d+$/.test(queryId);
 
-        // Find product by id, product_code, or slug
         let existing = [];
         if (isNumeric) {
           existing = await sql.query('SELECT * FROM products WHERE id = $1 LIMIT 1', [parseInt(queryId, 10)]);
@@ -896,7 +936,6 @@ export default async function handler(req, res) {
         let targetId = existing.length > 0 ? existing[0].id : (isNumeric ? parseInt(queryId, 10) : null);
 
         if (!targetId) {
-          // If not found in database, insert it
           const insertRes = await sql.query(
             `INSERT INTO products (name, slug, product_code, sku, price, stock, brand)
              VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
@@ -913,7 +952,6 @@ export default async function handler(req, res) {
           targetId = insertRes[0].id;
         }
 
-        // Update product fields
         await sql.query(
           `UPDATE products SET
             name = COALESCE($1, name),
@@ -956,11 +994,8 @@ export default async function handler(req, res) {
           ]
         );
 
-        // Update product gallery images
         const allImages = Array.isArray(body.images) && body.images.length > 0
-          ? body.images
-              .map((img) => (typeof img === 'string' ? img : (img.url || img.image_url || img.src)))
-              .filter(Boolean)
+          ? body.images.map((img) => (typeof img === 'string' ? img : (img.url || img.image_url || img.src))).filter(Boolean)
           : Array.isArray(body.image_urls) && body.image_urls.length > 0
           ? body.image_urls
           : (body.primary_image || body.image_url ? [body.primary_image || body.image_url] : []);
@@ -976,7 +1011,6 @@ export default async function handler(req, res) {
           }
         }
 
-        // Fetch refreshed product with images
         const updatedRow = await sql.query('SELECT * FROM products WHERE id = $1', [targetId]);
         const imgRows = await sql.query(
           'SELECT id, image_url, is_primary, sort_order FROM product_images WHERE product_id = $1 ORDER BY is_primary DESC, sort_order ASC, id ASC',
@@ -1004,6 +1038,7 @@ export default async function handler(req, res) {
 
       // DELETE PRODUCT: DELETE /api/products/:id
       if (route1 && req.method === 'DELETE') {
+        if (!sql) return sendJson(res, 503, { status: 'fail', message: 'DATABASE_URL is not configured.' });
         const id = parseInt(route1, 10);
         await sql.query('DELETE FROM product_images WHERE product_id = $1', [id]);
         await sql.query('DELETE FROM products WHERE id = $1', [id]);
@@ -1017,7 +1052,7 @@ export default async function handler(req, res) {
 
         let rows = [];
         if (isNumeric) {
-          rows = await sql.query(
+          rows = await safeQuery(
             `SELECT p.*, c.name AS category_name, c.slug AS category_slug
              FROM products p
              LEFT JOIN categories c ON p.category_id = c.id
@@ -1031,7 +1066,7 @@ export default async function handler(req, res) {
           const extractedCode = codeMatch ? codeMatch[1].toUpperCase() : '';
           const cleanSlug = queryId.replace(/^mrm-\d+-?/i, '');
 
-          rows = await sql.query(
+          rows = await safeQuery(
             `SELECT p.*, c.name AS category_name, c.slug AS category_slug
              FROM products p
              LEFT JOIN categories c ON p.category_id = c.id
@@ -1047,7 +1082,7 @@ export default async function handler(req, res) {
 
         if (rows.length > 0) {
           const product = rows[0];
-          const imgRows = await sql.query(
+          const imgRows = await safeQuery(
             'SELECT id, image_url, is_primary, sort_order FROM product_images WHERE product_id = $1 ORDER BY is_primary DESC, sort_order ASC, id ASC',
             [product.id]
           );
@@ -1122,18 +1157,17 @@ export default async function handler(req, res) {
           query += ' AND p.new_arrival = true';
         }
 
-        const countRes = await sql.query(`SELECT COUNT(*) AS total FROM (${query}) AS sub`, params);
+        const countRes = await safeQuery(`SELECT COUNT(*) AS total FROM (${query}) AS sub`, params);
         const total = parseInt(countRes[0]?.total || 0, 10);
 
         query += ` ORDER BY p.id ASC LIMIT $${idx} OFFSET $${idx + 1}`;
         params.push(limit, (page - 1) * limit);
 
-        const products = await sql.query(query, params);
+        const products = await safeQuery(query, params);
 
-        // Fetch gallery images for these products
         if (products.length > 0) {
           const ids = products.map((p) => p.id);
-          const allImgs = await sql.query(
+          const allImgs = await safeQuery(
             'SELECT id, product_id, image_url, is_primary, sort_order FROM product_images WHERE product_id = ANY($1::int[]) ORDER BY sort_order ASC, id ASC',
             [ids]
           );
