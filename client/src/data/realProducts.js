@@ -1,4 +1,4 @@
-// Real product catalog loaded from asstes/Vision_Eye_Care_Produst List.csv
+// Real product catalog with selling prices from DRISHTI_with_selling_prices.xlsx
 export const realProducts = [
   {
     "id": 1,
@@ -11,8 +11,8 @@ export const realProducts = [
     "memo_no": "27 no",
     "box": "",
     "size": "54-19-147",
-    "price": 300,
-    "compare_price": 390,
+    "price": 600.0,
+    "compare_price": 780,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -31,7 +31,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 18
+    "review_count": 18,
+    "wholesale_price": 300.0
   },
   {
     "id": 2,
@@ -44,8 +45,8 @@ export const realProducts = [
     "memo_no": "25 no",
     "box": "",
     "size": "51-19-148",
-    "price": 400,
-    "compare_price": 520,
+    "price": 800.0,
+    "compare_price": 1040,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -64,7 +65,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 31
+    "review_count": 31,
+    "wholesale_price": 400.0
   },
   {
     "id": 3,
@@ -77,8 +79,8 @@ export const realProducts = [
     "memo_no": "26NO",
     "box": "",
     "size": "Standard",
-    "price": 170,
-    "compare_price": 221,
+    "price": 340.0,
+    "compare_price": 442,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -97,7 +99,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 44
+    "review_count": 44,
+    "wholesale_price": 170.0
   },
   {
     "id": 4,
@@ -110,8 +113,8 @@ export const realProducts = [
     "memo_no": "23 no",
     "box": "",
     "size": "62-14-140",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -130,7 +133,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 12
+    "review_count": 12,
+    "wholesale_price": 420.0
   },
   {
     "id": 5,
@@ -143,8 +147,8 @@ export const realProducts = [
     "memo_no": "24 no(2)",
     "box": "samebox 2-12",
     "size": "52-18-145",
-    "price": 270,
-    "compare_price": 351,
+    "price": 540.0,
+    "compare_price": 702,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -163,7 +167,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 25
+    "review_count": 25,
+    "wholesale_price": 270.0
   },
   {
     "id": 6,
@@ -176,8 +181,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "A",
     "size": "60-18-130",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -196,7 +201,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 38
+    "review_count": 38,
+    "wholesale_price": 550.0
   },
   {
     "id": 7,
@@ -209,8 +215,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "",
     "size": "52-16",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -229,7 +235,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 6
+    "review_count": 6,
+    "wholesale_price": 550.0
   },
   {
     "id": 8,
@@ -242,8 +249,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "",
     "size": "orange",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -262,7 +269,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 19
+    "review_count": 19,
+    "wholesale_price": 550.0
   },
   {
     "id": 9,
@@ -275,8 +283,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "",
     "size": "blue",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -295,7 +303,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 32
+    "review_count": 32,
+    "wholesale_price": 550.0
   },
   {
     "id": 10,
@@ -308,8 +317,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "",
     "size": "green",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -328,7 +337,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 45
+    "review_count": 45,
+    "wholesale_price": 550.0
   },
   {
     "id": 11,
@@ -341,8 +351,8 @@ export const realProducts = [
     "memo_no": "Sports(21)",
     "box": "",
     "size": "red-black",
-    "price": 550,
-    "compare_price": 715,
+    "price": 1100.0,
+    "compare_price": 1430,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -361,7 +371,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 13
+    "review_count": 13,
+    "wholesale_price": 550.0
   },
   {
     "id": 12,
@@ -374,8 +385,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "",
     "size": "52-17-143",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -394,7 +405,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 26
+    "review_count": 26,
+    "wholesale_price": 380.0
   },
   {
     "id": 13,
@@ -407,8 +419,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "",
     "size": "(different)",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 2,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -427,7 +439,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 39
+    "review_count": 39,
+    "wholesale_price": 380.0
   },
   {
     "id": 14,
@@ -440,8 +453,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "",
     "size": "57-15-145",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -460,7 +473,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 7
+    "review_count": 7,
+    "wholesale_price": 380.0
   },
   {
     "id": 15,
@@ -473,8 +487,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "",
     "size": "55-16-145",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -493,7 +507,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 20
+    "review_count": 20,
+    "wholesale_price": 380.0
   },
   {
     "id": 16,
@@ -506,8 +521,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "",
     "size": "18-58-148",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -526,7 +541,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 33
+    "review_count": 33,
+    "wholesale_price": 380.0
   },
   {
     "id": 17,
@@ -539,8 +555,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "Samebox 13-30",
     "size": "55-18-143",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -559,7 +575,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 46
+    "review_count": 46,
+    "wholesale_price": 380.0
   },
   {
     "id": 18,
@@ -572,8 +589,8 @@ export const realProducts = [
     "memo_no": "1no(20 )",
     "box": "B",
     "size": "52-18-142",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -592,7 +609,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 14
+    "review_count": 14,
+    "wholesale_price": 380.0
   },
   {
     "id": 19,
@@ -605,8 +623,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "48-24-142",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -625,7 +643,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 27
+    "review_count": 27,
+    "wholesale_price": 380.0
   },
   {
     "id": 20,
@@ -638,8 +657,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "57-18-143",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -658,7 +677,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 40
+    "review_count": 40,
+    "wholesale_price": 380.0
   },
   {
     "id": 21,
@@ -671,8 +691,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "52-19-145",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -691,7 +711,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 8
+    "review_count": 8,
+    "wholesale_price": 380.0
   },
   {
     "id": 22,
@@ -704,8 +725,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "50-18-142",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -724,7 +745,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 21
+    "review_count": 21,
+    "wholesale_price": 380.0
   },
   {
     "id": 23,
@@ -737,8 +759,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "52-22-143",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -757,7 +779,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 34
+    "review_count": 34,
+    "wholesale_price": 380.0
   },
   {
     "id": 24,
@@ -770,8 +793,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "54-21-142",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -790,7 +813,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 47
+    "review_count": 47,
+    "wholesale_price": 380.0
   },
   {
     "id": 25,
@@ -803,8 +827,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "52-18-144",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -823,7 +847,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 15
+    "review_count": 15,
+    "wholesale_price": 380.0
   },
   {
     "id": 26,
@@ -836,8 +861,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "54-15-143",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -856,7 +881,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 28
+    "review_count": 28,
+    "wholesale_price": 380.0
   },
   {
     "id": 27,
@@ -869,8 +895,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "50-21-144",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -889,7 +915,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 41
+    "review_count": 41,
+    "wholesale_price": 380.0
   },
   {
     "id": 28,
@@ -902,8 +929,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "54-21-142",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -922,7 +949,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 9
+    "review_count": 9,
+    "wholesale_price": 380.0
   },
   {
     "id": 29,
@@ -935,8 +963,8 @@ export const realProducts = [
     "memo_no": "1no(20)",
     "box": "",
     "size": "N/A",
-    "price": 380,
-    "compare_price": 494,
+    "price": 760.0,
+    "compare_price": 988,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -955,7 +983,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 22
+    "review_count": 22,
+    "wholesale_price": 380.0
   },
   {
     "id": 30,
@@ -968,8 +997,8 @@ export const realProducts = [
     "memo_no": "15no(5)",
     "box": "",
     "size": "50-17-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -988,7 +1017,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 35
+    "review_count": 35,
+    "wholesale_price": 260.0
   },
   {
     "id": 31,
@@ -1001,8 +1031,8 @@ export const realProducts = [
     "memo_no": "15no(5)",
     "box": "",
     "size": "50-18-142",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1021,7 +1051,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 48
+    "review_count": 48,
+    "wholesale_price": 260.0
   },
   {
     "id": 32,
@@ -1034,8 +1065,8 @@ export const realProducts = [
     "memo_no": "15no(5)",
     "box": "",
     "size": "50-20-145",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -1054,7 +1085,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 16
+    "review_count": 16,
+    "wholesale_price": 260.0
   },
   {
     "id": 33,
@@ -1067,8 +1099,8 @@ export const realProducts = [
     "memo_no": "15no(5)",
     "box": "Samebox 31-48",
     "size": "50-18-142",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1087,7 +1119,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 29
+    "review_count": 29,
+    "wholesale_price": 260.0
   },
   {
     "id": 34,
@@ -1100,8 +1133,8 @@ export const realProducts = [
     "memo_no": "15no(5)",
     "box": "C",
     "size": "50-20-145",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1120,7 +1153,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 42
+    "review_count": 42,
+    "wholesale_price": 260.0
   },
   {
     "id": 35,
@@ -1133,8 +1167,8 @@ export const realProducts = [
     "memo_no": "16no(2)",
     "box": "",
     "size": "54-16-145",
-    "price": 320,
-    "compare_price": 416,
+    "price": 640.0,
+    "compare_price": 832,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1153,7 +1187,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 10
+    "review_count": 10,
+    "wholesale_price": 320.0
   },
   {
     "id": 36,
@@ -1166,8 +1201,8 @@ export const realProducts = [
     "memo_no": "16no(2)",
     "box": "",
     "size": "55-16-145",
-    "price": 320,
-    "compare_price": 416,
+    "price": 640.0,
+    "compare_price": 832,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -1186,7 +1221,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 23
+    "review_count": 23,
+    "wholesale_price": 320.0
   },
   {
     "id": 37,
@@ -1199,8 +1235,8 @@ export const realProducts = [
     "memo_no": "17no(1)",
     "box": "",
     "size": "48-22-148",
-    "price": 450,
-    "compare_price": 585,
+    "price": 900.0,
+    "compare_price": 1170,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1219,7 +1255,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 36
+    "review_count": 36,
+    "wholesale_price": 450.0
   },
   {
     "id": 38,
@@ -1232,8 +1269,8 @@ export const realProducts = [
     "memo_no": "18no(1)",
     "box": "",
     "size": "52-19-142",
-    "price": 270,
-    "compare_price": 351,
+    "price": 540.0,
+    "compare_price": 702,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1252,7 +1289,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 49
+    "review_count": 49,
+    "wholesale_price": 270.0
   },
   {
     "id": 39,
@@ -1265,8 +1303,8 @@ export const realProducts = [
     "memo_no": "13no(6)",
     "box": "",
     "size": "52-20-147",
-    "price": 330,
-    "compare_price": 429,
+    "price": 660.0,
+    "compare_price": 858,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1285,7 +1323,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 17
+    "review_count": 17,
+    "wholesale_price": 330.0
   },
   {
     "id": 40,
@@ -1298,8 +1337,8 @@ export const realProducts = [
     "memo_no": "13no(6)",
     "box": "",
     "size": "55-19-150",
-    "price": 330,
-    "compare_price": 429,
+    "price": 660.0,
+    "compare_price": 858,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1318,7 +1357,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 30
+    "review_count": 30,
+    "wholesale_price": 330.0
   },
   {
     "id": 41,
@@ -1331,8 +1371,8 @@ export const realProducts = [
     "memo_no": "13no(6)",
     "box": "",
     "size": "55-19-150",
-    "price": 330,
-    "compare_price": 429,
+    "price": 660.0,
+    "compare_price": 858,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -1351,7 +1391,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 43
+    "review_count": 43,
+    "wholesale_price": 330.0
   },
   {
     "id": 42,
@@ -1364,8 +1405,8 @@ export const realProducts = [
     "memo_no": "19no(1)",
     "box": "",
     "size": "50-17-143",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1384,7 +1425,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 11
+    "review_count": 11,
+    "wholesale_price": 350.0
   },
   {
     "id": 43,
@@ -1397,8 +1439,8 @@ export const realProducts = [
     "memo_no": "14no(7)",
     "box": "",
     "size": "51-20-145",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1417,7 +1459,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 24
+    "review_count": 24,
+    "wholesale_price": 350.0
   },
   {
     "id": 44,
@@ -1430,8 +1473,8 @@ export const realProducts = [
     "memo_no": "14no(7)",
     "box": "",
     "size": "50-18-146",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1450,7 +1493,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 37
+    "review_count": 37,
+    "wholesale_price": 350.0
   },
   {
     "id": 45,
@@ -1463,8 +1507,8 @@ export const realProducts = [
     "memo_no": "14no(7)",
     "box": "",
     "size": "53-18-145",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1483,7 +1527,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 5
+    "review_count": 5,
+    "wholesale_price": 350.0
   },
   {
     "id": 46,
@@ -1496,8 +1541,8 @@ export const realProducts = [
     "memo_no": "14no(7)",
     "box": "",
     "size": "52-19-146",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1516,7 +1561,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 18
+    "review_count": 18,
+    "wholesale_price": 350.0
   },
   {
     "id": 47,
@@ -1529,8 +1575,8 @@ export const realProducts = [
     "memo_no": "14no(7)",
     "box": "",
     "size": "52-19-146",
-    "price": 350,
-    "compare_price": 455,
+    "price": 700.0,
+    "compare_price": 910,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 4,
@@ -1549,7 +1595,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 31
+    "review_count": 31,
+    "wholesale_price": 350.0
   },
   {
     "id": 48,
@@ -1562,8 +1609,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "52-18-145",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1582,7 +1629,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 44
+    "review_count": 44,
+    "wholesale_price": 420.0
   },
   {
     "id": 49,
@@ -1595,8 +1643,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "53-21-147",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1615,7 +1663,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 12
+    "review_count": 12,
+    "wholesale_price": 420.0
   },
   {
     "id": 50,
@@ -1628,8 +1677,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "55-17-147",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1648,7 +1697,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 25
+    "review_count": 25,
+    "wholesale_price": 420.0
   },
   {
     "id": 51,
@@ -1661,8 +1711,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "53-22-147",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1681,7 +1731,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 38
+    "review_count": 38,
+    "wholesale_price": 420.0
   },
   {
     "id": 52,
@@ -1694,8 +1745,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "52-18-145",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1714,7 +1765,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 6
+    "review_count": 6,
+    "wholesale_price": 420.0
   },
   {
     "id": 53,
@@ -1727,8 +1779,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "Same Box 49-61",
     "size": "54-20-145",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1747,7 +1799,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 19
+    "review_count": 19,
+    "wholesale_price": 420.0
   },
   {
     "id": 54,
@@ -1760,8 +1813,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "D",
     "size": "51-22-146",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1780,7 +1833,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 32
+    "review_count": 32,
+    "wholesale_price": 420.0
   },
   {
     "id": 55,
@@ -1793,8 +1847,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "61-21-142",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1813,7 +1867,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 45
+    "review_count": 45,
+    "wholesale_price": 420.0
   },
   {
     "id": 56,
@@ -1826,8 +1881,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "52-17-142",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1846,7 +1901,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 13
+    "review_count": 13,
+    "wholesale_price": 420.0
   },
   {
     "id": 57,
@@ -1859,8 +1915,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "51-22-146",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1879,7 +1935,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 26
+    "review_count": 26,
+    "wholesale_price": 420.0
   },
   {
     "id": 58,
@@ -1892,8 +1949,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "55-19-147",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1912,7 +1969,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 39
+    "review_count": 39,
+    "wholesale_price": 420.0
   },
   {
     "id": 59,
@@ -1925,8 +1983,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "51-18-142",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1945,7 +2003,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 7
+    "review_count": 7,
+    "wholesale_price": 420.0
   },
   {
     "id": 60,
@@ -1958,8 +2017,8 @@ export const realProducts = [
     "memo_no": "2no(13)",
     "box": "",
     "size": "54-18-144",
-    "price": 420,
-    "compare_price": 546,
+    "price": 840.0,
+    "compare_price": 1092,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -1978,7 +2037,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 20
+    "review_count": 20,
+    "wholesale_price": 420.0
   },
   {
     "id": 61,
@@ -1991,8 +2051,8 @@ export const realProducts = [
     "memo_no": "5NO(2)",
     "box": "",
     "size": "50-22-150",
-    "price": 1300,
-    "compare_price": 1690,
+    "price": 2600.0,
+    "compare_price": 3380,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -2011,7 +2071,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 33
+    "review_count": 33,
+    "wholesale_price": 1300.0
   },
   {
     "id": 62,
@@ -2024,8 +2085,8 @@ export const realProducts = [
     "memo_no": "5NO(2)",
     "box": "",
     "size": "50-22-150",
-    "price": 1300,
-    "compare_price": 1690,
+    "price": 2600.0,
+    "compare_price": 3380,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 1,
@@ -2044,7 +2105,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 46
+    "review_count": 46,
+    "wholesale_price": 1300.0
   },
   {
     "id": 63,
@@ -2057,8 +2119,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "",
     "size": "53-19-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2077,7 +2139,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 14
+    "review_count": 14,
+    "wholesale_price": 220.0
   },
   {
     "id": 64,
@@ -2090,8 +2153,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "",
     "size": "53-19-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2110,7 +2173,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 27
+    "review_count": 27,
+    "wholesale_price": 220.0
   },
   {
     "id": 65,
@@ -2123,8 +2187,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "",
     "size": "48-24-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2143,7 +2207,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 40
+    "review_count": 40,
+    "wholesale_price": 220.0
   },
   {
     "id": 66,
@@ -2156,8 +2221,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "",
     "size": "54-20-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2176,7 +2241,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 8
+    "review_count": 8,
+    "wholesale_price": 220.0
   },
   {
     "id": 67,
@@ -2189,8 +2255,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "",
     "size": "52-19-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2209,7 +2275,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 21
+    "review_count": 21,
+    "wholesale_price": 220.0
   },
   {
     "id": 68,
@@ -2222,8 +2289,8 @@ export const realProducts = [
     "memo_no": "7no(6)",
     "box": "Samebox 62-81",
     "size": "50-21-146",
-    "price": 220,
-    "compare_price": 286,
+    "price": 440.0,
+    "compare_price": 572,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2242,7 +2309,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 34
+    "review_count": 34,
+    "wholesale_price": 220.0
   },
   {
     "id": 69,
@@ -2255,8 +2323,8 @@ export const realProducts = [
     "memo_no": "3no(2)",
     "box": "E",
     "size": "53-21-145",
-    "price": 1050,
-    "compare_price": 1365,
+    "price": 2100.0,
+    "compare_price": 2730,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2275,7 +2343,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 47
+    "review_count": 47,
+    "wholesale_price": 1050.0
   },
   {
     "id": 70,
@@ -2288,8 +2357,8 @@ export const realProducts = [
     "memo_no": "3no(2)",
     "box": "",
     "size": "53-21-145",
-    "price": 1050,
-    "compare_price": 1365,
+    "price": 2100.0,
+    "compare_price": 2730,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2308,7 +2377,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 15
+    "review_count": 15,
+    "wholesale_price": 1050.0
   },
   {
     "id": 71,
@@ -2321,8 +2391,8 @@ export const realProducts = [
     "memo_no": "4no(2)",
     "box": "",
     "size": "54-20-145",
-    "price": 950,
-    "compare_price": 1235,
+    "price": 1900.0,
+    "compare_price": 2470,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2341,7 +2411,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 28
+    "review_count": 28,
+    "wholesale_price": 950.0
   },
   {
     "id": 72,
@@ -2354,8 +2425,8 @@ export const realProducts = [
     "memo_no": "4no(2)",
     "box": "",
     "size": "50-19-145",
-    "price": 950,
-    "compare_price": 1235,
+    "price": 1900.0,
+    "compare_price": 2470,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2374,7 +2445,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 41
+    "review_count": 41,
+    "wholesale_price": 950.0
   },
   {
     "id": 73,
@@ -2387,8 +2459,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "53-17-148",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2407,7 +2479,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 9
+    "review_count": 9,
+    "wholesale_price": 280.0
   },
   {
     "id": 74,
@@ -2420,8 +2493,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "54-19-149",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2440,7 +2513,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 22
+    "review_count": 22,
+    "wholesale_price": 280.0
   },
   {
     "id": 75,
@@ -2453,8 +2527,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "52-18-145",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2473,7 +2547,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 35
+    "review_count": 35,
+    "wholesale_price": 280.0
   },
   {
     "id": 76,
@@ -2486,8 +2561,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "53-18-142",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2506,7 +2581,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 48
+    "review_count": 48,
+    "wholesale_price": 280.0
   },
   {
     "id": 77,
@@ -2519,8 +2595,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "53-17-148",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2539,7 +2615,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 16
+    "review_count": 16,
+    "wholesale_price": 280.0
   },
   {
     "id": 78,
@@ -2552,8 +2629,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "49-19-14",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2572,7 +2649,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 29
+    "review_count": 29,
+    "wholesale_price": 280.0
   },
   {
     "id": 79,
@@ -2585,8 +2663,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "52-18-145",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2605,7 +2683,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 42
+    "review_count": 42,
+    "wholesale_price": 280.0
   },
   {
     "id": 80,
@@ -2618,8 +2697,8 @@ export const realProducts = [
     "memo_no": "6no(9)",
     "box": "",
     "size": "54-19-149",
-    "price": 280,
-    "compare_price": 364,
+    "price": 560.0,
+    "compare_price": 728,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2638,7 +2717,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 10
+    "review_count": 10,
+    "wholesale_price": 280.0
   },
   {
     "id": 81,
@@ -2651,8 +2731,8 @@ export const realProducts = [
     "memo_no": "11no(3)",
     "box": "",
     "size": "52-16-142",
-    "price": 180,
-    "compare_price": 234,
+    "price": 360.0,
+    "compare_price": 468,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -2671,7 +2751,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 23
+    "review_count": 23,
+    "wholesale_price": 180.0
   },
   {
     "id": 82,
@@ -2684,8 +2765,8 @@ export const realProducts = [
     "memo_no": "11no(3)",
     "box": "",
     "size": "52-16-142",
-    "price": 180,
-    "compare_price": 234,
+    "price": 360.0,
+    "compare_price": 468,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -2704,7 +2785,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 36
+    "review_count": 36,
+    "wholesale_price": 180.0
   },
   {
     "id": 83,
@@ -2717,8 +2799,8 @@ export const realProducts = [
     "memo_no": "11no(3)",
     "box": "",
     "size": "50-18-143",
-    "price": 180,
-    "compare_price": 234,
+    "price": 360.0,
+    "compare_price": 468,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -2737,7 +2819,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 49
+    "review_count": 49,
+    "wholesale_price": 180.0
   },
   {
     "id": 84,
@@ -2750,8 +2833,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "52-16-143",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2770,7 +2853,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 17
+    "review_count": 17,
+    "wholesale_price": 260.0
   },
   {
     "id": 85,
@@ -2783,8 +2867,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "49-21-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2803,7 +2887,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 30
+    "review_count": 30,
+    "wholesale_price": 260.0
   },
   {
     "id": 86,
@@ -2816,8 +2901,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "50-20-148",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2836,7 +2921,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 43
+    "review_count": 43,
+    "wholesale_price": 260.0
   },
   {
     "id": 87,
@@ -2849,8 +2935,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "48-23-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2869,7 +2955,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 11
+    "review_count": 11,
+    "wholesale_price": 260.0
   },
   {
     "id": 88,
@@ -2882,8 +2969,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "53-17-143",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2902,7 +2989,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 24
+    "review_count": 24,
+    "wholesale_price": 260.0
   },
   {
     "id": 89,
@@ -2915,8 +3003,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "50-20-148",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2935,7 +3023,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 37
+    "review_count": 37,
+    "wholesale_price": 260.0
   },
   {
     "id": 90,
@@ -2948,8 +3037,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "49-22-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -2968,7 +3057,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 5
+    "review_count": 5,
+    "wholesale_price": 260.0
   },
   {
     "id": 91,
@@ -2981,8 +3071,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "51-23-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 2,
@@ -3001,7 +3091,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 18
+    "review_count": 18,
+    "wholesale_price": 260.0
   },
   {
     "id": 92,
@@ -3014,8 +3105,8 @@ export const realProducts = [
     "memo_no": "8no(9)",
     "box": "",
     "size": "48-23-146",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3034,7 +3125,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 31
+    "review_count": 31,
+    "wholesale_price": 260.0
   },
   {
     "id": 93,
@@ -3047,8 +3139,8 @@ export const realProducts = [
     "memo_no": "12no(3)",
     "box": "",
     "size": "51-17-141",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3067,7 +3159,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 44
+    "review_count": 44,
+    "wholesale_price": 260.0
   },
   {
     "id": 94,
@@ -3080,8 +3173,8 @@ export const realProducts = [
     "memo_no": "12no(3)",
     "box": "samebox 82-101",
     "size": "51-17-141",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3100,7 +3193,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 12
+    "review_count": 12,
+    "wholesale_price": 260.0
   },
   {
     "id": 95,
@@ -3113,8 +3207,8 @@ export const realProducts = [
     "memo_no": "12no(3)",
     "box": "F",
     "size": "51-17-141",
-    "price": 260,
-    "compare_price": 338,
+    "price": 520.0,
+    "compare_price": 676,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3133,7 +3227,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 25
+    "review_count": 25,
+    "wholesale_price": 260.0
   },
   {
     "id": 96,
@@ -3146,8 +3241,8 @@ export const realProducts = [
     "memo_no": "9no(6)",
     "box": "",
     "size": "49-17-147",
-    "price": 130,
-    "compare_price": 169,
+    "price": 260.0,
+    "compare_price": 338,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3166,7 +3261,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 38
+    "review_count": 38,
+    "wholesale_price": 130.0
   },
   {
     "id": 97,
@@ -3179,8 +3275,8 @@ export const realProducts = [
     "memo_no": "9no(6)",
     "box": "",
     "size": "50-18-139",
-    "price": 130,
-    "compare_price": 169,
+    "price": 260.0,
+    "compare_price": 338,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3199,7 +3295,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 6
+    "review_count": 6,
+    "wholesale_price": 130.0
   },
   {
     "id": 98,
@@ -3212,8 +3309,8 @@ export const realProducts = [
     "memo_no": "9no(6)",
     "box": "",
     "size": "51-18-142",
-    "price": 130,
-    "compare_price": 169,
+    "price": 260.0,
+    "compare_price": 338,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3232,7 +3329,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 19
+    "review_count": 19,
+    "wholesale_price": 130.0
   },
   {
     "id": 99,
@@ -3245,8 +3343,8 @@ export const realProducts = [
     "memo_no": "9no(6)",
     "box": "",
     "size": "49-17-147",
-    "price": 130,
-    "compare_price": 169,
+    "price": 260.0,
+    "compare_price": 338,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3265,7 +3363,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 32
+    "review_count": 32,
+    "wholesale_price": 130.0
   },
   {
     "id": 100,
@@ -3278,8 +3377,8 @@ export const realProducts = [
     "memo_no": "9no(6)",
     "box": "",
     "size": "43-19-140",
-    "price": 130,
-    "compare_price": 169,
+    "price": 260.0,
+    "compare_price": 338,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 5,
@@ -3298,7 +3397,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 45
+    "review_count": 45,
+    "wholesale_price": 130.0
   },
   {
     "id": 101,
@@ -3311,8 +3411,8 @@ export const realProducts = [
     "memo_no": "28no(8)",
     "box": "",
     "size": "48-17-136",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3331,7 +3431,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 13
+    "review_count": 13,
+    "wholesale_price": 250.0
   },
   {
     "id": 102,
@@ -3344,8 +3445,8 @@ export const realProducts = [
     "memo_no": "28no(8)",
     "box": "",
     "size": "45-15-135",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3364,7 +3465,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 26
+    "review_count": 26,
+    "wholesale_price": 250.0
   },
   {
     "id": 103,
@@ -3377,8 +3479,8 @@ export const realProducts = [
     "memo_no": "28no(8)",
     "box": "Samebox 102-109",
     "size": "48-17-136",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3397,7 +3499,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 39
+    "review_count": 39,
+    "wholesale_price": 250.0
   },
   {
     "id": 104,
@@ -3410,8 +3513,8 @@ export const realProducts = [
     "memo_no": "28no(8)",
     "box": "G",
     "size": "48-17-136",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3430,7 +3533,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.9",
-    "review_count": 7
+    "review_count": 7,
+    "wholesale_price": 250.0
   },
   {
     "id": 105,
@@ -3443,8 +3547,8 @@ export const realProducts = [
     "memo_no": "29no(2)",
     "box": "",
     "size": "46-17-130",
-    "price": 170,
-    "compare_price": 221,
+    "price": 340.0,
+    "compare_price": 442,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3463,7 +3567,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.6",
-    "review_count": 20
+    "review_count": 20,
+    "wholesale_price": 170.0
   },
   {
     "id": 106,
@@ -3476,8 +3581,8 @@ export const realProducts = [
     "memo_no": "29no(2)",
     "box": "",
     "size": "47-16-130",
-    "price": 170,
-    "compare_price": 221,
+    "price": 340.0,
+    "compare_price": 442,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3496,7 +3601,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.8",
-    "review_count": 33
+    "review_count": 33,
+    "wholesale_price": 170.0
   },
   {
     "id": 107,
@@ -3509,8 +3615,8 @@ export const realProducts = [
     "memo_no": "30no(2)",
     "box": "",
     "size": "43-17-130",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3529,7 +3635,8 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "5.0",
-    "review_count": 46
+    "review_count": 46,
+    "wholesale_price": 250.0
   },
   {
     "id": 108,
@@ -3542,8 +3649,8 @@ export const realProducts = [
     "memo_no": "30no(2)",
     "box": "",
     "size": "43-17-131",
-    "price": 250,
-    "compare_price": 325,
+    "price": 500.0,
+    "compare_price": 650,
     "stock": 1,
     "low_stock_threshold": 1,
     "category_id": 7,
@@ -3562,7 +3669,9 @@ export const realProducts = [
     "primary_image": null,
     "images": [],
     "average_rating": "4.7",
-    "review_count": 14
+    "review_count": 14,
+    "wholesale_price": 250.0
   }
 ];
+
 export default realProducts;
