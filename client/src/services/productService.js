@@ -3,7 +3,7 @@ import { realProducts } from '../data/realProducts';
 
 const CUSTOM_PRODUCTS_KEY = 'vec_customized_products';
 
-function getLocalProductOverrides() {
+export function getLocalProductOverrides() {
   try {
     const raw = localStorage.getItem(CUSTOM_PRODUCTS_KEY);
     return raw ? JSON.parse(raw) : {};
@@ -12,13 +12,15 @@ function getLocalProductOverrides() {
   }
 }
 
-function saveLocalProductOverride(id, productData) {
+export function saveLocalProductOverride(id, productData) {
   try {
     const map = getLocalProductOverrides();
     const primary =
       productData.image_url ||
-      (Array.isArray(productData.images)
-        ? productData.images[0]?.url || productData.images[0]?.image_url || productData.images[0]
+      (Array.isArray(productData.images) && productData.images.length > 0
+        ? (typeof productData.images[0] === 'string'
+            ? productData.images[0]
+            : (productData.images[0]?.url || productData.images[0]?.image_url || productData.images[0]?.src))
         : null) ||
       productData.primary_image ||
       '';
@@ -35,26 +37,66 @@ function saveLocalProductOverride(id, productData) {
         }).filter((i) => Boolean(i.image_url))
       : (primary ? [{ id: 'primary', image_url: primary, url: primary, is_primary: true }] : []);
 
-    map[String(id)] = {
-      ...map[String(id)],
+    const updatedData = {
+      ...(map[String(id)] || {}),
       ...productData,
       primary_image: primary,
       image_url: primary,
       images: normalizedImages,
     };
-    localStorage.setItem(CUSTOM_PRODUCTS_KEY, JSON.stringify(map));
-  } catch {}
+
+    // Index by all possible identifiers (id, product_code, slug, sku)
+    const keys = new Set();
+    if (id !== undefined && id !== null) keys.add(String(id));
+    if (productData.id !== undefined && productData.id !== null) keys.add(String(productData.id));
+    if (productData.product_code) {
+      keys.add(String(productData.product_code).trim());
+      keys.add(String(productData.product_code).toLowerCase().trim());
+    }
+    if (productData.slug) {
+      keys.add(String(productData.slug).trim());
+      keys.add(String(productData.slug).toLowerCase().trim());
+    }
+    if (productData.sku) {
+      keys.add(String(productData.sku).trim());
+      keys.add(String(productData.sku).toLowerCase().trim());
+    }
+
+    keys.forEach((key) => {
+      map[key] = updatedData;
+    });
+
+    try {
+      localStorage.setItem(CUSTOM_PRODUCTS_KEY, JSON.stringify(map));
+    } catch (quotaError) {
+      console.warn('localStorage quota warning when saving product override:', quotaError);
+    }
+  } catch (err) {
+    console.error('Failed to save local product override:', err);
+  }
 }
 
-function getMergedProducts() {
+export function getMergedProducts() {
   const overrides = getLocalProductOverrides();
   return realProducts.map((p) => {
-    const override = overrides[String(p.id)] || overrides[p.product_code];
+    const override =
+      overrides[String(p.id)] ||
+      (p.product_code && overrides[p.product_code]) ||
+      (p.product_code && overrides[p.product_code.toLowerCase()]) ||
+      (p.slug && overrides[p.slug]) ||
+      (p.slug && overrides[p.slug.toLowerCase()]) ||
+      (p.sku && overrides[p.sku]) ||
+      (p.sku && overrides[p.sku.toLowerCase()]);
+
     if (override) {
       const primary =
         override.image_url ||
         override.primary_image ||
-        (override.images?.[0]?.image_url || override.images?.[0]?.url || override.images?.[0]) ||
+        (Array.isArray(override.images) && override.images.length > 0
+          ? (typeof override.images[0] === 'string'
+              ? override.images[0]
+              : (override.images[0]?.image_url || override.images[0]?.url))
+          : null) ||
         p.primary_image;
 
       const rawImages = (Array.isArray(override.images) && override.images.length > 0)
@@ -77,6 +119,7 @@ function getMergedProducts() {
         ...p,
         ...override,
         primary_image: primary,
+        image_url: primary,
         images: normalizedImages,
       };
     }
@@ -85,13 +128,21 @@ function getMergedProducts() {
 }
 
 export const productService = {
+  getMergedProducts,
+  getLocalProductOverrides,
+  saveLocalProductOverride,
+
   /**
    * Fetch paginated & filtered products list
    */
   async getProducts(params = {}) {
     try {
       const response = await api.get('/products', { params });
-      if (response.data?.data?.products?.length > 0) {
+      if (
+        response.data &&
+        typeof response.data === 'object' &&
+        response.data.data?.products?.length > 0
+      ) {
         return response.data;
       }
     } catch {
@@ -142,7 +193,14 @@ export const productService = {
   async getFeaturedProducts() {
     try {
       const response = await api.get('/products/featured');
-      if (response.data) return response.data;
+      if (
+        response.data &&
+        typeof response.data === 'object' &&
+        response.data.data &&
+        Array.isArray(response.data.data.featured)
+      ) {
+        return response.data;
+      }
     } catch {}
 
     const featured = getMergedProducts().slice(0, 8);
@@ -155,16 +213,25 @@ export const productService = {
   async getProductByIdOrSlug(idOrSlug) {
     try {
       const response = await api.get(`/products/${idOrSlug}`);
-      if (response.data) return response.data;
+      if (
+        response.data &&
+        typeof response.data === 'object' &&
+        response.data.status === 'success' &&
+        response.data.data &&
+        typeof response.data.data === 'object'
+      ) {
+        return response.data;
+      }
     } catch {}
 
     const list = getMergedProducts();
-    const query = String(idOrSlug).toLowerCase();
+    const query = String(idOrSlug).toLowerCase().trim();
     const product = list.find(
       (p) =>
-        String(p.id) === query ||
-        p.slug === query ||
-        (p.product_code && p.product_code.toLowerCase() === query)
+        String(p.id).toLowerCase() === query ||
+        (p.slug && p.slug.toLowerCase() === query) ||
+        (p.product_code && p.product_code.toLowerCase() === query) ||
+        (p.sku && p.sku.toLowerCase() === query)
     );
 
     if (product) {

@@ -48,48 +48,70 @@ const ProductDetailsPage = () => {
       try {
         const res = await productService.getProductByIdOrSlug(id);
         if (res.status === 'success' && res.data) {
-          setProduct(res.data);
-          trackViewContent(res.data);
-          const rawImages = (Array.isArray(res.data.images) && res.data.images.length > 0)
-            ? res.data.images
-            : (res.data.primary_image ? [{ id: 'primary', image_url: res.data.primary_image, is_primary: true }] : []);
+          const item = res.data;
+          setProduct(item);
+          trackViewContent(item);
+
+          const rawImages = (Array.isArray(item.images) && item.images.length > 0)
+            ? item.images
+            : (item.primary_image || item.image_url
+                ? [{ id: 'primary', image_url: item.primary_image || item.image_url, url: item.primary_image || item.image_url, is_primary: true }]
+                : []);
 
           const primary =
-            res.data.images?.find((img) => img.is_primary)?.image_url ||
+            item.images?.find((img) => img.is_primary)?.image_url ||
+            item.images?.find((img) => img.is_primary)?.url ||
             rawImages[0]?.image_url ||
+            rawImages[0]?.url ||
             (typeof rawImages[0] === 'string' ? rawImages[0] : null) ||
-            res.data.primary_image ||
+            item.primary_image ||
+            item.image_url ||
             null;
           setSelectedImage(primary);
 
-          if (res.data.category_id) {
+          if (item.category_id) {
             const relRes = await productService.getProducts({
-              category: res.data.category_id,
+              category: item.category_id,
               limit: 4,
             });
-            if (relRes.status === 'success') {
-              setRelatedProducts(relRes.data.products.filter((p) => p.id !== res.data.id));
+            if (relRes.status === 'success' && relRes.data?.products) {
+              setRelatedProducts(relRes.data.products.filter((p) => p.id !== item.id));
             }
           }
         } else {
           throw new Error('Not found in API');
         }
       } catch {
-        // Fallback to real local catalog
-        const match = realProducts.find(
+        // Fallback to merged catalog with user-customized/uploaded images
+        const catalog = productService.getMergedProducts ? productService.getMergedProducts() : realProducts;
+        const query = String(id).toLowerCase().trim();
+        const match = catalog.find(
           (p) =>
-            String(p.id) === String(id) ||
-            p.slug === id ||
-            (p.product_code && p.product_code.toLowerCase() === id.toLowerCase()) ||
-            (p.sku && p.sku.toLowerCase() === id.toLowerCase())
+            String(p.id).toLowerCase() === query ||
+            (p.slug && p.slug.toLowerCase() === query) ||
+            (p.product_code && p.product_code.toLowerCase() === query) ||
+            (p.sku && p.sku.toLowerCase() === query)
         );
         if (match) {
           setProduct(match);
-          const primary = (Array.isArray(match.images) && match.images.length > 0)
-            ? (typeof match.images[0] === 'string' ? match.images[0] : (match.images[0].image_url || match.images[0].url))
-            : (match.primary_image || null);
+          const rawImages = (Array.isArray(match.images) && match.images.length > 0)
+            ? match.images
+            : (match.primary_image || match.image_url
+                ? [{ id: 'primary', url: match.primary_image || match.image_url, image_url: match.primary_image || match.image_url, is_primary: true }]
+                : []);
+
+          const primary =
+            match.images?.find((img) => img.is_primary)?.image_url ||
+            match.images?.find((img) => img.is_primary)?.url ||
+            rawImages[0]?.image_url ||
+            rawImages[0]?.url ||
+            (typeof rawImages[0] === 'string' ? rawImages[0] : null) ||
+            match.primary_image ||
+            match.image_url ||
+            null;
+
           setSelectedImage(primary);
-          const rel = realProducts.filter((p) => p.category_id === match.category_id && p.id !== match.id).slice(0, 4);
+          const rel = catalog.filter((p) => p.category_id === match.category_id && p.id !== match.id).slice(0, 4);
           setRelatedProducts(rel);
         }
       } finally {
@@ -161,9 +183,18 @@ const ProductDetailsPage = () => {
           alt: img.alt_text || `${product.name} angle ${idx + 1}`,
         };
       }).filter((item) => Boolean(item.url))
-    : (product?.primary_image ? [{ id: 'primary', url: product.primary_image, alt: product.name }] : []);
+    : (product?.primary_image || product?.image_url
+        ? [{ id: 'primary', url: product.primary_image || product.image_url, alt: product.name }]
+        : []);
 
-  const activeIndex = Math.max(0, galleryImages.findIndex((g) => g.url === selectedImage));
+  const activeDisplayImage =
+    selectedImage ||
+    galleryImages[0]?.url ||
+    product?.primary_image ||
+    product?.image_url ||
+    null;
+
+  const activeIndex = Math.max(0, galleryImages.findIndex((g) => g.url === activeDisplayImage));
 
   return (
     <div className="bg-white min-h-screen py-10 px-4 sm:px-6 lg:px-8 text-gray-900">
@@ -257,9 +288,9 @@ const ProductDetailsPage = () => {
                 </>
               )}
 
-              {selectedImage ? (
+              {activeDisplayImage ? (
                 <img
-                  src={selectedImage}
+                  src={activeDisplayImage}
                   alt={product.name}
                   loading="eager"
                   decoding="async"

@@ -12,7 +12,7 @@ const ProductCarousel = ({ title = 'Featured Products', fetchParams = {}, viewAl
   const scrollRef = useRef(null);
 
   const getFilteredRealProducts = () => {
-    let list = [...realProducts];
+    let list = productService.getMergedProducts ? productService.getMergedProducts() : [...realProducts];
     if (fetchParams.featured) {
       list = list.filter((p) => p.featured);
     } else if (fetchParams.bestseller) {

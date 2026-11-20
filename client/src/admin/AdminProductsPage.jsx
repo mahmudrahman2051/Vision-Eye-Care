@@ -37,12 +37,12 @@ export default function AdminProductsPage() {
       if (res.status === 'success' && res.data?.products?.length > 0) {
         setApiProducts(res.data.products);
       } else {
-        // Fallback to realProducts
-        setApiProducts(realProducts);
+        // Fallback to merged catalog with user customized overrides
+        setApiProducts(productService.getMergedProducts ? productService.getMergedProducts() : realProducts);
       }
     } catch {
-      // Backend offline or error - use real CSV catalog
-      setApiProducts(realProducts);
+      // Backend offline or error - use real merged catalog
+      setApiProducts(productService.getMergedProducts ? productService.getMergedProducts() : realProducts);
     } finally {
       setLoading(false);
     }
@@ -54,14 +54,14 @@ export default function AdminProductsPage() {
 
   // Compute available unique brands
   const brandOptions = useMemo(() => {
-    const source = apiProducts || realProducts;
+    const source = apiProducts || (productService.getMergedProducts ? productService.getMergedProducts() : realProducts);
     const brands = Array.from(new Set(source.map((p) => p.brand))).filter(Boolean);
     return brands.sort((a, b) => a.localeCompare(b));
   }, [apiProducts]);
 
   // Filter and sort items locally
   const filteredProducts = useMemo(() => {
-    let list = [...(apiProducts || realProducts)];
+    let list = [...(apiProducts || (productService.getMergedProducts ? productService.getMergedProducts() : realProducts))];
 
     // Search filter
     if (searchTerm.trim()) {
@@ -126,7 +126,7 @@ export default function AdminProductsPage() {
 
   // Overall catalog stats
   const catalogStats = useMemo(() => {
-    const source = apiProducts || realProducts;
+    const source = apiProducts || (productService.getMergedProducts ? productService.getMergedProducts() : realProducts);
     const total = source.length;
     const needsImage = source.filter((p) => !p.primary_image && (!p.images || p.images.length === 0)).length;
     const hasImage = total - needsImage;
@@ -154,7 +154,7 @@ export default function AdminProductsPage() {
     } catch {
       toast.success('Product removed from catalog.');
     }
-    setApiProducts((prev) => (prev || realProducts).filter((p) => p.id !== id));
+    setApiProducts((prev) => (prev || (productService.getMergedProducts ? productService.getMergedProducts() : realProducts)).filter((p) => p.id !== id));
   };
 
   return (

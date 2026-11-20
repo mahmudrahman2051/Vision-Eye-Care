@@ -29,13 +29,14 @@ const SearchOverlay = ({ isOpen, onClose }) => {
     const timer = setTimeout(async () => {
       setLoading(true);
       const q = query.trim().toLowerCase();
+      const catalog = productService.getMergedProducts ? productService.getMergedProducts() : realProducts;
       try {
         const res = await productService.getProducts({ search: query.trim(), limit: 6 });
         if (res.status === 'success' && res.data.products && res.data.products.length > 0) {
           setResults(res.data.products);
         } else {
           // Fallback to local real catalog
-          const localResults = realProducts.filter((p) =>
+          const localResults = catalog.filter((p) =>
             (p.name && p.name.toLowerCase().includes(q)) ||
             (p.brand && p.brand.toLowerCase().includes(q)) ||
             (p.product_code && p.product_code.toLowerCase().includes(q)) ||
@@ -45,7 +46,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           setResults(localResults);
         }
       } catch {
-        const localResults = realProducts.filter((p) =>
+        const localResults = catalog.filter((p) =>
           (p.name && p.name.toLowerCase().includes(q)) ||
           (p.brand && p.brand.toLowerCase().includes(q)) ||
           (p.product_code && p.product_code.toLowerCase().includes(q)) ||
@@ -165,9 +166,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                     className="flex items-center gap-4 p-3 bg-yellow-50/50 hover:bg-[#FEFCE8] border border-yellow-200 hover:border-[#DFFF00] rounded-xl transition-all group"
                   >
                     <div className="w-16 h-16 bg-[#FAF7F2] rounded-lg overflow-hidden flex-shrink-0 border border-yellow-200 flex items-center justify-center">
-                      {product.primary_image ? (
+                      {(product.primary_image || product.image_url || product.images?.[0]?.url || product.images?.[0]?.image_url || product.images?.[0]) ? (
                         <img
-                          src={product.primary_image}
+                          src={product.primary_image || product.image_url || product.images?.[0]?.url || product.images?.[0]?.image_url || product.images?.[0]}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />

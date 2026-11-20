@@ -16,7 +16,7 @@ const fallbackCategories = [
 ];
 
 const filterFallbackProducts = (filters) => {
-  let list = [...realProducts];
+  let list = productService.getMergedProducts ? productService.getMergedProducts() : [...realProducts];
 
   // Search by code, name, brand, model, size, color
   if (filters.search) {
@@ -114,13 +114,15 @@ const ShopPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(fallbackCategories);
-  const [pagination, setPagination] = useState({ total: realProducts.length, page: 1, limit: 12, totalPages: Math.ceil(realProducts.length / 12) });
+  const getCatalog = () => (productService.getMergedProducts ? productService.getMergedProducts() : realProducts);
+  const catalogList = getCatalog();
+  const [pagination, setPagination] = useState({ total: catalogList.length, page: 1, limit: 12, totalPages: Math.ceil(catalogList.length / 12) });
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // Extract all unique brands from real products
   const brands = useMemo(() => {
-    return Array.from(new Set(realProducts.map((p) => p.brand).filter(Boolean))).sort();
+    return Array.from(new Set(getCatalog().map((p) => p.brand).filter(Boolean))).sort();
   }, []);
 
   const currentFilters = {

@@ -16,6 +16,13 @@ const ProductCard = ({ product }) => {
   const displayCode = product_code || sku || '';
   const isWishlisted = isInWishlist(product?.product_id || id);
 
+  const cardImage =
+    primary_image ||
+    product?.image_url ||
+    (Array.isArray(product?.images) && product.images.length > 0
+      ? (typeof product.images[0] === 'string' ? product.images[0] : (product.images[0]?.image_url || product.images[0]?.url))
+      : null);
+
   const numericPrice = parseFloat(price) || 0;
   const numericComparePrice = parseFloat(compare_price) || 0;
   const hasDiscount = numericComparePrice > numericPrice;
@@ -72,9 +79,9 @@ const ProductCard = ({ product }) => {
         to={`/product/${slug || id}`}
         className="relative h-40 sm:h-52 w-full bg-[#FAFAFA] border-b border-neutral-100 overflow-hidden block flex-shrink-0 flex items-center justify-center p-3 group-hover:bg-[#F4F4F5] transition-colors"
       >
-        {primary_image ? (
+        {cardImage ? (
           <img
-            src={primary_image}
+            src={cardImage}
             alt={name}
             loading="lazy"
             decoding="async"

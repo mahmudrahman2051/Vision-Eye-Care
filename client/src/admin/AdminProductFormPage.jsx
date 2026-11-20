@@ -60,7 +60,14 @@ export default function AdminProductFormPage() {
         .then((res) => {
           if (res.status === 'success' && res.data) {
             const p = res.data;
-            const primaryImg = p.images?.find((img) => img.is_primary)?.image_url || p.images?.[0]?.image_url || p.primary_image || '';
+            const primaryImg =
+              p.images?.find((img) => img.is_primary)?.image_url ||
+              p.images?.find((img) => img.is_primary)?.url ||
+              p.images?.[0]?.image_url ||
+              p.images?.[0]?.url ||
+              p.primary_image ||
+              p.image_url ||
+              '';
             const initialImages = (Array.isArray(p.images) && p.images.length > 0)
               ? p.images.map((img, idx) => ({
                   id: img.id || `img-${idx}`,
@@ -70,6 +77,8 @@ export default function AdminProductFormPage() {
               : (primaryImg ? [{ id: 'primary', url: primaryImg, is_primary: true }] : []);
 
             setForm({
+              id: p.id,
+              slug: p.slug || '',
               name: p.name || '',
               brand: p.brand || '',
               product_code: p.product_code || '',
@@ -99,12 +108,25 @@ export default function AdminProductFormPage() {
           }
         })
         .catch(() => {
-          // Fallback to real local catalog
-          const local = realProducts.find(
-            (p) => String(p.id) === String(id) || p.slug === id || (p.product_code && p.product_code.toLowerCase() === id.toLowerCase())
+          // Fallback to merged catalog with user-customized/uploaded images
+          const catalog = productService.getMergedProducts ? productService.getMergedProducts() : realProducts;
+          const query = String(id).toLowerCase().trim();
+          const local = catalog.find(
+            (p) =>
+              String(p.id).toLowerCase() === query ||
+              (p.slug && p.slug.toLowerCase() === query) ||
+              (p.product_code && p.product_code.toLowerCase() === query) ||
+              (p.sku && p.sku.toLowerCase() === query)
           );
           if (local) {
-            const localPrimary = local.primary_image || '';
+            const localPrimary =
+              local.images?.find((img) => img.is_primary)?.image_url ||
+              local.images?.find((img) => img.is_primary)?.url ||
+              local.images?.[0]?.image_url ||
+              local.images?.[0]?.url ||
+              local.primary_image ||
+              local.image_url ||
+              '';
             const localImages = (Array.isArray(local.images) && local.images.length > 0)
               ? local.images.map((img, idx) => ({
                   id: `local-img-${idx}`,
@@ -114,6 +136,8 @@ export default function AdminProductFormPage() {
               : (localPrimary ? [{ id: 'primary', url: localPrimary, is_primary: true }] : []);
 
             setForm({
+              id: local.id,
+              slug: local.slug || '',
               name: local.name || '',
               brand: local.brand || '',
               product_code: local.product_code || '',
@@ -166,6 +190,8 @@ export default function AdminProductFormPage() {
       const primaryUrl = form.images?.[0]?.url || form.images?.[0]?.image_url || form.image_url || '';
       const payload = {
         ...form,
+        id: form.id || id,
+        slug: form.slug || (form.name ? form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : ''),
         image_url: primaryUrl,
         primary_image: primaryUrl,
         images: form.images,
