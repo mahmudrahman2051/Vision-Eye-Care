@@ -51,12 +51,6 @@ const LoginPage = () => {
     }
   };
 
-  // Fast demo account auto-fill
-  const fillDemoAccount = (email, password) => {
-    setFormData({ email, password });
-    toast.success(`Demo credentials set for ${email}`);
-  };
-
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-[#F5EFE3]/30 font-sans">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl border border-[#E8DFD0] shadow-xl relative overflow-hidden">
@@ -164,25 +158,6 @@ const LoginPage = () => {
             )}
           </button>
         </form>
-
-        {/* Demo Accounts Quick-Click */}
-        <div className="pt-4 border-t border-[#F5EFE3] text-center">
-          <p className="text-xs text-[#777] mb-3 font-medium">Quick Demo Logins:</p>
-          <div className="flex justify-center gap-3">
-            <button
-              onClick={() => fillDemoAccount('rahim@example.com', 'Customer@123')}
-              className="px-3 py-1.5 text-xs bg-[#F5EFE3]/60 border border-[#E8DFD0] text-[#1A1A1A] font-semibold rounded-lg hover:border-[#8B7355] hover:text-[#8B7355] transition-colors"
-            >
-              👤 Demo Customer
-            </button>
-            <button
-              onClick={() => fillDemoAccount('admin@visioneyecare.com', 'Admin@123')}
-              className="px-3 py-1.5 text-xs bg-[#F5EFE3]/60 border border-[#E8DFD0] text-[#1A1A1A] font-semibold rounded-lg hover:border-[#8B7355] hover:text-[#8B7355] transition-colors"
-            >
-              👑 Demo Admin
-            </button>
-          </div>
-        </div>
 
         {/* Register Link */}
         <div className="text-center pt-2">

@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import bcrypt from 'bcryptjs';
 
 export const config = {
   api: {
@@ -520,35 +521,84 @@ export default async function handler(req, res) {
       }
 
       if (route1 === 'me') {
-        return sendJson(res, 200, {
-          status: 'success',
-          data: {
-            user: {
-              id: 1,
-              name: 'Admin',
-              email: 'admin@visioneyecare.com',
-              role: 'admin',
-            },
-          },
-        });
+        const authHeader = req.headers.authorization || '';
+        const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+        if (token && token.startsWith('vec_token_')) {
+          const parts = token.split('_');
+          const userId = parseInt(parts[2], 10);
+          if (userId) {
+            const userRows = await sql.query(
+              'SELECT id, name, email, phone, role, is_active FROM users WHERE id = $1 LIMIT 1',
+              [userId]
+            );
+            if (userRows.length > 0 && userRows[0].is_active) {
+              return sendJson(res, 200, {
+                status: 'success',
+                user: userRows[0],
+                data: { user: userRows[0] },
+              });
+            }
+          }
+        }
+
+        return sendJson(res, 401, { status: 'fail', message: 'Not authenticated' });
       }
 
       if (route1 === 'login' && req.method === 'POST') {
         const body = await getBody(req);
         const email = (body.email || '').trim().toLowerCase();
-        let user = null;
-        if (email) {
-          const userRows = await sql.query('SELECT id, name, email, role FROM users WHERE email = $1 LIMIT 1', [email]);
-          if (userRows.length > 0) user = userRows[0];
+        const password = body.password || '';
+
+        if (!email || !password) {
+          return sendJson(res, 400, {
+            status: 'fail',
+            message: 'Please provide both email and password.',
+          });
         }
-        if (!user) {
-          user = { id: 1, name: 'Admin', email: email || 'admin@visioneyecare.com', role: 'admin' };
+
+        const userRows = await sql.query(
+          'SELECT id, name, email, phone, role, password_hash, is_active FROM users WHERE LOWER(email) = LOWER($1) LIMIT 1',
+          [email]
+        );
+
+        if (userRows.length === 0) {
+          return sendJson(res, 401, {
+            status: 'fail',
+            message: 'Invalid email or password.',
+          });
         }
+
+        const user = userRows[0];
+
+        if (!user.is_active) {
+          return sendJson(res, 403, {
+            status: 'fail',
+            message: 'Your account is deactivated. Please contact support.',
+          });
+        }
+
+        const isPasswordValid = user.password_hash
+          ? await bcrypt.compare(password, user.password_hash)
+          : false;
+
+        if (!isPasswordValid) {
+          return sendJson(res, 401, {
+            status: 'fail',
+            message: 'Invalid email or password.',
+          });
+        }
+
+        delete user.password_hash;
+        const token = `vec_token_${user.id}_${Date.now()}`;
+
         return sendJson(res, 200, {
           status: 'success',
-          message: 'Logged in successfully',
+          message: 'Logged in successfully!',
+          token,
+          user,
           data: {
-            token: 'vec_token_' + Date.now(),
+            token,
             user,
           },
         });

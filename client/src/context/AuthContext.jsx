@@ -15,25 +15,13 @@ export const AuthProvider = ({ children }) => {
       const storedUser = localStorage.getItem('user');
 
       if (storedToken) {
-        // If it's a demo offline token, restore immediately
-        if (storedToken.startsWith('demo-') && storedUser) {
-          try {
-            setUser(JSON.parse(storedUser));
-            setToken(storedToken);
-          } catch {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-          }
-          setLoading(false);
-          return;
-        }
-
         try {
           const response = await authService.getMe();
-          if (response.status === 'success' && response.user) {
-            setUser(response.user);
+          const currentUser = response.user || response.data?.user;
+          if (currentUser) {
+            setUser(currentUser);
             setToken(storedToken);
-            localStorage.setItem('user', JSON.stringify(response.user));
+            localStorage.setItem('user', JSON.stringify(currentUser));
           } else {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -41,7 +29,6 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
           }
         } catch {
-          // If server is unreachable or returning 405/offline, preserve local session if present
           if (storedUser) {
             try {
               setUser(JSON.parse(storedUser));
@@ -68,71 +55,17 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const data = await authService.login({ email, password });
-      if (data.status === 'success' && data.token) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setToken(data.token);
-        setUser(data.user);
+      const user = data.user || data.data?.user;
+      const token = data.token || data.data?.token;
+
+      if (user && token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setToken(token);
+        setUser(user);
       }
       return data;
     } catch (err) {
-      const status = err.response?.status;
-      const isMethodNotAllowed = status === 405; // Happens on static hosts (Vercel/preview)
-      const isNotFound = status === 404;
-      const isNetworkError = !err.response || err.code === 'ERR_NETWORK';
-
-      const cleanEmail = (email || '').trim().toLowerCase();
-
-      // Graceful offline demo fallback if backend is unreachable or returning 405 (e.g. on Vercel)
-      if (isMethodNotAllowed || isNotFound || isNetworkError) {
-        const isAdmin = cleanEmail === 'admin@visioneyecare.com' || cleanEmail.includes('admin');
-
-        if (isAdmin) {
-          const mockAdminUser = {
-            id: 1,
-            name: 'Admin',
-            full_name: 'Admin',
-            email: cleanEmail || 'admin@visioneyecare.com',
-            phone: '+8801700000000',
-            role: 'admin',
-            is_active: true,
-          };
-          const demoToken = 'demo-admin-jwt-token-vision-eye-care';
-          localStorage.setItem('token', demoToken);
-          localStorage.setItem('user', JSON.stringify(mockAdminUser));
-          setToken(demoToken);
-          setUser(mockAdminUser);
-          return {
-            status: 'success',
-            message: 'Logged in as Admin (Demo/Offline Mode)',
-            user: mockAdminUser,
-            token: demoToken,
-          };
-        } else {
-          const displayName = cleanEmail ? cleanEmail.split('@')[0] : 'Customer';
-          const mockCustomerUser = {
-            id: 2,
-            name: displayName,
-            full_name: displayName,
-            email: cleanEmail || 'customer@visioneyecare.com',
-            phone: '+8801711111111',
-            role: 'customer',
-            is_active: true,
-          };
-          const demoToken = 'demo-customer-jwt-token-vision-eye-care';
-          localStorage.setItem('token', demoToken);
-          localStorage.setItem('user', JSON.stringify(mockCustomerUser));
-          setToken(demoToken);
-          setUser(mockCustomerUser);
-          return {
-            status: 'success',
-            message: 'Logged in as Customer (Demo/Offline Mode)',
-            user: mockCustomerUser,
-            token: demoToken,
-          };
-        }
-      }
-
       throw err;
     }
   };
