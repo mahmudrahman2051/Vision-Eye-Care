@@ -1,9 +1,68 @@
 import { neon } from '@neondatabase/serverless';
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '15mb',
+    },
+    responseLimit: '15mb',
+  },
+};
+
 const DEFAULT_DB_URL =
   'postgresql://neondb_owner:npg_1Z2MeHfPBYLQ@ep-winter-smoke-b44w9lae-pooler.c-6.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
 const DATABASE_URL = process.env.DATABASE_URL || DEFAULT_DB_URL;
 const sql = neon(DATABASE_URL);
+
+// Default Ticker Settings (Factory Fallback)
+const DEFAULT_MAIN_TICKER = {
+  enabled: true,
+  speed: 28,
+  direction: 'left',
+  backgroundColor: '#000000',
+  textColor: '#FFFFFF',
+  accentColor: '#FFFFFF',
+  pauseOnHover: true,
+  separator: '✦',
+  messages: [
+    {
+      id: '1',
+      text: 'Complimentary Nationwide Express Delivery on all orders over ৳5,000',
+      badge: 'FREE SHIPPING',
+      link: '/shop',
+    },
+    {
+      id: '2',
+      text: 'Custom Japanese CNC Lens Milling & Precision Anti-Reflective Coating in Dhaka',
+      badge: 'PRECISION LAB',
+      link: '/about',
+    },
+    {
+      id: '3',
+      text: 'Experience 100+ Designer Frames in the comfort of your home across Dhaka',
+      badge: 'HOME TRIAL',
+      link: '/contact',
+    },
+    {
+      id: '4',
+      text: '1-Year International Warranty on All Titanium & Handcrafted Acetate Frames',
+      badge: 'WARRANTY',
+      link: '/faq',
+    },
+  ],
+};
+
+const DEFAULT_COUPON_TICKER = {
+  enabled: true,
+  speed: 24,
+  direction: 'left',
+  pauseOnHover: true,
+  backgroundColor: '#000000',
+  textColor: '#FFFFFF',
+  accentColor: '#FFFFFF',
+  separator: '✦',
+  promptText: '[Click to Copy]',
+};
 
 // Helper to send json
 function sendJson(res, statusCode, data) {
@@ -70,6 +129,378 @@ export default async function handler(req, res) {
         message: 'Vision Eye Care Neon Serverless API Online',
         timestamp: new Date().toISOString(),
       });
+    }
+
+    // ------------------------------------------------------------------------
+    // MARQUEE TICKER (Public & General Endpoints)
+    // ------------------------------------------------------------------------
+    if (route0 === 'ticker') {
+      // GET /api/ticker/coupon - Coupon Marquee Ticker Settings
+      if (route1 === 'coupon') {
+        if (req.method === 'GET') {
+          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
+          let data = DEFAULT_COUPON_TICKER;
+          if (rows.length > 0 && rows[0].value) {
+            try {
+              data = JSON.parse(rows[0].value);
+            } catch {}
+          }
+          return sendJson(res, 200, { status: 'success', data });
+        }
+        if (req.method === 'PUT' || req.method === 'POST') {
+          const body = await getBody(req);
+          await sql.query(
+            `INSERT INTO site_settings (key, value, category, label, updated_at)
+             VALUES ('coupon_ticker', $1, 'marquee', 'Coupon Marquee Ticker Settings', NOW())
+             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+            [JSON.stringify(body)]
+          );
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Coupon ticker settings saved successfully in database!',
+            data: body,
+          });
+        }
+      }
+
+      // GET /api/ticker - Main Announcement Marquee Ticker Settings
+      if (!route1 && req.method === 'GET') {
+        const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
+        let data = DEFAULT_MAIN_TICKER;
+        if (rows.length > 0 && rows[0].value) {
+          try {
+            data = JSON.parse(rows[0].value);
+          } catch {}
+        }
+        return sendJson(res, 200, { status: 'success', data });
+      }
+
+      // PUT /api/ticker - Main Announcement Marquee Ticker Update
+      if (!route1 && (req.method === 'PUT' || req.method === 'POST')) {
+        const body = await getBody(req);
+        await sql.query(
+          `INSERT INTO site_settings (key, value, category, label, updated_at)
+           VALUES ('marquee_ticker', $1, 'marquee', 'Marquee Announcement Ticker Settings', NOW())
+           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+          [JSON.stringify(body)]
+        );
+        return sendJson(res, 200, {
+          status: 'success',
+          message: 'Main announcement ticker saved successfully in database!',
+          data: body,
+        });
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // COUPONS (Public & Validation)
+    // ------------------------------------------------------------------------
+    if (route0 === 'coupons') {
+      // POST /api/coupons/validate - Validate coupon code
+      if (route1 === 'validate' && req.method === 'POST') {
+        const body = await getBody(req);
+        const code = (body.code || '').trim().toUpperCase();
+        const amount = parseFloat(body.amount || 0);
+
+        const rows = await sql.query('SELECT * FROM coupons WHERE UPPER(code) = $1 LIMIT 1', [code]);
+        if (rows.length === 0) {
+          return sendJson(res, 400, {
+            status: 'fail',
+            message: `Coupon code "${code}" is invalid or does not exist.`,
+          });
+        }
+
+        const coupon = rows[0];
+        if (!coupon.is_active) {
+          return sendJson(res, 400, {
+            status: 'fail',
+            message: `Coupon code "${code}" is currently inactive.`,
+          });
+        }
+
+        const minOrder = parseFloat(coupon.min_order_amount || 0);
+        if (minOrder > 0 && amount < minOrder) {
+          return sendJson(res, 400, {
+            status: 'fail',
+            message: `Minimum order amount of ৳${minOrder.toLocaleString()} required for code "${coupon.code}". (Cart total: ৳${amount.toLocaleString()})`,
+          });
+        }
+
+        let discount_amount = 0;
+        const val = parseFloat(coupon.discount_value || 0);
+        if (coupon.discount_type === 'percentage') {
+          discount_amount = Math.round((amount * val) / 100);
+          const maxDiscount = parseFloat(coupon.max_discount || 0);
+          if (maxDiscount > 0 && discount_amount > maxDiscount) {
+            discount_amount = maxDiscount;
+          }
+        } else {
+          discount_amount = Math.min(val, amount);
+        }
+
+        return sendJson(res, 200, {
+          status: 'success',
+          data: {
+            code: coupon.code,
+            discount_amount,
+            discount_type: coupon.discount_type,
+            discount_value: coupon.discount_value,
+            description: coupon.description,
+            min_order_amount: coupon.min_order_amount,
+          },
+        });
+      }
+
+      // GET /api/coupons - List active coupons for public tickers and cart
+      if (req.method === 'GET') {
+        const coupons = await sql.query('SELECT * FROM coupons WHERE is_active = true ORDER BY id ASC');
+        return sendJson(res, 200, { status: 'success', data: coupons });
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // BANNERS (Public & Homepage)
+    // ------------------------------------------------------------------------
+    if (route0 === 'banners') {
+      if (req.method === 'GET') {
+        const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
+        if (rows.length > 0 && rows[0].value) {
+          try {
+            return sendJson(res, 200, { status: 'success', data: JSON.parse(rows[0].value) });
+          } catch {}
+        }
+        // Fallback to active banners from banners table
+        const bannerRows = await sql.query('SELECT * FROM banners WHERE is_active = true ORDER BY sort_order ASC');
+        return sendJson(res, 200, {
+          status: 'success',
+          data: {
+            heroBanners: bannerRows.filter((b) => b.section === 'hero').map((b) => ({
+              id: b.id,
+              src: b.image_url,
+              title: b.title,
+              subtitle: b.subtitle,
+              badge: b.badge,
+              ctaText: b.cta_text,
+              ctaLink: b.cta_link,
+            })),
+            promoBanners: bannerRows.filter((b) => b.section !== 'hero').map((b) => ({
+              id: b.id,
+              image: b.image_url,
+              title: b.title,
+              link: b.cta_link,
+              enabled: b.is_active,
+            })),
+          },
+        });
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // ADMIN ENDPOINTS
+    // ------------------------------------------------------------------------
+    if (route0 === 'admin') {
+      // ADMIN MAIN ANNOUNCEMENT TICKER: GET & PUT /api/admin/ticker
+      if (route1 === 'ticker') {
+        if (req.method === 'GET') {
+          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'marquee_ticker' LIMIT 1");
+          let data = DEFAULT_MAIN_TICKER;
+          if (rows.length > 0 && rows[0].value) {
+            try {
+              data = JSON.parse(rows[0].value);
+            } catch {}
+          }
+          return sendJson(res, 200, { status: 'success', data });
+        }
+        if (req.method === 'PUT' || req.method === 'POST') {
+          const body = await getBody(req);
+          await sql.query(
+            `INSERT INTO site_settings (key, value, category, label, updated_at)
+             VALUES ('marquee_ticker', $1, 'marquee', 'Marquee Announcement Ticker Settings', NOW())
+             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+            [JSON.stringify(body)]
+          );
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Main announcement ticker saved successfully in database!',
+            data: body,
+          });
+        }
+      }
+
+      // ADMIN COUPON TICKER: GET & PUT /api/admin/coupon-ticker
+      if (route1 === 'coupon-ticker') {
+        if (req.method === 'GET') {
+          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'coupon_ticker' LIMIT 1");
+          let data = DEFAULT_COUPON_TICKER;
+          if (rows.length > 0 && rows[0].value) {
+            try {
+              data = JSON.parse(rows[0].value);
+            } catch {}
+          }
+          return sendJson(res, 200, { status: 'success', data });
+        }
+        if (req.method === 'PUT' || req.method === 'POST') {
+          const body = await getBody(req);
+          await sql.query(
+            `INSERT INTO site_settings (key, value, category, label, updated_at)
+             VALUES ('coupon_ticker', $1, 'marquee', 'Coupon Marquee Ticker Settings', NOW())
+             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+            [JSON.stringify(body)]
+          );
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Coupon ticker settings saved successfully in database!',
+            data: body,
+          });
+        }
+      }
+
+      // ADMIN HOMEPAGE BANNERS: GET & PUT /api/admin/banners
+      if (route1 === 'banners') {
+        if (req.method === 'GET') {
+          const rows = await sql.query("SELECT value FROM site_settings WHERE key = 'banners_config' LIMIT 1");
+          let data = null;
+          if (rows.length > 0 && rows[0].value) {
+            try {
+              data = JSON.parse(rows[0].value);
+            } catch {}
+          }
+          return sendJson(res, 200, { status: 'success', data });
+        }
+        if (req.method === 'PUT' || req.method === 'POST') {
+          const body = await getBody(req);
+          await sql.query(
+            `INSERT INTO site_settings (key, value, category, label, updated_at)
+             VALUES ('banners_config', $1, 'banners', 'Homepage Banners Configuration', NOW())
+             ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()`,
+            [JSON.stringify(body)]
+          );
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Banners updated successfully in database!',
+            data: body,
+          });
+        }
+      }
+
+      // ADMIN COUPONS: /api/admin/coupons
+      if (route1 === 'coupons') {
+        // GET /api/admin/coupons - List all coupons
+        if (!route2 && req.method === 'GET') {
+          const coupons = await sql.query('SELECT * FROM coupons ORDER BY id ASC');
+          return sendJson(res, 200, { status: 'success', data: coupons });
+        }
+
+        // POST /api/admin/coupons - Create coupon
+        if (!route2 && req.method === 'POST') {
+          const body = await getBody(req);
+          const rows = await sql.query(
+            `INSERT INTO coupons (
+              code, description, discount_type, discount_value, min_order_amount,
+              max_discount, usage_limit, used_count, is_active, created_at, updated_at
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, 0, $8, NOW(), NOW())
+            RETURNING *`,
+            [
+              (body.code || '').trim().toUpperCase(),
+              body.description || '',
+              body.discount_type || 'percentage',
+              parseFloat(body.discount_value || 0),
+              parseFloat(body.min_order_amount || 0),
+              body.max_discount ? parseFloat(body.max_discount) : null,
+              body.usage_limit ? parseInt(body.usage_limit, 10) : null,
+              body.is_active !== undefined ? Boolean(body.is_active) : true,
+            ]
+          );
+          return sendJson(res, 201, {
+            status: 'success',
+            message: 'Coupon created successfully in database!',
+            data: rows[0],
+          });
+        }
+
+        // PUT /api/admin/coupons/:id - Update coupon
+        if (route2 && req.method === 'PUT') {
+          const couponId = parseInt(route2, 10);
+          const body = await getBody(req);
+          const rows = await sql.query(
+            `UPDATE coupons SET
+              code = COALESCE($1, code),
+              description = COALESCE($2, description),
+              discount_type = COALESCE($3, discount_type),
+              discount_value = COALESCE($4, discount_value),
+              min_order_amount = COALESCE($5, min_order_amount),
+              max_discount = $6,
+              usage_limit = $7,
+              is_active = COALESCE($8, is_active),
+              updated_at = NOW()
+             WHERE id = $9 RETURNING *`,
+            [
+              body.code ? body.code.trim().toUpperCase() : null,
+              body.description !== undefined ? body.description : null,
+              body.discount_type || null,
+              body.discount_value !== undefined ? parseFloat(body.discount_value) : null,
+              body.min_order_amount !== undefined ? parseFloat(body.min_order_amount) : null,
+              body.max_discount !== undefined ? (body.max_discount ? parseFloat(body.max_discount) : null) : null,
+              body.usage_limit !== undefined ? (body.usage_limit ? parseInt(body.usage_limit, 10) : null) : null,
+              body.is_active !== undefined ? Boolean(body.is_active) : null,
+              couponId,
+            ]
+          );
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Coupon updated successfully in database!',
+            data: rows[0],
+          });
+        }
+
+        // DELETE /api/admin/coupons/:id - Delete coupon
+        if (route2 && req.method === 'DELETE') {
+          const couponId = parseInt(route2, 10);
+          await sql.query('DELETE FROM coupons WHERE id = $1', [couponId]);
+          return sendJson(res, 200, {
+            status: 'success',
+            message: 'Coupon deleted successfully from database!',
+          });
+        }
+      }
+
+      // ADMIN DASHBOARD: GET /api/admin/dashboard
+      if (route1 === 'dashboard') {
+        const orderCountRes = await sql.query('SELECT COUNT(*) as count, COALESCE(SUM(total), 0) as revenue FROM orders');
+        const pendingCountRes = await sql.query("SELECT COUNT(*) as count FROM orders WHERE order_status = 'pending'");
+        const productCountRes = await sql.query('SELECT COUNT(*) as count FROM products');
+        const recentOrders = await sql.query('SELECT * FROM orders ORDER BY id DESC LIMIT 5');
+
+        return sendJson(res, 200, {
+          status: 'success',
+          data: {
+            metrics: {
+              totalOrders: parseInt(orderCountRes[0]?.count || 0, 10),
+              totalRevenue: parseFloat(orderCountRes[0]?.revenue || 0),
+              pendingOrders: parseInt(pendingCountRes[0]?.count || 0, 10),
+              totalProducts: parseInt(productCountRes[0]?.count || 0, 10),
+            },
+            recentOrders,
+          },
+        });
+      }
+
+      // ADMIN ORDERS: GET /api/admin/orders
+      if (route1 === 'orders') {
+        const orders = await sql.query('SELECT * FROM orders ORDER BY id DESC LIMIT 100');
+        return sendJson(res, 200, {
+          status: 'success',
+          data: {
+            orders,
+            pagination: {
+              total: orders.length,
+              page: 1,
+              limit: 100,
+              total_pages: 1,
+            },
+          },
+        });
+      }
     }
 
     // ------------------------------------------------------------------------
@@ -222,6 +653,63 @@ export default async function handler(req, res) {
         return sendJson(res, 200, {
           status: 'success',
           data: { featured, bestsellers: featured },
+        });
+      }
+
+      // CREATE PRODUCT: POST /api/products
+      if (!route1 && req.method === 'POST') {
+        const body = await getBody(req);
+        const insertRes = await sql.query(
+          `INSERT INTO products (
+            name, slug, product_code, sku, price, compare_price, stock, brand,
+            frame_material, frame_shape, frame_color, size, gender,
+            short_description, description, featured, bestseller, new_arrival, category_id
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+          RETURNING *`,
+          [
+            body.name || 'Untitled Optical Product',
+            body.slug || `product-${Date.now()}`,
+            body.product_code || `MRM-${Date.now()}`,
+            body.sku || body.product_code || String(Date.now()),
+            parseFloat(body.price || 0),
+            body.compare_price ? parseFloat(body.compare_price) : null,
+            parseInt(body.stock || 1, 10),
+            body.brand || 'Vision Eye Care',
+            body.frame_material || null,
+            body.frame_shape || null,
+            body.frame_color || null,
+            body.size || 'Standard',
+            body.gender || 'unisex',
+            body.short_description || null,
+            body.description || null,
+            Boolean(body.featured),
+            Boolean(body.bestseller),
+            body.new_arrival !== undefined ? Boolean(body.new_arrival) : true,
+            body.category_id ? parseInt(body.category_id, 10) : null,
+          ]
+        );
+        const targetId = insertRes[0].id;
+
+        const allImages = Array.isArray(body.images) && body.images.length > 0
+          ? body.images.map((img) => (typeof img === 'string' ? img : (img.url || img.image_url || img.src))).filter(Boolean)
+          : Array.isArray(body.image_urls) && body.image_urls.length > 0
+          ? body.image_urls
+          : (body.primary_image || body.image_url ? [body.primary_image || body.image_url] : []);
+
+        if (allImages.length > 0) {
+          for (let i = 0; i < allImages.length; i++) {
+            await sql.query(
+              `INSERT INTO product_images (product_id, image_url, is_primary, sort_order)
+               VALUES ($1, $2, $3, $4)`,
+              [targetId, allImages[i], i === 0, i]
+            );
+          }
+        }
+
+        return sendJson(res, 201, {
+          status: 'success',
+          message: 'Product created successfully in database!',
+          data: insertRes[0],
         });
       }
 

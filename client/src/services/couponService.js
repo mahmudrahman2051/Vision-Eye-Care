@@ -22,11 +22,11 @@ export const couponService = {
     try {
       const response = await api.get('/admin/coupons');
       if (response.data?.status === 'success' && Array.isArray(response.data.data)) {
-        const sanitized = sanitizeCoupons(response.data.data);
+        const list = response.data.data;
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
         } catch {}
-        return { status: 'success', data: sanitized };
+        return { status: 'success', data: list };
       }
     } catch {
       // Backend offline or 405 (static Vercel hosting)
